@@ -348,7 +348,13 @@ const EncryptionComponent = () => {
                   <Label htmlFor="textInput" className="text-gray-700">
                     {isEncrypting ? "Plain Text" : "Encrypted Text"}
                   </Label>
-                  <Textarea id="textInput" value={textInput} onChange={e => setTextInput(e.target.value)} placeholder={isEncrypting ? "Enter the text you want to encrypt" : "Paste the encrypted text here"} className="min-h-32 satoshi-input" />
+                  <Textarea 
+                    id="textInput" 
+                    value={textInput} 
+                    onChange={e => setTextInput(e.target.value)} 
+                    placeholder={isEncrypting ? "Enter the text you want to encrypt" : "Paste the encrypted text here"} 
+                    className="min-h-32 satoshi-input placeholder:text-xs placeholder:text-muted-foreground/50" 
+                  />
                 </div>
                 
                 <div className="grid gap-2">
