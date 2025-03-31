@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Shield, Key, Lock, FileText, Book, FileCheck } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
 import EncryptionComponent from "@/components/EncryptionComponent";
@@ -8,10 +7,21 @@ import FAQComponent from "@/components/FAQComponent";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useLocation } from "react-router-dom";
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewType>("encrypt");
   const isMobile = useIsMobile();
+  const location = useLocation();
+  
+  useEffect(() => {
+    // Check if there's a faq parameter in the URL
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.has('faq')) {
+      setCurrentView("faq");
+    }
+  }, [location]);
+
   return <div className="min-h-screen flex flex-col bg-background">
       <Header currentView={currentView} setCurrentView={setCurrentView} />
       

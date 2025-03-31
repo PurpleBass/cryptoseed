@@ -296,7 +296,12 @@ const EncryptionComponent = () => {
             <PopoverContent className="w-80 p-3 text-sm">
               <p className="font-medium mb-2">Why use this offline?</p>
               <p className="text-gray-600 mb-3">Using encryption tools offline adds an additional layer of security by preventing potential network-based attacks.</p>
-              <Button size="sm" variant="outline" onClick={goToFAQ} className="w-full justify-start">
+              <Button 
+                size="sm" 
+                variant="outline" 
+                onClick={goToFAQ} 
+                className="w-full justify-start"
+              >
                 <HelpCircle className="h-3.5 w-3.5 mr-2" /> 
                 Read more in FAQ
               </Button>
