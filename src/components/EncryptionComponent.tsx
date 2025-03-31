@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertCircle, ArrowDownUp, Copy, Download, Eye, EyeOff, FileUp, Lock, LockOpen, Shield, Wifi, WifiOff, Sprout, FileText, File, Broom } from "lucide-react";
+import { AlertCircle, ArrowDownUp, Copy, Download, Eye, EyeOff, FileUp, Lock, LockOpen, Shield, Wifi, WifiOff, Sprout, FileText, File, Eraser } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
@@ -325,7 +325,7 @@ const EncryptionComponent = () => {
                         Encrypted Seed Phrase
                       </Label>
                       <Button onClick={clearTextInput} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
-                        <Broom className="h-3.5 w-3.5 mr-1.5" />
+                        <Eraser className="h-3.5 w-3.5 mr-1.5" />
                         <span>Clear</span>
                       </Button>
                     </div>
@@ -336,7 +336,7 @@ const EncryptionComponent = () => {
                   <div className="flex items-center justify-between">
                     <Label htmlFor="seedPhrasePassword" className="text-gray-700">Password</Label>
                     <Button onClick={clearPassword} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
-                      <Broom className="h-3.5 w-3.5 mr-1.5" />
+                      <Eraser className="h-3.5 w-3.5 mr-1.5" />
                       <span>Clear</span>
                     </Button>
                   </div>
@@ -393,7 +393,7 @@ const EncryptionComponent = () => {
                       {isEncrypting ? "Plain Text" : "Encrypted Text"}
                     </Label>
                     <Button onClick={clearTextInput} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
-                      <Broom className="h-3.5 w-3.5 mr-1.5" />
+                      <Eraser className="h-3.5 w-3.5 mr-1.5" />
                       <span>Clear</span>
                     </Button>
                   </div>
@@ -404,7 +404,7 @@ const EncryptionComponent = () => {
                   <div className="flex items-center justify-between">
                     <Label htmlFor="password" className="text-gray-700">Password</Label>
                     <Button onClick={clearPassword} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
-                      <Broom className="h-3.5 w-3.5 mr-1.5" />
+                      <Eraser className="h-3.5 w-3.5 mr-1.5" />
                       <span>Clear</span>
                     </Button>
                   </div>
@@ -461,7 +461,7 @@ const EncryptionComponent = () => {
                       {isEncrypting ? "Select File" : "Select Encrypted File"}
                     </Label>
                     {selectedFile && <Button onClick={clearFileSelection} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
-                        <Broom className="h-3.5 w-3.5 mr-1.5" />
+                        <Eraser className="h-3.5 w-3.5 mr-1.5" />
                         <span>Clear</span>
                       </Button>}
                   </div>
@@ -477,7 +477,7 @@ const EncryptionComponent = () => {
                   <div className="flex items-center justify-between">
                     <Label htmlFor="filePassword" className="text-gray-700">Password</Label>
                     <Button onClick={clearPassword} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
-                      <Broom className="h-3.5 w-3.5 mr-1.5" />
+                      <Eraser className="h-3.5 w-3.5 mr-1.5" />
                       <span>Clear</span>
                     </Button>
                   </div>

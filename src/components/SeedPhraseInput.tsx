@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,7 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { MinusCircle, PlusCircle, ChevronDown, Broom } from "lucide-react";
+import { MinusCircle, PlusCircle, ChevronDown, Eraser } from "lucide-react";
 
 interface SeedPhraseInputProps {
   onSeedPhraseChange: (seedPhrase: string) => void;
@@ -27,22 +26,18 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
   const [words, setWords] = useState<string[]>(Array(12).fill(""));
   const [isCustomCount, setIsCustomCount] = useState(false);
 
-  // Update word array when count changes
   useEffect(() => {
     const newWords = [...words];
     if (wordCount > words.length) {
-      // Add empty words
       for (let i = words.length; i < wordCount; i++) {
         newWords.push("");
       }
     } else if (wordCount < words.length) {
-      // Remove extra words
       newWords.splice(wordCount);
     }
     setWords(newWords);
   }, [wordCount]);
 
-  // Update parent component when words change
   useEffect(() => {
     const seedPhrase = words.join(" ").trim();
     onSeedPhraseChange(seedPhrase);
@@ -78,8 +73,7 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
   const returnToDropdown = () => {
     setIsCustomCount(false);
   };
-  
-  // Fixed clear function that properly resets the words state
+
   const clearAllWords = () => {
     const emptyWords = Array(wordCount).fill("");
     setWords(emptyWords);
@@ -173,7 +167,6 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
       </div>
 
       <div className="grid gap-4">
-        {/* Clear button above the input grid */}
         <div className="flex justify-end">
           <Button
             type="button"
@@ -182,7 +175,7 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
             onClick={clearAllWords}
             className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
           >
-            <Broom className="h-3.5 w-3.5 mr-1.5" />
+            <Eraser className="h-3.5 w-3.5 mr-1.5" />
             <span>Clear Seed Phrase</span>
           </Button>
         </div>
