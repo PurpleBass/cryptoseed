@@ -20,39 +20,39 @@ const Index = () => {
           <div className="satoshi-container text-center">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Secure Your Crypto Seed Phrases</h1>
             <div className="max-w-3xl mx-auto">
-              <p className="text-gray-700 mb-6">
+              <p className="text-gray-700 mb-6 text-center">
                 Protect your critical seed phrases with advanced zero-knowledge encryption. 
                 Safeguard the keys to your crypto wallets with military-grade security.
               </p>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center">
                   <div className="flex items-center mb-2">
                     <Key className="h-5 w-5 text-secure-600 mr-2" />
-                    <h3 className="font-medium text-gray-900">Seed Phrase Protection</h3>
+                    <h3 className="font-medium text-gray-900 text-center">Seed Phrase Protection</h3>
                   </div>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 text-center">
                     Securely encrypt and store your wallet recovery phrases using AES-256 encryption. 
                     Prevent unauthorized access to your crypto assets.
                   </p>
                 </div>
                 
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center">
                   <div className="flex items-center mb-2">
                     <FileText className="h-5 w-5 text-secure-600 mr-2" />
-                    <h3 className="font-medium text-gray-900">Text Encryption</h3>
+                    <h3 className="font-medium text-gray-900 text-center">Text Encryption</h3>
                   </div>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 text-center">
                     Encrypt sensitive text messages, passwords, or confidential notes with robust encryption.
                   </p>
                 </div>
                 
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center">
                   <div className="flex items-center mb-2">
                     <Lock className="h-5 w-5 text-secure-600 mr-2" />
-                    <h3 className="font-medium text-gray-900">File Encryption</h3>
+                    <h3 className="font-medium text-gray-900 text-center">File Encryption</h3>
                   </div>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 text-center">
                     Encrypt any file with a password. Secure your documents, images, and other sensitive files.
                   </p>
                 </div>
