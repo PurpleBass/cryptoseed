@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -26,8 +27,8 @@ const FAQComponent = () => {
 
   return (
     <div className="w-full mx-auto px-2 sm:px-4 max-w-4xl">
-      <div className="mb-4 sm:mb-6">
-        <div className="flex items-center gap-2">
+      <div className="mb-4 sm:mb-6 text-center">
+        <div className="flex items-center gap-2 justify-center">
           <HelpCircle className="h-4 w-4 sm:h-5 sm:w-5 text-secure-600" />
           <h2 className="text-xl sm:text-2xl font-bold">FAQ & Best Practices</h2>
         </div>
