@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,46 +9,46 @@ import { Separator } from "@/components/ui/separator";
 
 const FAQComponent = () => {
   return (
-    <div className="container mx-auto p-4 max-w-4xl">
-      <div className="mb-6">
+    <div className="w-full mx-auto px-2 sm:px-4 max-w-4xl">
+      <div className="mb-4 sm:mb-6">
         <div className="flex items-center gap-2">
-          <HelpCircle className="h-5 w-5 text-secure-600" />
-          <h2 className="text-2xl font-bold">FAQ & Best Practices</h2>
+          <HelpCircle className="h-4 w-4 sm:h-5 sm:w-5 text-secure-600" />
+          <h2 className="text-xl sm:text-2xl font-bold">FAQ & Best Practices</h2>
         </div>
-        <p className="text-muted-foreground mt-2">
+        <p className="text-muted-foreground mt-1 sm:mt-2 text-sm">
           Common questions about encryption and how to use this tool securely.
         </p>
       </div>
       
-      <Tabs defaultValue="user">
-        <TabsList className="mb-4">
-          <TabsTrigger value="user">Non-Technical FAQ</TabsTrigger>
-          <TabsTrigger value="technical">Technical Details</TabsTrigger>
-          <TabsTrigger value="practices">Best Practices</TabsTrigger>
-          <TabsTrigger value="legal">Legal</TabsTrigger>
+      <Tabs defaultValue="user" className="w-full">
+        <TabsList className="mb-3 w-full overflow-x-auto flex sm:inline-flex whitespace-nowrap">
+          <TabsTrigger value="user" className="text-xs sm:text-sm">Non-Technical FAQ</TabsTrigger>
+          <TabsTrigger value="technical" className="text-xs sm:text-sm">Technical Details</TabsTrigger>
+          <TabsTrigger value="practices" className="text-xs sm:text-sm">Best Practices</TabsTrigger>
+          <TabsTrigger value="legal" className="text-xs sm:text-sm">Legal</TabsTrigger>
         </TabsList>
         
         <TabsContent value="user">
-          <Card>
-            <CardHeader>
-              <CardTitle>Understanding Encryption</CardTitle>
-              <CardDescription>
+          <Card className="border-0 sm:border shadow-none sm:shadow-sm">
+            <CardHeader className="px-2 sm:px-6 py-3 sm:py-4">
+              <CardTitle className="text-lg sm:text-xl">Understanding Encryption</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
                 Explanations for users without a technical background
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-1 sm:px-6">
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="what-is-encryption">
-                  <AccordionTrigger>What is encryption and why do I need it?</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2">What is encryption and why do I need it?</AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       Encryption is like a high-security digital safe for your information. It scrambles your 
                       text or files so that only someone with the correct password can read them.
                     </p>
-                    <p className="mt-2 text-muted-foreground">
+                    <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
                       You might need encryption to:
                     </p>
-                    <ul className="list-disc pl-6 mt-2 space-y-1 text-muted-foreground">
+                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1 text-xs sm:text-sm text-muted-foreground">
                       <li>Securely store sensitive personal information</li>
                       <li>Share confidential information with others</li>
                       <li>Protect valuable files from unauthorized access</li>
@@ -57,23 +58,23 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="how-it-works">
-                  <AccordionTrigger>How does this app work?</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2">How does this app work?</AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       Our app uses a very strong encryption method called AES-256 (the same technology used by
                       governments and banks) to protect your data.
                     </p>
-                    <p className="mt-2 text-muted-foreground">
+                    <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-muted-foreground">
                       Here's how it works in simple terms:
                     </p>
-                    <ol className="list-decimal pl-6 mt-2 space-y-1 text-muted-foreground">
+                    <ol className="list-decimal pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1 text-xs sm:text-sm text-muted-foreground">
                       <li>You enter your text or select a file to encrypt</li>
                       <li>You create a password (make it strong!)</li>
                       <li>The app scrambles your data using your password as the key</li>
                       <li>The result is a jumbled mess that's meaningless without your password</li>
                       <li>Later, you can use your password to unscramble and recover your original data</li>
                     </ol>
-                    <p className="mt-2 text-muted-foreground">
+                    <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-muted-foreground">
                       All of this happens directly on your device. Your information never leaves your 
                       computer or phone, so there's no risk of interception.
                     </p>
@@ -163,25 +164,25 @@ const FAQComponent = () => {
         </TabsContent>
         
         <TabsContent value="technical">
-          <Card>
-            <CardHeader>
-              <CardTitle>Technical Implementation</CardTitle>
-              <CardDescription>
+          <Card className="border-0 sm:border shadow-none sm:shadow-sm">
+            <CardHeader className="px-2 sm:px-6 py-3 sm:py-4">
+              <CardTitle className="text-lg sm:text-xl">Technical Implementation</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
                 Detailed explanations of the cryptographic implementation
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-1 sm:px-6">
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="crypto-implementation">
-                  <AccordionTrigger>Cryptographic Implementation</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2">Cryptographic Implementation</AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       This application uses the Web Crypto API (SubtleCrypto) to perform all cryptographic operations. Here's a detailed breakdown:
                     </p>
-                    <ul className="list-disc pl-6 mt-2 space-y-2 text-muted-foreground">
+                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1 text-xs sm:text-sm text-muted-foreground">
                       <li>
                         <strong>Encryption Algorithm:</strong> AES-256-GCM (Galois/Counter Mode)
-                        <ul className="list-disc pl-6 mt-1">
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
                           <li>256-bit key length (maximum security level for AES)</li>
                           <li>GCM provides both confidentiality and authenticity</li>
                           <li>Detects tampering with the encrypted data</li>
@@ -189,7 +190,7 @@ const FAQComponent = () => {
                       </li>
                       <li>
                         <strong>Key Derivation:</strong> PBKDF2 (Password-Based Key Derivation Function 2)
-                        <ul className="list-disc pl-6 mt-1">
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
                           <li>100,000 iterations of SHA-256 hashing</li>
                           <li>Unique random salt for each encryption operation</li>
                           <li>Protects against rainbow table and brute-force attacks</li>
@@ -197,7 +198,7 @@ const FAQComponent = () => {
                       </li>
                       <li>
                         <strong>Initialization Vector (IV):</strong> 
-                        <ul className="list-disc pl-6 mt-1">
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
                           <li>96-bit (12-byte) cryptographically secure random IV</li>
                           <li>Generated using crypto.getRandomValues()</li>
                           <li>Fresh IV used for each encryption operation</li>
@@ -205,7 +206,7 @@ const FAQComponent = () => {
                       </li>
                       <li>
                         <strong>Output Format:</strong> 
-                        <ul className="list-disc pl-6 mt-1">
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
                           <li>Salt (16 bytes) + IV (12 bytes) + Encrypted data</li>
                           <li>Encoded as Base64 for text compatibility</li>
                         </ul>
@@ -344,35 +345,35 @@ const FAQComponent = () => {
         </TabsContent>
         
         <TabsContent value="practices">
-          <Card>
-            <CardHeader>
-              <CardTitle>Security Best Practices</CardTitle>
-              <CardDescription>
+          <Card className="border-0 sm:border shadow-none sm:shadow-sm">
+            <CardHeader className="px-2 sm:px-6 py-3 sm:py-4">
+              <CardTitle className="text-lg sm:text-xl">Security Best Practices</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
                 How to use this tool most securely
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <Alert className="mb-6 bg-secure-100 text-secure-800 border-secure-300">
-                <AlertCircle className="h-4 w-4" />
+            <CardContent className="px-1 sm:px-6">
+              <Alert className="mb-4 sm:mb-6 bg-secure-100 text-secure-800 border-secure-300 text-xs sm:text-sm">
+                <AlertCircle className="h-3 w-3 sm:h-4 sm:w-4" />
                 <AlertDescription>
                   For maximum security, follow these recommendations when handling sensitive data.
                 </AlertDescription>
               </Alert>
               
-              <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
                 <div>
-                  <h3 className="text-lg font-medium flex items-center gap-2">
-                    <Shield className="h-5 w-5 text-secure-600" />
+                  <h3 className="text-base sm:text-lg font-medium flex items-center gap-2">
+                    <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-secure-600" />
                     <span>Offline Usage</span>
                   </h3>
-                  <div className="mt-2 pl-7 space-y-3">
-                    <p className="text-muted-foreground">
+                  <div className="mt-1 sm:mt-2 pl-4 sm:pl-7 space-y-2 sm:space-y-3">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       Always use this application offline when dealing with sensitive information:
                     </p>
-                    <ol className="list-decimal pl-6 space-y-2 text-muted-foreground">
+                    <ol className="list-decimal pl-4 sm:pl-6 space-y-1 sm:space-y-2 text-xs sm:text-sm text-muted-foreground">
                       <li>
                         <strong>Disconnect from the internet:</strong>
-                        <ul className="list-disc pl-6 mt-1">
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
                           <li>Turn off Wi-Fi on your device</li>
                           <li>Disconnect ethernet cables</li>
                           <li>Enable airplane mode on mobile devices</li>
@@ -525,28 +526,28 @@ const FAQComponent = () => {
         </TabsContent>
         
         <TabsContent value="legal">
-          <Card>
-            <CardHeader>
-              <CardTitle>Legal Information</CardTitle>
-              <CardDescription>
+          <Card className="border-0 sm:border shadow-none sm:shadow-sm">
+            <CardHeader className="px-2 sm:px-6 py-3 sm:py-4">
+              <CardTitle className="text-lg sm:text-xl">Legal Information</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
                 Important legal information regarding the use of this service
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-1 sm:px-6">
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="disclaimer">
-                  <AccordionTrigger>Disclaimer of Responsibility</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2">Disclaimer of Responsibility</AccordionTrigger>
                   <AccordionContent>
-                    <Alert className="bg-orange-50 text-orange-800 border-orange-200 mb-4">
-                      <AlertCircle className="h-4 w-4" />
+                    <Alert className="bg-orange-50 text-orange-800 border-orange-200 mb-3 sm:mb-4 text-xs sm:text-sm">
+                      <AlertCircle className="h-3 w-3 sm:h-4 sm:w-4" />
                       <AlertDescription className="font-medium">
                         We are not responsible for the use of this application or the data it manages.
                       </AlertDescription>
                     </Alert>
-                    <p className="text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       This tool is provided for educational and security purposes only. By using this service, you acknowledge and agree that:
                     </p>
-                    <ul className="list-disc pl-6 mt-2 space-y-1 text-muted-foreground">
+                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1 text-xs sm:text-sm text-muted-foreground">
                       <li>You are solely responsible for your data and password management</li>
                       <li>We cannot recover lost passwords under any circumstances</li>
                       <li>We provide no warranties or guarantees regarding the security, accuracy, or reliability of this service</li>
@@ -612,17 +613,17 @@ const FAQComponent = () => {
                 </AccordionItem>
               </Accordion>
               
-              <Separator className="my-6" />
+              <Separator className="my-4 sm:my-6" />
               
-              <div className="bg-gray-50 p-4 rounded-md border border-gray-100">
-                <div className="flex items-center gap-2 mb-2">
-                  <FileText className="h-5 w-5 text-secure-600" />
-                  <h3 className="font-medium text-gray-900">Legal Documents</h3>
+              <div className="bg-gray-50 p-3 sm:p-4 rounded-md border border-gray-100">
+                <div className="flex items-center gap-2 mb-1 sm:mb-2">
+                  <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-secure-600" />
+                  <h3 className="font-medium text-gray-900 text-sm sm:text-base">Legal Documents</h3>
                 </div>
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-4">
                   Complete legal documents are available at the bottom of the page:
                 </p>
-                <ul className="list-disc pl-6 text-sm text-secure-600">
+                <ul className="list-disc pl-4 sm:pl-6 text-xs sm:text-sm text-secure-600">
                   <li><a href="#" className="hover:underline">Terms of Service</a></li>
                   <li><a href="#" className="hover:underline">Privacy Policy</a></li>
                   <li><a href="#" className="hover:underline">MIT License</a></li>
@@ -633,8 +634,8 @@ const FAQComponent = () => {
         </TabsContent>
       </Tabs>
       
-      <div className="mt-12 p-4 border-t border-gray-200 text-xs text-gray-500">
-        <p className="font-bold mb-2">DISCLAIMER:</p>
+      <div className="mt-8 sm:mt-12 p-3 sm:p-4 border-t border-gray-200 text-[10px] sm:text-xs text-gray-500">
+        <p className="font-bold mb-1 sm:mb-2">DISCLAIMER:</p>
         <p>
           We are not responsible for the use of this application or the data it manages. 
           This tool is provided for educational and security purposes only. Users are solely responsible for their 
