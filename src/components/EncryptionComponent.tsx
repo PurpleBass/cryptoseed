@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertCircle, ArrowDownUp, Copy, Download, FileUp, Lock, Shield, Wifi, WifiOff } from "lucide-react";
+import { AlertCircle, ArrowDownUp, Copy, Download, Eye, EyeOff, FileUp, Lock, Shield, Wifi, WifiOff } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
@@ -16,6 +15,7 @@ const EncryptionComponent = () => {
   const [mode, setMode] = useState<"text" | "file">("text");
   const [textInput, setTextInput] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [output, setOutput] = useState("");
   const [isEncrypting, setIsEncrypting] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -168,6 +168,10 @@ const EncryptionComponent = () => {
     setIsEncrypting(!isEncrypting);
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const cryptoSupported = isWebCryptoSupported();
 
   if (!cryptoSupported) {
@@ -223,34 +227,6 @@ const EncryptionComponent = () => {
         </div>
       </div>
 
-      <Card className="mb-8 rounded-xl border border-gray-100 shadow-sm">
-        <CardHeader className="pb-3">
-          <div className="flex gap-2 items-center">
-            <Lock className="h-5 w-5 text-satoshi-500" />
-            <CardTitle className="text-xl text-gray-900">Password</CardTitle>
-          </div>
-          <CardDescription className="text-gray-600">
-            Enter a strong password to {isEncrypting ? "encrypt" : "decrypt"} your data. 
-            This password will be required to {isEncrypting ? "decrypt" : "encrypt"} the data later.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="password" className="text-gray-700">Password</Label>
-              <Input 
-                id="password" 
-                type="password" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter a strong password"
-                className="satoshi-input"
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       <Tabs 
         defaultValue="text" 
         value={mode} 
@@ -299,6 +275,29 @@ const EncryptionComponent = () => {
                       : "Paste the encrypted text here"}
                     className="min-h-32 satoshi-input"
                   />
+                </div>
+                
+                <div className="grid gap-2">
+                  <Label htmlFor="password" className="text-gray-700">Password</Label>
+                  <div className="relative">
+                    <Input 
+                      id="password" 
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter a strong password"
+                      className="satoshi-input pr-10"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={togglePasswordVisibility}
+                      className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -375,6 +374,29 @@ const EncryptionComponent = () => {
                       Selected file: {selectedFile.name} ({Math.round(selectedFile.size / 1024)}KB)
                     </div>
                   )}
+                </div>
+                
+                <div className="grid gap-2">
+                  <Label htmlFor="filePassword" className="text-gray-700">Password</Label>
+                  <div className="relative">
+                    <Input 
+                      id="filePassword" 
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter a strong password"
+                      className="satoshi-input pr-10"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={togglePasswordVisibility}
+                      className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </CardContent>
