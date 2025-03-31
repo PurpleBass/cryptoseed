@@ -3,6 +3,13 @@ import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 import { MinusCircle, PlusCircle } from "lucide-react";
 
 interface SeedPhraseInputProps {
@@ -12,6 +19,7 @@ interface SeedPhraseInputProps {
 const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange }) => {
   const [wordCount, setWordCount] = useState(12);
   const [words, setWords] = useState<string[]>(Array(12).fill(""));
+  const [isCustomCount, setIsCustomCount] = useState(false);
 
   // Update word array when count changes
   useEffect(() => {
@@ -40,6 +48,15 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
     setWords(newWords);
   };
 
+  const handleWordCountChange = (value: string) => {
+    if (value === "custom") {
+      setIsCustomCount(true);
+    } else {
+      setIsCustomCount(false);
+      setWordCount(parseInt(value));
+    }
+  };
+
   const increaseWordCount = () => {
     if (wordCount < 24) {
       setWordCount(wordCount + 1);
@@ -56,27 +73,43 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <Label htmlFor="wordCount" className="text-gray-700">Number of Words</Label>
-        <div className="flex items-center gap-2">
-          <Button 
-            type="button" 
-            variant="outline" 
-            size="icon" 
-            onClick={decreaseWordCount}
-            disabled={wordCount <= 3}
-          >
-            <MinusCircle className="h-4 w-4" />
-          </Button>
-          <span className="w-8 text-center font-medium">{wordCount}</span>
-          <Button 
-            type="button" 
-            variant="outline" 
-            size="icon" 
-            onClick={increaseWordCount}
-            disabled={wordCount >= 24}
-          >
-            <PlusCircle className="h-4 w-4" />
-          </Button>
-        </div>
+        {isCustomCount ? (
+          <div className="flex items-center gap-2">
+            <Button 
+              type="button" 
+              variant="outline" 
+              size="icon" 
+              onClick={decreaseWordCount}
+              disabled={wordCount <= 3}
+            >
+              <MinusCircle className="h-4 w-4" />
+            </Button>
+            <span className="w-8 text-center font-medium">{wordCount}</span>
+            <Button 
+              type="button" 
+              variant="outline" 
+              size="icon" 
+              onClick={increaseWordCount}
+              disabled={wordCount >= 24}
+            >
+              <PlusCircle className="h-4 w-4" />
+            </Button>
+          </div>
+        ) : (
+          <Select onValueChange={handleWordCountChange} defaultValue="12">
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select length" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="12">12 words</SelectItem>
+              <SelectItem value="15">15 words</SelectItem>
+              <SelectItem value="18">18 words</SelectItem>
+              <SelectItem value="21">21 words</SelectItem>
+              <SelectItem value="24">24 words</SelectItem>
+              <SelectItem value="custom">Custom</SelectItem>
+            </SelectContent>
+          </Select>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
