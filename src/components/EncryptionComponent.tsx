@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -409,7 +408,7 @@ const EncryptionComponent = () => {
               </CardHeader>
               <CardContent>
                 <div className="p-4 bg-gray-50 rounded-md overflow-auto max-h-96 border border-gray-100">
-                  <pre className="whitespace-pre-wrap break-all text-gray-800">{output}</pre>
+                  <pre className="whitespace-pre-wrap break-all text-gray-800 text-left">{output}</pre>
                 </div>
               </CardContent>
             </Card>
@@ -503,7 +502,7 @@ const EncryptionComponent = () => {
               </CardHeader>
               <CardContent>
                 <div className="p-4 bg-gray-50 rounded-md overflow-auto max-h-96 border border-gray-100">
-                  <pre className="whitespace-pre-wrap break-all text-gray-800">{output}</pre>
+                  <pre className="whitespace-pre-wrap break-all text-gray-800 text-left">{output}</pre>
                 </div>
               </CardContent>
             </Card>
