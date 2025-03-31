@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertCircle, ArrowDownUp, Copy, Download, Eye, EyeOff, FileUp, Lock, Shield, Wifi, WifiOff } from "lucide-react";
+import { AlertCircle, ArrowDownUp, Copy, Download, Eye, EyeOff, FileUp, Lock, LockOpen, Shield, Wifi, WifiOff } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
@@ -241,9 +242,16 @@ const EncryptionComponent = () => {
                   onCheckedChange={setIsEncrypting}
                   className="data-[state=checked]:bg-satoshi-500"
                 />
-                <span className="text-2xl font-heading font-bold text-gray-900">
-                  {isEncrypting ? "Encrypt" : "Decrypt"}
-                </span>
+                <div className="flex items-center">
+                  {isEncrypting ? (
+                    <Lock className="h-4 w-4 mr-2 text-satoshi-500" />
+                  ) : (
+                    <LockOpen className="h-4 w-4 mr-2 text-gray-500" />
+                  )}
+                  <span className="text-2xl font-heading font-bold text-gray-900">
+                    {isEncrypting ? "Encrypt" : "Decrypt"}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
