@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, Github, Search, ChevronDown } from "lucide-react";
@@ -270,7 +271,7 @@ export async function decryptMessage(encryptedMessage: string, password: string)
                       variant="outline"
                       asChild
                     >
-                      <a href="https://github.com/secure-nomad/crypto-seed-encryptor" target="_blank" rel="noopener noreferrer">
+                      <a href="https://github.com/PurpleBass/cryptoseed" target="_blank" rel="noopener noreferrer">
                         <Github className="h-4 w-4" />
                         <span>View on GitHub</span>
                       </a>

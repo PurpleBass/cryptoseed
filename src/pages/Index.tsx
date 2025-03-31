@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Shield, Key, Lock, FileText, Book, FileCheck } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
@@ -80,7 +81,7 @@ const Index = () => {
             All encryption happens locally in your browser.
           </p>
           <div className="mt-4 md:mt-6 flex flex-wrap justify-center gap-3 md:gap-6 px-2 md:px-0">
-            <a href="https://github.com/yourusername/secure-nomad-encryptor" target="_blank" rel="noopener noreferrer" className="text-secure-500 hover:text-secure-700 hover:underline text-xs md:text-sm">
+            <a href="https://github.com/PurpleBass/cryptoseed" target="_blank" rel="noopener noreferrer" className="text-secure-500 hover:text-secure-700 hover:underline text-xs md:text-sm">
               GitHub Repository
             </a>
             <a href="#" onClick={e => {
