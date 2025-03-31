@@ -15,7 +15,6 @@ const Index = () => {
   const location = useLocation();
   
   useEffect(() => {
-    // Check if there's a faq parameter in the URL
     const searchParams = new URLSearchParams(location.search);
     if (searchParams.has('faq')) {
       setCurrentView("faq");
@@ -26,11 +25,16 @@ const Index = () => {
     <div className="min-h-screen flex flex-col bg-background">
       <Header currentView={currentView} setCurrentView={setCurrentView} />
       
-      {/* Hero section - only show on encrypt view */}
       {currentView === "encrypt" && (
         <div className="bg-gradient-to-b from-secure-50 to-white pt-4 md:pt-8 pb-4 md:pb-6 border-b border-gray-100">
           <div className="satoshi-container text-center">
-            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4">Secure Your Crypto Seed Phrases</h1>
+            <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
+              <Shield className="h-6 w-6 md:h-8 md:w-8 text-secure-500" />
+              <h1 className="text-2xl md:text-4xl font-bold text-gray-900">
+                Secure Your Crypto Seed Phrases
+              </h1>
+            </div>
+            
             <div className="max-w-3xl mx-auto px-2 md:px-0">
               <p className="text-sm md:text-base text-gray-700 mb-4 md:mb-6">
                 Protect your critical seed phrases with advanced zero-knowledge encryption. 
@@ -108,7 +112,6 @@ const Index = () => {
             </a>
           </div>
           
-          {/* Legal section */}
           <div className="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-gray-200">
             <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-3 md:mb-4">
               <Dialog>
