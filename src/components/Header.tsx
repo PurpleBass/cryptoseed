@@ -1,6 +1,6 @@
 
 import React from "react";
-import { FileText, HelpCircle } from "lucide-react";
+import { FileText, HelpCircle, Shield } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useBreakpoint } from "@/hooks/use-mobile";

@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from "react";
-import { Key, Lock, FileText, Book, FileCheck } from "lucide-react";
+import { Key, Lock, FileText, Book, FileCheck, Shield } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
 import EncryptionComponent from "@/components/EncryptionComponent";
 import CodeVerification from "@/components/CodeVerification";
