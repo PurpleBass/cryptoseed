@@ -80,7 +80,7 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         <Label htmlFor="wordCount" className="text-gray-700">Number of Words</Label>
         {isCustomCount ? (
@@ -166,7 +166,7 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {words.map((word, index) => (
           <div key={index} className="flex items-center">
             <span className="mr-2 text-sm text-gray-500 w-6">{index + 1}:</span>
@@ -174,7 +174,7 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
               value={word}
               onChange={(e) => handleWordChange(index, e.target.value)}
               placeholder={`Word ${index + 1}`}
-              className="satoshi-input text-sm"
+              className="satoshi-input"
             />
           </div>
         ))}
