@@ -411,11 +411,14 @@ const EncryptionComponent = () => {
                     {isEncrypting ? "Select File" : "Select Encrypted File"}
                   </Label>
                   <div className="flex items-center gap-2">
-                    <Input ref={fileInputRef} id="fileUpload" type="file" onChange={handleFileSelect} className="satoshi-input" />
-                  </div>
-                  {selectedFile && <div className="text-sm text-gray-500 mt-2">
+                    <Input ref={fileInputRef} id="fileUpload" type="file" onChange={handleFileSelect} className="satoshi-input" placeholder="**Choose file**" />
+                    {!selectedFile && <div className="text-sm text-gray-500 mt-2">
+                      No file selected
+                    </div>}
+                    {selectedFile && <div className="text-sm text-gray-500 mt-2">
                       Selected file: {selectedFile.name} ({Math.round(selectedFile.size / 1024)}KB)
                     </div>}
+                  </div>
                 </div>
                 
                 <div className="grid gap-2">
