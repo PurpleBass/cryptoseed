@@ -174,7 +174,7 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
               value={word}
               onChange={(e) => handleWordChange(index, e.target.value)}
               placeholder={`Word ${index + 1}`}
-              className="satoshi-input"
+              className="satoshi-input placeholder:text-xs placeholder:text-muted-foreground/50"
             />
           </div>
         ))}
@@ -184,3 +184,4 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
 };
 
 export default SeedPhraseInput;
+
