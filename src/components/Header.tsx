@@ -3,7 +3,7 @@ import React from "react";
 import { Shield, FileText, HelpCircle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useBreakpoint } from "@/hooks/use-mobile";
 
 export type ViewType = "encrypt" | "verify" | "faq";
 
@@ -13,7 +13,8 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
-  const isMobile = useIsMobile();
+  const breakpoint = useBreakpoint();
+  const isMobile = breakpoint === 'mobile';
 
   return (
     <header className="w-full py-4 md:py-8 bg-white border-b border-gray-100">
@@ -38,41 +39,37 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
           >
             <TabsList className={cn(
               "grid w-full rounded-full p-1 bg-gray-100",
-              isMobile ? "grid-cols-1 gap-1" : "grid-cols-3"
+              isMobile ? "grid-cols-3 gap-1" : "grid-cols-3"
             )}>
               {isMobile ? (
-                // Mobile Layout: Show only the active tab
+                // Mobile Layout: Show all tabs with smaller text and icons
                 <>
-                  {currentView === "encrypt" && (
-                    <TabsTrigger 
-                      value="encrypt" 
-                      className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
-                    >
-                      <Shield className="h-3 w-3 md:h-4 md:w-4" />
-                      <span className="text-sm">Encrypt</span>
-                    </TabsTrigger>
-                  )}
-                  {currentView === "verify" && (
-                    <TabsTrigger 
-                      value="verify" 
-                      className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
-                    >
-                      <FileText className="h-3 w-3 md:h-4 md:w-4" />
-                      <span className="text-sm">Verify Code</span>
-                    </TabsTrigger>
-                  )}
-                  {currentView === "faq" && (
-                    <TabsTrigger 
-                      value="faq" 
-                      className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
-                    >
-                      <HelpCircle className="h-3 w-3 md:h-4 md:w-4" />
-                      <span className="text-sm">FAQ</span>
-                    </TabsTrigger>
-                  )}
+                  <TabsTrigger 
+                    value="encrypt" 
+                    className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm text-xs py-1.5"
+                  >
+                    <Shield className="h-3 w-3" />
+                    <span>Encrypt</span>
+                  </TabsTrigger>
+                  
+                  <TabsTrigger 
+                    value="verify" 
+                    className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm text-xs py-1.5"
+                  >
+                    <FileText className="h-3 w-3" />
+                    <span>Verify</span>
+                  </TabsTrigger>
+                  
+                  <TabsTrigger 
+                    value="faq" 
+                    className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm text-xs py-1.5"
+                  >
+                    <HelpCircle className="h-3 w-3" />
+                    <span>FAQ</span>
+                  </TabsTrigger>
                 </>
               ) : (
-                // Desktop Layout: Show all tabs
+                // Desktop Layout: Show all tabs with normal size
                 <>
                   <TabsTrigger 
                     value="encrypt" 
