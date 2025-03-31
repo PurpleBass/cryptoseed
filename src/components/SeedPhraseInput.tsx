@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,22 +26,18 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
   const [words, setWords] = useState<string[]>(Array(12).fill(""));
   const [isCustomCount, setIsCustomCount] = useState(false);
 
-  // Update word array when count changes
   useEffect(() => {
     const newWords = [...words];
     if (wordCount > words.length) {
-      // Add empty words
       for (let i = words.length; i < wordCount; i++) {
         newWords.push("");
       }
     } else if (wordCount < words.length) {
-      // Remove extra words
       newWords.splice(wordCount);
     }
     setWords(newWords);
   }, [wordCount]);
 
-  // Update parent component when words change
   useEffect(() => {
     const seedPhrase = words.join(" ").trim();
     onSeedPhraseChange(seedPhrase);
@@ -75,12 +70,8 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
     }
   };
 
-  const returnToDropdown = () => {
-    setIsCustomCount(false);
-  };
-
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <Label htmlFor="wordCount" className="text-gray-700">Number of Words</Label>
         {isCustomCount ? (
@@ -166,7 +157,7 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {words.map((word, index) => (
           <div key={index} className="flex items-center">
             <span className="mr-2 text-sm text-gray-500 w-6">{index + 1}:</span>
