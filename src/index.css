@@ -7,33 +7,33 @@
 
 @layer base {
   :root {
-    --background: 220 33% 98%;
-    --foreground: 222 47% 11%;
+    --background: 210 50% 98%;
+    --foreground: 220 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 220 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 220 47% 11%;
 
-    --primary: 222 83% 55%; /* Satoshi blue */
+    --primary: 217 91% 60%; /* Primary blue */
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 214 32% 96%;
+    --secondary-foreground: 220 47% 11%;
 
-    --muted: 220 14% 96%;
+    --muted: 214 32% 96%;
     --muted-foreground: 220 8% 46%;
 
-    --accent: 220 14% 96%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 214 32% 96%;
+    --accent-foreground: 220 47% 11%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 222 84% 48%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 217 91% 60%;
 
     --radius: 0.5rem;
 
@@ -57,28 +57,28 @@
     --popover: 222 47% 11%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 222 83% 55%;
+    --primary: 217 91% 60%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 215 27% 17%;
+    --secondary: 217 32% 17%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 215 27% 17%;
+    --muted: 217 32% 17%;
     --muted-foreground: 217 20% 65%;
 
-    --accent: 215 27% 17%;
+    --accent: 217 32% 17%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62% 30%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 215 27% 17%;
-    --input: 215 27% 17%;
-    --ring: 213 27% 84%;
+    --border: 217 32% 17%;
+    --input: 217 32% 17%;
+    --ring: 217 27% 84%;
     
     --sidebar-background: 240 6% 10%;
     --sidebar-foreground: 240 5% 96%;
-    --sidebar-primary: 222 83% 55%;
+    --sidebar-primary: 217 91% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 240 4% 16%;
     --sidebar-accent-foreground: 240 5% 96%;
@@ -101,22 +101,22 @@
   }
 }
 
-/* SatoshiLabs-inspired styles */
+/* Crypto-inspired styles */
 @layer components {
-  .satoshi-container {
+  .crypto-container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
   
-  .satoshi-button {
-    @apply bg-satoshi-500 hover:bg-satoshi-600 text-white font-medium py-2 px-4 rounded-md transition-colors;
+  .crypto-button {
+    @apply bg-crypto-500 hover:bg-crypto-600 text-white font-medium py-2 px-4 rounded-md transition-colors;
   }
   
-  .satoshi-card {
+  .crypto-card {
     @apply bg-white rounded-xl shadow-sm border border-gray-100;
   }
   
-  .satoshi-input {
-    @apply rounded-md border-gray-200 focus:border-satoshi-500 focus:ring focus:ring-satoshi-200 focus:ring-opacity-50;
+  .crypto-input {
+    @apply rounded-md border-gray-200 focus:border-crypto-500 focus:ring focus:ring-crypto-200 focus:ring-opacity-50;
   }
 }
 

@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Shield, Key, Lock, FileText } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
@@ -13,8 +14,8 @@ const Index = () => {
       <Header currentView={currentView} setCurrentView={setCurrentView} />
       
       {currentView === "encrypt" && (
-        <div className="bg-gradient-to-b from-satoshi-50 to-white pt-8 pb-6 border-b border-gray-100">
-          <div className="satoshi-container text-center">
+        <div className="bg-gradient-to-b from-crypto-50 to-white pt-8 pb-6 border-b border-gray-100">
+          <div className="crypto-container text-center">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Secure Your Crypto Seed Phrases</h1>
             <div className="max-w-3xl mx-auto">
               <p className="text-gray-700 mb-6">
@@ -25,7 +26,7 @@ const Index = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
                 <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
                   <div className="flex items-center mb-2">
-                    <Key className="h-5 w-5 text-satoshi-600 mr-2" />
+                    <Key className="h-5 w-5 text-crypto-600 mr-2" />
                     <h3 className="font-medium text-gray-900">Seed Phrase Protection</h3>
                   </div>
                   <p className="text-sm text-gray-600">
@@ -36,7 +37,7 @@ const Index = () => {
                 
                 <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
                   <div className="flex items-center mb-2">
-                    <FileText className="h-5 w-5 text-satoshi-600 mr-2" />
+                    <FileText className="h-5 w-5 text-crypto-600 mr-2" />
                     <h3 className="font-medium text-gray-900">Text Encryption</h3>
                   </div>
                   <p className="text-sm text-gray-600">
@@ -46,7 +47,7 @@ const Index = () => {
                 
                 <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
                   <div className="flex items-center mb-2">
-                    <Lock className="h-5 w-5 text-satoshi-600 mr-2" />
+                    <Lock className="h-5 w-5 text-crypto-600 mr-2" />
                     <h3 className="font-medium text-gray-900">File Encryption</h3>
                   </div>
                   <p className="text-sm text-gray-600">
@@ -66,9 +67,9 @@ const Index = () => {
       </main>
       
       <footer className="py-10 bg-gray-50 border-t border-gray-100">
-        <div className="satoshi-container text-center">
+        <div className="crypto-container text-center">
           <div className="mb-4">
-            <Shield className="h-8 w-8 text-satoshi-500 inline-block" />
+            <Shield className="h-8 w-8 text-crypto-500 inline-block" />
             <p className="text-lg font-medium text-gray-800 mt-2">Crypto Seed</p>
           </div>
           <p className="text-sm text-gray-600 max-w-xl mx-auto">
@@ -80,21 +81,21 @@ const Index = () => {
               href="https://github.com/yourusername/secure-nomad-encryptor" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-satoshi-500 hover:text-satoshi-700 hover:underline text-sm"
+              className="text-crypto-500 hover:text-crypto-700 hover:underline text-sm"
             >
               GitHub Repository
             </a>
             <a 
               href="#" 
               onClick={(e) => { e.preventDefault(); setCurrentView("verify"); }}
-              className="text-satoshi-500 hover:text-satoshi-700 hover:underline text-sm"
+              className="text-crypto-500 hover:text-crypto-700 hover:underline text-sm"
             >
               Verify Code
             </a>
             <a 
               href="#" 
               onClick={(e) => { e.preventDefault(); setCurrentView("faq"); }}
-              className="text-satoshi-500 hover:text-satoshi-700 hover:underline text-sm"
+              className="text-crypto-500 hover:text-crypto-700 hover:underline text-sm"
             >
               Security FAQ
             </a>
