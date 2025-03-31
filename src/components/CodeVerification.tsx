@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -45,7 +44,7 @@ const CodeVerification = () => {
             </CardHeader>
             <CardContent>
               <div className="p-4 bg-muted rounded-md overflow-auto max-h-[600px]">
-                <pre className="text-xs md:text-sm whitespace-pre">
+                <pre className="text-xs md:text-sm whitespace-pre text-left ml-0">
 {`/**
  * AES-256 encryption functions for the Secure Nomad Encryptor
  * 
