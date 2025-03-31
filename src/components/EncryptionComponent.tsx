@@ -5,13 +5,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertCircle, ArrowDownUp, Copy, Download, Eye, EyeOff, FileUp, Lock, LockOpen, Shield, Wifi, WifiOff, Sprout, FileText, File, Eraser } from "lucide-react";
+import { AlertCircle, ArrowDownUp, Copy, Download, Eye, EyeOff, FileUp, Lock, LockOpen, Shield, Wifi, WifiOff, Sprout, FileText, File, Eraser, HelpCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { encryptMessage, decryptMessage, encryptFile, decryptFile, isWebCryptoSupported } from "@/lib/encryption";
 import { Switch } from "@/components/ui/switch";
 import SeedPhraseInput from "./SeedPhraseInput";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useNavigate } from "react-router-dom";
 
 const EncryptionComponent = () => {
   const [mode, setMode] = useState<"seedphrase" | "text" | "file">("seedphrase");
@@ -27,6 +29,7 @@ const EncryptionComponent = () => {
   const {
     toast
   } = useToast();
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     setOutput("");
@@ -254,6 +257,10 @@ const EncryptionComponent = () => {
       </div>;
   }
 
+  const goToFAQ = () => {
+    navigate('/?faq=offline');
+  };
+
   return <div className="satoshi-container px-4 md:px-0 py-10 bg-white">
       <div className="mb-8 flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-3 rounded-lg gap-2">
         <div className="flex flex-col sm:flex-row items-center gap-2">
@@ -279,6 +286,22 @@ const EncryptionComponent = () => {
             <WifiOff className="h-3 w-3" />
             <span>Offline recommended</span>
           </Badge>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full hover:bg-gray-300/50 p-0">
+                <HelpCircle className="h-3.5 w-3.5 text-gray-700" />
+                <span className="sr-only">Why offline recommended?</span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 p-3 text-sm">
+              <p className="font-medium mb-2">Why use this offline?</p>
+              <p className="text-gray-600 mb-3">Using encryption tools offline adds an additional layer of security by preventing potential network-based attacks.</p>
+              <Button size="sm" variant="outline" onClick={goToFAQ} className="w-full justify-start">
+                <HelpCircle className="h-3.5 w-3.5 mr-2" /> 
+                Read more in FAQ
+              </Button>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
 
