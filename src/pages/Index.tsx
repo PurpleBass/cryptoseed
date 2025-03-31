@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Shield, Key, Lock, FileText, Book, FileCheck } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
@@ -7,6 +8,7 @@ import FAQComponent from "@/components/FAQComponent";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
+
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewType>("encrypt");
   const isMobile = useIsMobile();
@@ -28,7 +30,7 @@ const Index = () => {
                     <Key className="h-4 w-4 md:h-5 md:w-5 text-secure-600 mr-2" />
                     <h3 className="font-medium text-sm md:text-base text-gray-900">Seed Phrase Protection</h3>
                   </div>
-                  <p className="text-xs md:text-sm text-gray-600">
+                  <p className="text-xs md:text-sm text-gray-600 min-h-[3rem]">
                     Securely encrypt and store your wallet recovery phrases using AES-256 encryption. 
                     Prevent unauthorized access to your crypto assets.
                   </p>
@@ -39,8 +41,9 @@ const Index = () => {
                     <FileText className="h-4 w-4 md:h-5 md:w-5 text-secure-600 mr-2" />
                     <h3 className="font-medium text-sm md:text-base text-gray-900">Text Encryption</h3>
                   </div>
-                  <p className="text-xs md:text-sm text-gray-600">
-Encrypt sensitive text messages, passwords, or confidential notes with robust encryption.</p>
+                  <p className="text-xs md:text-sm text-gray-600 min-h-[3rem]">
+                    Encrypt sensitive text messages, passwords, or confidential notes with robust encryption.
+                  </p>
                 </div>
                 
                 <div className="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-gray-100">
@@ -48,8 +51,9 @@ Encrypt sensitive text messages, passwords, or confidential notes with robust en
                     <Lock className="h-4 w-4 md:h-5 md:w-5 text-secure-600 mr-2" />
                     <h3 className="font-medium text-sm md:text-base text-gray-900">File Encryption</h3>
                   </div>
-                  <p className="text-xs md:text-sm text-gray-600">
-Encrypt any file with a password. Secure your documents, images, and other sensitive files.</p>
+                  <p className="text-xs md:text-sm text-gray-600 min-h-[3rem]">
+                    Encrypt any file with a password. Secure your documents, images, and other sensitive files.
+                  </p>
                 </div>
               </div>
             </div>
