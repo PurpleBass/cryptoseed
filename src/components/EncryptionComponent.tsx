@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertCircle, ArrowDownUp, Copy, Download, Eye, EyeOff, FileUp, Lock, LockOpen, Shield, Wifi, WifiOff, Sprout, FileText, File } from "lucide-react";
+import { AlertCircle, ArrowDownUp, Copy, Download, Eye, EyeOff, FileUp, Lock, LockOpen, Shield, Wifi, WifiOff, Sprout, FileText, File, Trash2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
@@ -211,6 +211,17 @@ const EncryptionComponent = () => {
     setShowPassword(!showPassword);
   };
 
+  const clearAllInputs = () => {
+    setTextInput("");
+    setPassword("");
+    setOutput("");
+    setSeedPhrase("");
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   const cryptoSupported = isWebCryptoSupported();
   if (!cryptoSupported) {
     return <div className="satoshi-container my-8">
@@ -264,7 +275,19 @@ const EncryptionComponent = () => {
         </div>
       </div>
 
-      <Tabs defaultValue="seedphrase" value={mode} onValueChange={v => setMode(v as "seedphrase" | "text" | "file")} className="mt-4">
+      <div className="flex justify-end items-center mt-4 mb-2">
+        <Button 
+          onClick={clearAllInputs} 
+          variant="outline" 
+          size="sm" 
+          className="text-red-500 border-red-200 hover:bg-red-50 hover:border-red-300 hover:text-red-600 transition-colors"
+        >
+          <Trash2 className="h-4 w-4 mr-1.5" />
+          Erase All Inputs
+        </Button>
+      </div>
+
+      <Tabs defaultValue="seedphrase" value={mode} onValueChange={v => setMode(v as "seedphrase" | "text" | "file")} className="mt-2">
         <TabsList className="mb-4 bg-secure-50 p-1 border border-secure-100 shadow-sm rounded-full">
           <TabsTrigger value="seedphrase" className="flex items-center gap-1.5 rounded-full data-[state=active]:bg-secure-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">
             <Sprout className="h-3.5 w-3.5" />
