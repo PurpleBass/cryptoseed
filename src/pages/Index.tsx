@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import { Shield } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
 import EncryptionComponent from "@/components/EncryptionComponent";
 import CodeVerification from "@/components/CodeVerification";
