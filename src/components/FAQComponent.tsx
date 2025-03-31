@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -617,16 +616,55 @@ const FAQComponent = () => {
               
               <div className="bg-gray-50 p-3 sm:p-4 rounded-md border border-gray-100">
                 <div className="flex items-center gap-2 mb-1 sm:mb-2">
-                  <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-secure-600" />
+                  <FileText className="h-4 w-4 sm:h-5 md:w-5 text-secure-600 mr-2" />
                   <h3 className="font-medium text-gray-900 text-sm sm:text-base">Legal Documents</h3>
                 </div>
                 <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-4">
                   Complete legal documents are available at the bottom of the page:
                 </p>
                 <ul className="list-disc pl-4 sm:pl-6 text-xs sm:text-sm text-secure-600">
-                  <li><a href="#" className="hover:underline">Terms of Service</a></li>
-                  <li><a href="#" className="hover:underline">Privacy Policy</a></li>
-                  <li><a href="#" className="hover:underline">MIT License</a></li>
+                  <li>
+                    <button 
+                      onClick={() => {
+                        const termsDialog = document.querySelector('[aria-label="Terms of Service"]');
+                        if (termsDialog) {
+                          const button = termsDialog.parentElement?.querySelector('button');
+                          button?.click();
+                        }
+                      }} 
+                      className="hover:underline"
+                    >
+                      Terms of Service
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => {
+                        const privacyDialog = document.querySelector('[aria-label="Privacy Policy"]');
+                        if (privacyDialog) {
+                          const button = privacyDialog.parentElement?.querySelector('button');
+                          button?.click();
+                        }
+                      }} 
+                      className="hover:underline"
+                    >
+                      Privacy Policy
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => {
+                        const licenseDialog = document.querySelector('[aria-label="MIT License"]');
+                        if (licenseDialog) {
+                          const button = licenseDialog.parentElement?.querySelector('button');
+                          button?.click();
+                        }
+                      }} 
+                      className="hover:underline"
+                    >
+                      MIT License
+                    </button>
+                  </li>
                 </ul>
               </div>
             </CardContent>
