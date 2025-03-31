@@ -5,13 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertCircle, ArrowDownUp, Copy, Download, Eye, EyeOff, FileUp, Lock, LockOpen, Shield, Wifi, WifiOff, Sprout, FileText, File, Trash2 } from "lucide-react";
+import { AlertCircle, ArrowDownUp, Copy, Download, Eye, EyeOff, FileUp, Lock, LockOpen, Shield, Wifi, WifiOff, Sprout, FileText, File, Broom } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { encryptMessage, decryptMessage, encryptFile, decryptFile, isWebCryptoSupported } from "@/lib/encryption";
 import { Switch } from "@/components/ui/switch";
 import SeedPhraseInput from "./SeedPhraseInput";
+
 const EncryptionComponent = () => {
   const [mode, setMode] = useState<"seedphrase" | "text" | "file">("seedphrase");
   const [textInput, setTextInput] = useState("");
@@ -26,6 +27,7 @@ const EncryptionComponent = () => {
   const {
     toast
   } = useToast();
+
   React.useEffect(() => {
     setOutput("");
     setSelectedFile(null);
@@ -33,14 +35,17 @@ const EncryptionComponent = () => {
       fileInputRef.current.value = "";
     }
   }, [isEncrypting]);
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
     }
   };
+
   const handleSeedPhraseChange = (phrase: string) => {
     setSeedPhrase(phrase);
   };
+
   const formatSeedPhrase = (phrase: string) => {
     if (!phrase.trim()) return "";
 
@@ -54,21 +59,26 @@ const EncryptionComponent = () => {
     // If not a seed phrase, return as is
     return phrase;
   };
+
   const clearTextInput = () => {
     setTextInput("");
   };
+
   const clearPassword = () => {
     setPassword("");
   };
+
   const clearSeedPhrase = () => {
     setSeedPhrase("");
   };
+
   const clearFileSelection = () => {
     setSelectedFile(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
+
   const clearAllInputs = () => {
     setTextInput("");
     setPassword("");
@@ -79,6 +89,7 @@ const EncryptionComponent = () => {
       fileInputRef.current.value = "";
     }
   };
+
   const processText = async () => {
     if (!textInput.trim() || !password.trim()) {
       toast({
@@ -115,6 +126,7 @@ const EncryptionComponent = () => {
       setIsProcessing(false);
     }
   };
+
   const processSeedPhrase = async () => {
     if (!seedPhrase.trim() || !password.trim()) {
       toast({
@@ -151,6 +163,7 @@ const EncryptionComponent = () => {
       setIsProcessing(false);
     }
   };
+
   const processFile = async () => {
     if (!selectedFile || !password.trim()) {
       toast({
@@ -211,6 +224,7 @@ const EncryptionComponent = () => {
       setIsProcessing(false);
     }
   };
+
   const copyToClipboard = () => {
     navigator.clipboard.writeText(output);
     toast({
@@ -218,12 +232,15 @@ const EncryptionComponent = () => {
       description: "The output has been copied to your clipboard"
     });
   };
+
   const toggleEncryptDecrypt = () => {
     setIsEncrypting(!isEncrypting);
   };
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
   const cryptoSupported = isWebCryptoSupported();
   if (!cryptoSupported) {
     return <div className="satoshi-container my-8">
@@ -236,6 +253,7 @@ const EncryptionComponent = () => {
         </Alert>
       </div>;
   }
+
   return <div className="satoshi-container px-4 md:px-0 py-10 bg-white">
       <div className="mb-8 flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-3 rounded-lg gap-2">
         <div className="flex flex-col sm:flex-row items-center gap-2">
@@ -307,8 +325,8 @@ const EncryptionComponent = () => {
                         Encrypted Seed Phrase
                       </Label>
                       <Button onClick={clearTextInput} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
-                        <Trash2 className="h-3.5 w-3.5 mr-1.5" />
-                        <span>Erase</span>
+                        <Broom className="h-3.5 w-3.5 mr-1.5" />
+                        <span>Clear</span>
                       </Button>
                     </div>
                     <Textarea id="seedPhraseInput" value={textInput} onChange={e => setTextInput(e.target.value)} placeholder="Paste the encrypted seed phrase here" className="min-h-32 satoshi-input" />
@@ -318,8 +336,8 @@ const EncryptionComponent = () => {
                   <div className="flex items-center justify-between">
                     <Label htmlFor="seedPhrasePassword" className="text-gray-700">Password</Label>
                     <Button onClick={clearPassword} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
-                      <Trash2 className="h-3.5 w-3.5 mr-1.5" />
-                      <span>Erase</span>
+                      <Broom className="h-3.5 w-3.5 mr-1.5" />
+                      <span>Clear</span>
                     </Button>
                   </div>
                   <div className="relative">
@@ -375,8 +393,8 @@ const EncryptionComponent = () => {
                       {isEncrypting ? "Plain Text" : "Encrypted Text"}
                     </Label>
                     <Button onClick={clearTextInput} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
-                      <Trash2 className="h-3.5 w-3.5 mr-1.5" />
-                      <span>Erase</span>
+                      <Broom className="h-3.5 w-3.5 mr-1.5" />
+                      <span>Clear</span>
                     </Button>
                   </div>
                   <Textarea id="textInput" value={textInput} onChange={e => setTextInput(e.target.value)} placeholder={isEncrypting ? "Enter the text you want to encrypt" : "Paste the encrypted text here"} className="min-h-32 satoshi-input" />
@@ -386,8 +404,8 @@ const EncryptionComponent = () => {
                   <div className="flex items-center justify-between">
                     <Label htmlFor="password" className="text-gray-700">Password</Label>
                     <Button onClick={clearPassword} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
-                      <Trash2 className="h-3.5 w-3.5 mr-1.5" />
-                      <span>Erase</span>
+                      <Broom className="h-3.5 w-3.5 mr-1.5" />
+                      <span>Clear</span>
                     </Button>
                   </div>
                   <div className="relative">
@@ -443,8 +461,8 @@ const EncryptionComponent = () => {
                       {isEncrypting ? "Select File" : "Select Encrypted File"}
                     </Label>
                     {selectedFile && <Button onClick={clearFileSelection} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
-                        <Trash2 className="h-3.5 w-3.5 mr-1.5" />
-                        <span>Erase</span>
+                        <Broom className="h-3.5 w-3.5 mr-1.5" />
+                        <span>Clear</span>
                       </Button>}
                   </div>
                   <div className="flex items-center gap-2">
@@ -459,8 +477,8 @@ const EncryptionComponent = () => {
                   <div className="flex items-center justify-between">
                     <Label htmlFor="filePassword" className="text-gray-700">Password</Label>
                     <Button onClick={clearPassword} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
-                      <Trash2 className="h-3.5 w-3.5 mr-1.5" />
-                      <span>Erase</span>
+                      <Broom className="h-3.5 w-3.5 mr-1.5" />
+                      <span>Clear</span>
                     </Button>
                   </div>
                   <div className="relative">
@@ -490,4 +508,5 @@ const EncryptionComponent = () => {
       </Tabs>
     </div>;
 };
+
 export default EncryptionComponent;

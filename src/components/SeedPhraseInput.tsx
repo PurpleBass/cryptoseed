@@ -16,7 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { MinusCircle, PlusCircle, ChevronDown, Trash2 } from "lucide-react";
+import { MinusCircle, PlusCircle, ChevronDown, Broom } from "lucide-react";
 
 interface SeedPhraseInputProps {
   onSeedPhraseChange: (seedPhrase: string) => void;
@@ -173,7 +173,7 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
       </div>
 
       <div className="grid gap-4">
-        {/* Erase button above the input grid */}
+        {/* Clear button above the input grid */}
         <div className="flex justify-end">
           <Button
             type="button"
@@ -182,8 +182,8 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
             onClick={clearAllWords}
             className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
           >
-            <Trash2 className="h-3.5 w-3.5 mr-1.5" />
-            <span>Erase Seed Phrase</span>
+            <Broom className="h-3.5 w-3.5 mr-1.5" />
+            <span>Clear Seed Phrase</span>
           </Button>
         </div>
 
