@@ -67,19 +67,19 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Blue tones palette (inspired by Trezor but with blue instead of green)
-        crypto: {
-          50: "#F0F7FF",
-          100: "#E1EFFF",
-          200: "#C2DFFF",
-          300: "#94C5FF",
-          400: "#5A9EFF",
-          500: "#3B82F6", // Primary blue
-          600: "#2563EB",
-          700: "#1D4ED8",
-          800: "#1E40AF",
-          900: "#1E3A8A",
-          950: "#172554",
+        // SatoshiLabs inspired colors
+        satoshi: {
+          50: "#F5F8FF",
+          100: "#EBF1FF",
+          200: "#D6E4FF",
+          300: "#ADC8FF",
+          400: "#85A5FF",
+          500: "#4F7DF3", // Primary blue
+          600: "#3861D8",
+          700: "#2248C4",
+          800: "#1A3899",
+          900: "#0E1B4D",
+          950: "#091033",
         },
       },
       borderRadius: {
