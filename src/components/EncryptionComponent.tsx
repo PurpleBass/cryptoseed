@@ -12,6 +12,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { encryptMessage, decryptMessage, encryptFile, decryptFile, isWebCryptoSupported } from "@/lib/encryption";
 import { Switch } from "@/components/ui/switch";
 import SeedPhraseInput from "./SeedPhraseInput";
+import { QRCodeSVG } from "qrcode.react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 
 const EncryptionComponent = () => {
   const [mode, setMode] = useState<"seedphrase" | "text" | "file">("seedphrase");
@@ -24,6 +26,7 @@ const EncryptionComponent = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [seedPhrase, setSeedPhrase] = useState("");
+  const [showQRCode, setShowQRCode] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
@@ -216,13 +219,11 @@ const EncryptionComponent = () => {
   };
 
   const createQRCode = () => {
-    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(output)}`;
-    
-    window.open(qrCodeUrl, "_blank");
+    setShowQRCode(true);
     
     toast({
       title: "QR Code created",
-      description: "QR Code has been generated in a new tab"
+      description: "QR Code has been generated"
     });
   };
 
@@ -661,6 +662,32 @@ const EncryptionComponent = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <Dialog open={showQRCode} onOpenChange={setShowQRCode}>
+        <DialogContent className="sm:max-w-md bg-white">
+          <DialogHeader>
+            <DialogTitle>QR Code</DialogTitle>
+            <DialogDescription>
+              Scan this QR code to view the {isEncrypting ? "encrypted" : "decrypted"} content
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex items-center justify-center p-4">
+            <QRCodeSVG 
+              value={output} 
+              size={200} 
+              bgColor="#FFFFFF"
+              fgColor="#000000"
+              level="L"
+              includeMargin={false}
+            />
+          </div>
+          <div className="flex justify-center">
+            <DialogClose asChild>
+              <Button variant="outline">Close</Button>
+            </DialogClose>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
