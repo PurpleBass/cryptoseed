@@ -9,8 +9,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 const CodeVerification = () => {
   return (
     <div className="container mx-auto p-4 max-w-4xl">
-      <div className="text-center mb-6"> {/* Added text-center here */}
-        <div className="flex items-center justify-center gap-2"> {/* Added justify-center */}
+      <div className="mb-6">
+        <div className="flex items-center gap-2">
           <FileText className="h-5 w-5 text-secure-600" />
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Verify Our Code</h2>
         </div>
