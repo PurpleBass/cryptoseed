@@ -244,8 +244,8 @@ const EncryptionComponent = () => {
   }
 
   return (
-    <div className="satoshi-container py-10">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="satoshi-container py-10 bg-white">
+      <div className="mb-8 flex items-center justify-between bg-gray-50 p-4 rounded-lg">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-4">
@@ -298,29 +298,29 @@ const EncryptionComponent = () => {
         onValueChange={(v) => setMode(v as "seedphrase" | "text" | "file")}
         className="mt-4"
       >
-        <TabsList className="mb-4 rounded-full bg-secure-50 p-1 border border-secure-100">
+        <TabsList className="mb-4 rounded-full bg-white p-1 border border-gray-100 shadow-sm">
           <TabsTrigger 
             value="seedphrase" 
-            className="rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
+            className="rounded-full data-[state=active]:bg-gray-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
           >
             Seed Phrase
           </TabsTrigger>
           <TabsTrigger 
             value="text" 
-            className="rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
+            className="rounded-full data-[state=active]:bg-gray-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
           >
             Text
           </TabsTrigger>
           <TabsTrigger 
             value="file" 
-            className="rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
+            className="rounded-full data-[state=active]:bg-gray-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
           >
             File
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="seedphrase">
-          <Card className="satoshi-card">
+          <Card className="bg-white border border-gray-100 shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-xl text-gray-900">
                 {isEncrypting ? "Seed Phrase to Encrypt" : "Encrypted Seed Phrase to Decrypt"}
@@ -378,7 +378,7 @@ const EncryptionComponent = () => {
               <Button 
                 disabled={isProcessing || (isEncrypting ? !seedPhrase : !textInput) || !password} 
                 onClick={isEncrypting ? processSeedPhrase : processText}
-                className="w-full bg-satoshi-500 hover:bg-satoshi-600 text-white"
+                className="w-full bg-green-500 hover:bg-green-600 text-white"
               >
                 {isProcessing ? (
                   "Processing..."
@@ -416,7 +416,7 @@ const EncryptionComponent = () => {
         </TabsContent>
         
         <TabsContent value="text">
-          <Card className="satoshi-card">
+          <Card className="bg-white border border-gray-100 shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-xl text-gray-900">
                 {isEncrypting ? "Text to Encrypt" : "Encrypted Text to Decrypt"}
@@ -472,7 +472,7 @@ const EncryptionComponent = () => {
               <Button 
                 disabled={isProcessing || !textInput || !password} 
                 onClick={processText}
-                className="w-full bg-satoshi-500 hover:bg-satoshi-600 text-white"
+                className="w-full bg-green-500 hover:bg-green-600 text-white"
               >
                 {isProcessing ? (
                   "Processing..."
@@ -510,7 +510,7 @@ const EncryptionComponent = () => {
         </TabsContent>
         
         <TabsContent value="file">
-          <Card className="satoshi-card">
+          <Card className="bg-white border border-gray-100 shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-xl text-gray-900">
                 {isEncrypting ? "File to Encrypt" : "Encrypted File to Decrypt"}
@@ -571,7 +571,7 @@ const EncryptionComponent = () => {
               <Button 
                 disabled={isProcessing || !selectedFile || !password} 
                 onClick={processFile}
-                className="w-full flex items-center gap-2 bg-satoshi-500 hover:bg-satoshi-600 text-white"
+                className="w-full flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white"
               >
                 {isProcessing ? (
                   "Processing..."
