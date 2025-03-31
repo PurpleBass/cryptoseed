@@ -12,6 +12,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { encryptMessage, decryptMessage, encryptFile, decryptFile, isWebCryptoSupported } from "@/lib/encryption";
 import { Switch } from "@/components/ui/switch";
 import SeedPhraseInput from "./SeedPhraseInput";
+
 const EncryptionComponent = () => {
   const [mode, setMode] = useState<"seedphrase" | "text" | "file">("seedphrase");
   const [textInput, setTextInput] = useState("");
@@ -20,23 +21,11 @@ const EncryptionComponent = () => {
   const [output, setOutput] = useState("");
   const [isEncrypting, setIsEncrypting] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [seedPhrase, setSeedPhrase] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const {
-    toast
-  } = useToast();
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
+  const { toast } = useToast();
+
   React.useEffect(() => {
     setOutput("");
     setSelectedFile(null);
@@ -44,14 +33,17 @@ const EncryptionComponent = () => {
       fileInputRef.current.value = "";
     }
   }, [isEncrypting]);
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
     }
   };
+
   const handleSeedPhraseChange = (phrase: string) => {
     setSeedPhrase(phrase);
   };
+
   const formatSeedPhrase = (phrase: string) => {
     if (!phrase.trim()) return "";
 
@@ -65,6 +57,7 @@ const EncryptionComponent = () => {
     // If not a seed phrase, return as is
     return phrase;
   };
+
   const processText = async () => {
     if (!textInput.trim() || !password.trim()) {
       toast({
@@ -85,7 +78,6 @@ const EncryptionComponent = () => {
         });
       } else {
         const decrypted = await decryptMessage(textInput, password);
-        // Apply formatting to the decrypted text in case it's a seed phrase
         setOutput(formatSeedPhrase(decrypted));
         toast({
           title: "Decryption successful",
@@ -102,6 +94,7 @@ const EncryptionComponent = () => {
       setIsProcessing(false);
     }
   };
+
   const processSeedPhrase = async () => {
     if (!seedPhrase.trim() || !password.trim()) {
       toast({
@@ -138,6 +131,7 @@ const EncryptionComponent = () => {
       setIsProcessing(false);
     }
   };
+
   const processFile = async () => {
     if (!selectedFile || !password.trim()) {
       toast({
@@ -198,6 +192,7 @@ const EncryptionComponent = () => {
       setIsProcessing(false);
     }
   };
+
   const copyToClipboard = () => {
     navigator.clipboard.writeText(output);
     toast({
@@ -205,12 +200,15 @@ const EncryptionComponent = () => {
       description: "The output has been copied to your clipboard"
     });
   };
+
   const toggleEncryptDecrypt = () => {
     setIsEncrypting(!isEncrypting);
   };
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
   const cryptoSupported = isWebCryptoSupported();
   if (!cryptoSupported) {
     return <div className="satoshi-container my-8">
@@ -223,6 +221,7 @@ const EncryptionComponent = () => {
         </Alert>
       </div>;
   }
+
   return <div className="satoshi-container py-10 bg-white">
       <div className="mb-8 flex items-center justify-between bg-gray-50 p-4 rounded-lg">
         <div className="flex flex-col gap-2">
@@ -240,13 +239,10 @@ const EncryptionComponent = () => {
             </div>
           </div>
           <div className="flex gap-2 items-center">
-            {isOnline ? <Badge variant="outline" className="flex items-center gap-1 bg-red-100 text-red-800 border-red-300">
-                <Wifi className="h-3 w-3" />
-                <span>Online</span>
-              </Badge> : <Badge variant="outline" className="flex items-center gap-1 bg-green-100 text-green-800 border-green-300">
-                <WifiOff className="h-3 w-3" />
-                <span>Offline (Recommended)</span>
-              </Badge>}
+            <Badge variant="outline" className="flex items-center gap-1 bg-green-100 text-green-800 border-green-300">
+              <WifiOff className="h-3 w-3" />
+              <span>For maximum security, use offline after loading</span>
+            </Badge>
             <Badge variant="outline" className="flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200">
               <Shield className="h-3 w-3" />
               <span>AES-256 Encryption</span>
@@ -433,4 +429,5 @@ const EncryptionComponent = () => {
       </Tabs>
     </div>;
 };
+
 export default EncryptionComponent;
