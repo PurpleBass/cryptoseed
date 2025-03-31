@@ -39,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
           >
             <TabsList className={cn(
               "grid w-full rounded-full p-1 bg-gray-100",
-              isMobile ? "grid-cols-3 gap-1" : "grid-cols-3"
+              "grid-cols-3"
             )}>
               {isMobile ? (
                 // Mobile Layout: Show all tabs with smaller text and icons

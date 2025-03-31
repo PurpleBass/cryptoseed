@@ -43,11 +43,11 @@ const FAQComponent = () => {
       </div>
       
       <Tabs defaultValue="user" className="w-full">
-        <TabsList className="mb-3 w-full overflow-x-auto flex sm:inline-flex whitespace-nowrap">
-          <TabsTrigger value="user" className="text-xs sm:text-sm">Non-Technical FAQ</TabsTrigger>
-          <TabsTrigger value="technical" className="text-xs sm:text-sm">Technical Details</TabsTrigger>
-          <TabsTrigger value="practices" className="text-xs sm:text-sm">Best Practices</TabsTrigger>
-          <TabsTrigger value="legal" className="text-xs sm:text-sm">Legal</TabsTrigger>
+        <TabsList className="grid grid-cols-4 w-full mb-3">
+          <TabsTrigger value="user" className="text-xs sm:text-sm px-2 sm:px-3">Non-Technical</TabsTrigger>
+          <TabsTrigger value="technical" className="text-xs sm:text-sm px-2 sm:px-3">Technical</TabsTrigger>
+          <TabsTrigger value="practices" className="text-xs sm:text-sm px-2 sm:px-3">Best Practices</TabsTrigger>
+          <TabsTrigger value="legal" className="text-xs sm:text-sm px-2 sm:px-3">Legal</TabsTrigger>
         </TabsList>
         
         <TabsContent value="user">
