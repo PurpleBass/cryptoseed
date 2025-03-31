@@ -12,7 +12,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { encryptMessage, decryptMessage, encryptFile, decryptFile, isWebCryptoSupported } from "@/lib/encryption";
 import { Switch } from "@/components/ui/switch";
 import SeedPhraseInput from "./SeedPhraseInput";
-
 const EncryptionComponent = () => {
   const [mode, setMode] = useState<"seedphrase" | "text" | "file">("seedphrase");
   const [textInput, setTextInput] = useState("");
@@ -27,7 +26,6 @@ const EncryptionComponent = () => {
   const {
     toast
   } = useToast();
-
   React.useEffect(() => {
     setOutput("");
     setSelectedFile(null);
@@ -35,17 +33,14 @@ const EncryptionComponent = () => {
       fileInputRef.current.value = "";
     }
   }, [isEncrypting]);
-
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
     }
   };
-
   const handleSeedPhraseChange = (phrase: string) => {
     setSeedPhrase(phrase);
   };
-
   const formatSeedPhrase = (phrase: string) => {
     if (!phrase.trim()) return "";
 
@@ -59,26 +54,21 @@ const EncryptionComponent = () => {
     // If not a seed phrase, return as is
     return phrase;
   };
-
   const clearTextInput = () => {
     setTextInput("");
   };
-
   const clearPassword = () => {
     setPassword("");
   };
-  
   const clearSeedPhrase = () => {
     setSeedPhrase("");
   };
-  
   const clearFileSelection = () => {
     setSelectedFile(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
-
   const clearAllInputs = () => {
     setTextInput("");
     setPassword("");
@@ -89,7 +79,6 @@ const EncryptionComponent = () => {
       fileInputRef.current.value = "";
     }
   };
-
   const processText = async () => {
     if (!textInput.trim() || !password.trim()) {
       toast({
@@ -126,7 +115,6 @@ const EncryptionComponent = () => {
       setIsProcessing(false);
     }
   };
-
   const processSeedPhrase = async () => {
     if (!seedPhrase.trim() || !password.trim()) {
       toast({
@@ -163,7 +151,6 @@ const EncryptionComponent = () => {
       setIsProcessing(false);
     }
   };
-
   const processFile = async () => {
     if (!selectedFile || !password.trim()) {
       toast({
@@ -224,7 +211,6 @@ const EncryptionComponent = () => {
       setIsProcessing(false);
     }
   };
-
   const copyToClipboard = () => {
     navigator.clipboard.writeText(output);
     toast({
@@ -232,15 +218,12 @@ const EncryptionComponent = () => {
       description: "The output has been copied to your clipboard"
     });
   };
-
   const toggleEncryptDecrypt = () => {
     setIsEncrypting(!isEncrypting);
   };
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
   const cryptoSupported = isWebCryptoSupported();
   if (!cryptoSupported) {
     return <div className="satoshi-container my-8">
@@ -253,28 +236,18 @@ const EncryptionComponent = () => {
         </Alert>
       </div>;
   }
-
-  return (
-    <div className="satoshi-container px-4 md:px-0 py-10 bg-white">
+  return <div className="satoshi-container px-4 md:px-0 py-10 bg-white">
       <div className="mb-8 flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-3 rounded-lg gap-2">
         <div className="flex flex-col sm:flex-row items-center gap-2">
           <div className="flex items-center gap-2">
             <div className="flex items-center space-x-2">
-              <Switch 
-                id="encrypt-mode" 
-                checked={isEncrypting} 
-                onCheckedChange={setIsEncrypting} 
-                className="data-[state=checked]:bg-secure-500" 
-              />
+              <Switch id="encrypt-mode" checked={isEncrypting} onCheckedChange={setIsEncrypting} className="data-[state=checked]:bg-secure-500" />
               <div className="flex items-center">
                 {isEncrypting ? <Lock className="h-4 w-4 mr-2 text-secure-500" /> : <LockOpen className="h-4 w-4 mr-2 text-gray-500" />}
                 <span className="text-lg font-heading font-bold text-gray-900">
                   {isEncrypting ? "Encrypt" : "Decrypt"}
                 </span>
-                <Badge 
-                  variant="outline" 
-                  className="ml-2 text-xs flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200"
-                >
+                <Badge variant="outline" className="ml-2 text-xs flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200">
                   <Shield className="h-3 w-3" />
                   <span>AES-256</span>
                 </Badge>
@@ -284,10 +257,7 @@ const EncryptionComponent = () => {
         </div>
         
         <div className="flex gap-2 items-center">
-          <Badge 
-            variant="outline" 
-            className="text-xs flex items-center gap-1 bg-gray-200 text-gray-800 border-gray-300"
-          >
+          <Badge variant="outline" className="text-xs flex items-center gap-1 bg-gray-200 text-gray-800 border-gray-300">
             <WifiOff className="h-3 w-3" />
             <span>Offline recommended</span>
           </Badge>
@@ -295,15 +265,7 @@ const EncryptionComponent = () => {
       </div>
 
       <div className="flex justify-end items-center mt-4 mb-2">
-        <Button 
-          onClick={clearAllInputs} 
-          variant="outline" 
-          size="sm" 
-          className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:border-gray-300 hover:text-gray-700 transition-colors"
-        >
-          <Trash2 className="h-4 w-4 mr-1.5" />
-          Erase All Inputs
-        </Button>
+        
       </div>
 
       <Tabs defaultValue="seedphrase" value={mode} onValueChange={v => setMode(v as "seedphrase" | "text" | "file")} className="mt-2">
@@ -334,50 +296,31 @@ const EncryptionComponent = () => {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4">
-                {isEncrypting ? (
-                  <div>
+                {isEncrypting ? <div>
                     <div className="flex justify-end mb-2">
-                      <Button 
-                        onClick={clearSeedPhrase} 
-                        variant="outline" 
-                        size="sm" 
-                        className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
-                      >
+                      <Button onClick={clearSeedPhrase} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
                         <Trash2 className="h-3.5 w-3.5 mr-1.5" />
                         <span>Erase Seed Phrase</span>
                       </Button>
                     </div>
                     <SeedPhraseInput onSeedPhraseChange={handleSeedPhraseChange} />
-                  </div>
-                ) : (
-                  <div className="grid gap-2">
+                  </div> : <div className="grid gap-2">
                     <div className="flex items-center justify-between">
                       <Label htmlFor="seedPhraseInput" className="text-gray-700">
                         Encrypted Seed Phrase
                       </Label>
-                      <Button 
-                        onClick={clearTextInput} 
-                        variant="outline" 
-                        size="sm" 
-                        className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
-                      >
+                      <Button onClick={clearTextInput} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
                         <Trash2 className="h-3.5 w-3.5 mr-1.5" />
                         <span>Erase</span>
                       </Button>
                     </div>
                     <Textarea id="seedPhraseInput" value={textInput} onChange={e => setTextInput(e.target.value)} placeholder="Paste the encrypted seed phrase here" className="min-h-32 satoshi-input" />
-                  </div>
-                )}
+                  </div>}
                 
                 <div className="grid gap-2">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="seedPhrasePassword" className="text-gray-700">Password</Label>
-                    <Button 
-                      onClick={clearPassword} 
-                      variant="outline" 
-                      size="sm" 
-                      className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
-                    >
+                    <Button onClick={clearPassword} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
                       <Trash2 className="h-3.5 w-3.5 mr-1.5" />
                       <span>Erase</span>
                     </Button>
@@ -434,12 +377,7 @@ const EncryptionComponent = () => {
                     <Label htmlFor="textInput" className="text-gray-700">
                       {isEncrypting ? "Plain Text" : "Encrypted Text"}
                     </Label>
-                    <Button 
-                      onClick={clearTextInput} 
-                      variant="outline" 
-                      size="sm" 
-                      className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
-                    >
+                    <Button onClick={clearTextInput} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
                       <Trash2 className="h-3.5 w-3.5 mr-1.5" />
                       <span>Erase</span>
                     </Button>
@@ -450,12 +388,7 @@ const EncryptionComponent = () => {
                 <div className="grid gap-2">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="password" className="text-gray-700">Password</Label>
-                    <Button 
-                      onClick={clearPassword} 
-                      variant="outline" 
-                      size="sm" 
-                      className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
-                    >
+                    <Button onClick={clearPassword} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
                       <Trash2 className="h-3.5 w-3.5 mr-1.5" />
                       <span>Erase</span>
                     </Button>
@@ -512,17 +445,10 @@ const EncryptionComponent = () => {
                     <Label htmlFor="fileUpload" className="text-gray-700">
                       {isEncrypting ? "Select File" : "Select Encrypted File"}
                     </Label>
-                    {selectedFile && (
-                      <Button 
-                        onClick={clearFileSelection} 
-                        variant="outline" 
-                        size="sm" 
-                        className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
-                      >
+                    {selectedFile && <Button onClick={clearFileSelection} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
                         <Trash2 className="h-3.5 w-3.5 mr-1.5" />
                         <span>Erase</span>
-                      </Button>
-                    )}
+                      </Button>}
                   </div>
                   <div className="flex items-center gap-2">
                     <Input ref={fileInputRef} id="fileUpload" type="file" onChange={handleFileSelect} className="satoshi-input" />
@@ -535,12 +461,7 @@ const EncryptionComponent = () => {
                 <div className="grid gap-2">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="filePassword" className="text-gray-700">Password</Label>
-                    <Button 
-                      onClick={clearPassword} 
-                      variant="outline" 
-                      size="sm" 
-                      className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
-                    >
+                    <Button onClick={clearPassword} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
                       <Trash2 className="h-3.5 w-3.5 mr-1.5" />
                       <span>Erase</span>
                     </Button>
@@ -570,8 +491,6 @@ const EncryptionComponent = () => {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
-  );
+    </div>;
 };
-
 export default EncryptionComponent;
