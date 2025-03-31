@@ -225,31 +225,41 @@ const EncryptionComponent = () => {
   }
 
   return <div className="satoshi-container py-10 bg-white">
-      <div className="mb-8 flex items-center justify-between bg-gray-50 p-4 rounded-lg">
-        <div className="flex flex-col gap-2">
+      <div className="mb-8 flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-3 rounded-lg gap-2">
+        <div className="flex flex-col sm:flex-row items-center gap-2">
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center space-x-2">
-                <Switch id="encrypt-mode" checked={isEncrypting} onCheckedChange={setIsEncrypting} className="data-[state=checked]:bg-secure-500" />
-                <div className="flex items-center">
-                  {isEncrypting ? <Lock className="h-4 w-4 mr-2 text-secure-500" /> : <LockOpen className="h-4 w-4 mr-2 text-gray-500" />}
-                  <span className="text-2xl font-heading font-bold text-gray-900">
-                    {isEncrypting ? "Encrypt" : "Decrypt"}
-                  </span>
-                  <Badge variant="outline" className="ml-2 flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200">
-                    <Shield className="h-3 w-3" />
-                    <span>AES-256 Encryption</span>
-                  </Badge>
-                </div>
+            <div className="flex items-center space-x-2">
+              <Switch 
+                id="encrypt-mode" 
+                checked={isEncrypting} 
+                onCheckedChange={setIsEncrypting} 
+                className="data-[state=checked]:bg-secure-500" 
+              />
+              <div className="flex items-center">
+                {isEncrypting ? <Lock className="h-4 w-4 mr-2 text-secure-500" /> : <LockOpen className="h-4 w-4 mr-2 text-gray-500" />}
+                <span className="text-lg font-heading font-bold text-gray-900">
+                  {isEncrypting ? "Encrypt" : "Decrypt"}
+                </span>
+                <Badge 
+                  variant="outline" 
+                  className="ml-2 text-xs flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200"
+                >
+                  <Shield className="h-3 w-3" />
+                  <span>AES-256</span>
+                </Badge>
               </div>
             </div>
           </div>
-          <div className="flex gap-2 items-center">
-            <Badge variant="outline" className="flex items-center gap-1 bg-gray-200 text-gray-800 border-gray-300">
-              <WifiOff className="h-3 w-3" />
-              <span>For maximum security, use offline after loading the page.</span>
-            </Badge>
-          </div>
+        </div>
+        
+        <div className="flex gap-2 items-center">
+          <Badge 
+            variant="outline" 
+            className="text-xs flex items-center gap-1 bg-gray-200 text-gray-800 border-gray-300"
+          >
+            <WifiOff className="h-3 w-3" />
+            <span>Offline recommended</span>
+          </Badge>
         </div>
       </div>
 
