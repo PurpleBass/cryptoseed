@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -205,6 +204,49 @@ const FAQComponent = () => {
                       Even if someone demanded we reveal your data, we <strong>physically cannot</strong>. 
                       Our design ensures that only you, with your specific password, can decrypt 
                       the information.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+                
+                <AccordionItem value="why-trust">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Why should I trust you?</AccordionTrigger>
+                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
+                    <p>
+                      Trust is earned through transparency, open-source code, and a commitment to user privacy. Here's why you can trust our encryption tool:
+                    </p>
+                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
+                      <li>
+                        <strong>Open-Source Code</strong>: Our entire codebase is publicly available on GitHub for anyone to review
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>Full transparency about how encryption works</li>
+                          <li>Community can verify there are no backdoors</li>
+                        </ul>
+                      </li>
+                      <li>
+                        <strong>Zero-Knowledge Architecture</strong>: We cannot access your data
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>All encryption happens directly in your browser</li>
+                          <li>No data is ever transmitted to our servers</li>
+                          <li>We have no way to recover or see your encrypted information</li>
+                        </ul>
+                      </li>
+                      <li>
+                        <strong>Industry-Standard Encryption</strong>: Using AES-256, the same technology used by governments and financial institutions
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>Considered unbreakable with current technology</li>
+                          <li>Recommended by cybersecurity experts</li>
+                        </ul>
+                      </li>
+                      <li>
+                        <strong>Community-Driven Development</strong>: Continuous improvement through open-source collaboration
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>Security vulnerabilities can be quickly identified and fixed</li>
+                          <li>Ongoing auditing by the open-source community</li>
+                        </ul>
+                      </li>
+                    </ul>
+                    <p className="mt-1 sm:mt-2">
+                      We believe trust is built on radical transparency, technical excellence, and an unwavering commitment to your privacy.
                     </p>
                   </AccordionContent>
                 </AccordionItem>
