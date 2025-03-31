@@ -14,7 +14,7 @@ import { Switch } from "@/components/ui/switch";
 import SeedPhraseInput from "./SeedPhraseInput";
 
 const EncryptionComponent = () => {
-  const [mode, setMode] = useState<"text" | "file" | "seedphrase">("text");
+  const [mode, setMode] = useState<"seedphrase" | "text" | "file">("seedphrase");
   const [textInput, setTextInput] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -27,7 +27,6 @@ const EncryptionComponent = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  // Monitor online/offline status
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
@@ -41,7 +40,6 @@ const EncryptionComponent = () => {
     };
   }, []);
 
-  // Clear output when switching between encryption and decryption
   React.useEffect(() => {
     setOutput("");
     setSelectedFile(null);
@@ -151,7 +149,6 @@ const EncryptionComponent = () => {
       if (isEncrypting) {
         const { encryptedData, fileName } = await encryptFile(selectedFile, password);
         
-        // Create a download link
         const url = URL.createObjectURL(encryptedData);
         const a = document.createElement('a');
         a.href = url;
@@ -168,7 +165,6 @@ const EncryptionComponent = () => {
       } else {
         const { decryptedData, fileName } = await decryptFile(selectedFile, password);
         
-        // Create a download link
         const url = URL.createObjectURL(decryptedData);
         const a = document.createElement('a');
         a.href = url;
@@ -184,7 +180,6 @@ const EncryptionComponent = () => {
         });
       }
       
-      // Reset the file input
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -276,12 +271,18 @@ const EncryptionComponent = () => {
       </div>
 
       <Tabs 
-        defaultValue="text" 
+        defaultValue="seedphrase" 
         value={mode} 
-        onValueChange={(v) => setMode(v as "text" | "file" | "seedphrase")}
+        onValueChange={(v) => setMode(v as "seedphrase" | "text" | "file")}
         className="mt-4"
       >
         <TabsList className="mb-4 rounded-full bg-gray-100 p-1">
+          <TabsTrigger 
+            value="seedphrase" 
+            className="rounded-full data-[state=active]:bg-white data-[state=active]:text-satoshi-700 data-[state=active]:shadow-sm"
+          >
+            Seed Phrase
+          </TabsTrigger>
           <TabsTrigger 
             value="text" 
             className="rounded-full data-[state=active]:bg-white data-[state=active]:text-satoshi-700 data-[state=active]:shadow-sm"
@@ -294,13 +295,103 @@ const EncryptionComponent = () => {
           >
             File
           </TabsTrigger>
-          <TabsTrigger 
-            value="seedphrase" 
-            className="rounded-full data-[state=active]:bg-white data-[state=active]:text-satoshi-700 data-[state=active]:shadow-sm"
-          >
-            Seed Phrase
-          </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="seedphrase">
+          <Card className="satoshi-card">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-xl text-gray-900">
+                {isEncrypting ? "Seed Phrase to Encrypt" : "Encrypted Seed Phrase to Decrypt"}
+              </CardTitle>
+              <CardDescription className="text-gray-600">
+                {isEncrypting 
+                  ? "Enter your seed phrase words." 
+                  : "Paste the encrypted text that you want to decrypt."}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4">
+                {isEncrypting ? (
+                  <SeedPhraseInput onSeedPhraseChange={handleSeedPhraseChange} />
+                ) : (
+                  <div className="grid gap-2">
+                    <Label htmlFor="seedPhraseInput" className="text-gray-700">
+                      Encrypted Seed Phrase
+                    </Label>
+                    <Textarea 
+                      id="seedPhraseInput" 
+                      value={textInput}
+                      onChange={(e) => setTextInput(e.target.value)}
+                      placeholder="Paste the encrypted seed phrase here"
+                      className="min-h-32 satoshi-input"
+                    />
+                  </div>
+                )}
+                
+                <div className="grid gap-2">
+                  <Label htmlFor="seedPhrasePassword" className="text-gray-700">Password</Label>
+                  <div className="relative">
+                    <Input 
+                      id="seedPhrasePassword" 
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter a strong password"
+                      className="satoshi-input pr-10"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={togglePasswordVisibility}
+                      className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button 
+                disabled={isProcessing || (isEncrypting ? !seedPhrase : !textInput) || !password} 
+                onClick={isEncrypting ? processSeedPhrase : processText}
+                className="w-full bg-satoshi-500 hover:bg-satoshi-600 text-white"
+              >
+                {isProcessing ? (
+                  "Processing..."
+                ) : (
+                  isEncrypting ? "Encrypt Seed Phrase" : "Decrypt Seed Phrase"
+                )}
+              </Button>
+            </CardFooter>
+          </Card>
+
+          {output && (
+            <Card className="mt-6 satoshi-card">
+              <CardHeader className="pb-3">
+                <div className="flex justify-between items-center">
+                  <CardTitle className="text-xl text-gray-900">
+                    {isEncrypting ? "Encrypted Result" : "Decrypted Result"}
+                  </CardTitle>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={copyToClipboard}
+                    className="text-satoshi-500 hover:text-satoshi-600 hover:bg-satoshi-50"
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="p-4 bg-gray-50 rounded-md overflow-auto max-h-96 border border-gray-100">
+                  <pre className="whitespace-pre-wrap break-all text-gray-800">{output}</pre>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
         
         <TabsContent value="text">
           <Card className="satoshi-card">
@@ -480,102 +571,6 @@ const EncryptionComponent = () => {
               </Button>
             </CardFooter>
           </Card>
-        </TabsContent>
-
-        <TabsContent value="seedphrase">
-          <Card className="satoshi-card">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-xl text-gray-900">
-                {isEncrypting ? "Seed Phrase to Encrypt" : "Encrypted Seed Phrase to Decrypt"}
-              </CardTitle>
-              <CardDescription className="text-gray-600">
-                {isEncrypting 
-                  ? "Enter your seed phrase words." 
-                  : "Paste the encrypted text that you want to decrypt."}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4">
-                {isEncrypting ? (
-                  <SeedPhraseInput onSeedPhraseChange={handleSeedPhraseChange} />
-                ) : (
-                  <div className="grid gap-2">
-                    <Label htmlFor="seedPhraseInput" className="text-gray-700">
-                      Encrypted Seed Phrase
-                    </Label>
-                    <Textarea 
-                      id="seedPhraseInput" 
-                      value={textInput}
-                      onChange={(e) => setTextInput(e.target.value)}
-                      placeholder="Paste the encrypted seed phrase here"
-                      className="min-h-32 satoshi-input"
-                    />
-                  </div>
-                )}
-                
-                <div className="grid gap-2">
-                  <Label htmlFor="seedPhrasePassword" className="text-gray-700">Password</Label>
-                  <div className="relative">
-                    <Input 
-                      id="seedPhrasePassword" 
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Enter a strong password"
-                      className="satoshi-input pr-10"
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={togglePasswordVisibility}
-                      className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button 
-                disabled={isProcessing || (isEncrypting ? !seedPhrase : !textInput) || !password} 
-                onClick={isEncrypting ? processSeedPhrase : processText}
-                className="w-full bg-satoshi-500 hover:bg-satoshi-600 text-white"
-              >
-                {isProcessing ? (
-                  "Processing..."
-                ) : (
-                  isEncrypting ? "Encrypt Seed Phrase" : "Decrypt Seed Phrase"
-                )}
-              </Button>
-            </CardFooter>
-          </Card>
-
-          {output && (
-            <Card className="mt-6 satoshi-card">
-              <CardHeader className="pb-3">
-                <div className="flex justify-between items-center">
-                  <CardTitle className="text-xl text-gray-900">
-                    {isEncrypting ? "Encrypted Result" : "Decrypted Result"}
-                  </CardTitle>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={copyToClipboard}
-                    className="text-satoshi-500 hover:text-satoshi-600 hover:bg-satoshi-50"
-                  >
-                    <Copy className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="p-4 bg-gray-50 rounded-md overflow-auto max-h-96 border border-gray-100">
-                  <pre className="whitespace-pre-wrap break-all text-gray-800">{output}</pre>
-                </div>
-              </CardContent>
-            </Card>
-          )}
         </TabsContent>
       </Tabs>
     </div>

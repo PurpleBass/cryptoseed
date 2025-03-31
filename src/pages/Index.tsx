@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Shield } from "lucide-react";
+import { Shield, Key, Lock, FileText } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
 import EncryptionComponent from "@/components/EncryptionComponent";
 import CodeVerification from "@/components/CodeVerification";
@@ -12,6 +12,52 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header currentView={currentView} setCurrentView={setCurrentView} />
+      
+      {currentView === "encrypt" && (
+        <div className="bg-gradient-to-b from-satoshi-50 to-white pt-8 pb-6 border-b border-gray-100">
+          <div className="satoshi-container text-center">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Secure Your Crypto Assets</h1>
+            <div className="max-w-3xl mx-auto">
+              <p className="text-gray-700 mb-6">
+                Protect your valuable seed phrases with zero-knowledge encryption. All encryption happens locally in your 
+                browser - your sensitive data never leaves your device.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                  <div className="flex items-center mb-2">
+                    <Key className="h-5 w-5 text-satoshi-600 mr-2" />
+                    <h3 className="font-medium text-gray-900">Seed Phrase Protection</h3>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Securely encrypt your wallet recovery phrases using AES-256 encryption. Perfect for offline storage or backups.
+                  </p>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                  <div className="flex items-center mb-2">
+                    <FileText className="h-5 w-5 text-satoshi-600 mr-2" />
+                    <h3 className="font-medium text-gray-900">Text Encryption</h3>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Encrypt sensitive text messages, passwords, notes or any confidential information.
+                  </p>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                  <div className="flex items-center mb-2">
+                    <Lock className="h-5 w-5 text-satoshi-600 mr-2" />
+                    <h3 className="font-medium text-gray-900">File Encryption</h3>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Encrypt any file with a password. Secure your documents, images, and other sensitive files.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       
       <main className="flex-1">
         {currentView === "encrypt" && <EncryptionComponent />}
