@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -64,7 +65,7 @@ const EncryptionComponent = () => {
     // Check if this is likely a seed phrase (multiple words separated by spaces)
     const words = phrase.trim().split(/\s+/);
     if (words.length >= 12) {
-      // Format as a numbered list
+      // Format as a numbered list with each word on a new line
       return words.map((word, index) => `${index + 1}. ${word}`).join('\n');
     }
     
@@ -93,7 +94,8 @@ const EncryptionComponent = () => {
         });
       } else {
         const decrypted = await decryptMessage(textInput, password);
-        setOutput(decrypted);
+        // Apply formatting to the decrypted text in case it's a seed phrase
+        setOutput(formatSeedPhrase(decrypted));
         toast({
           title: "Decryption successful",
           description: "Your text has been decrypted"
