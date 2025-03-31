@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -175,12 +174,45 @@ const FAQComponent = () => {
                     </p>
                   </AccordionContent>
                 </AccordionItem>
-              </Accordion>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="technical">
+              
+              <AccordionItem value="data-memory">
+                <AccordionTrigger className="text-sm sm:text-base py-2 text-left">
+                  How will you remember my encryption?
+                </AccordionTrigger>
+                <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
+                  <p>
+                    <strong>We won't – and more importantly, we can't</strong>. Our entire application 
+                    is designed with a zero-knowledge architecture that makes it <strong>impossible 
+                    for us to store or remember anything about your encrypted data</strong>.
+                  </p>
+                  <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
+                    <li>
+                      <strong>All encryption happens directly in your browser</strong>, on your device
+                    </li>
+                    <li>
+                      <strong>No data is ever transmitted to our servers</strong>
+                    </li>
+                    <li>
+                      <strong>We have no way to access your password or decryption key</strong>
+                    </li>
+                    <li>
+                      <strong>Each encryption session is completely isolated</strong> and exists 
+                      only in your browser's memory
+                    </li>
+                  </ul>
+                  <p className="mt-1 sm:mt-2">
+                    Even if someone demanded we reveal your data, we <strong>physically cannot</strong>. 
+                    Our design ensures that only you, with your specific password, can decrypt 
+                    the information.
+                  </p>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </CardContent>
+        </Card>
+      </TabsContent>
+      
+      <TabsContent value="technical">
           <Card className="border-0 sm:border shadow-none sm:shadow-sm">
             <CardHeader className="px-2 sm:px-6 py-3 sm:py-4">
               <CardTitle className="text-lg sm:text-xl">Technical Implementation</CardTitle>
@@ -619,73 +651,4 @@ const FAQComponent = () => {
                       This application is released under the <strong>MIT License</strong>, which means:
                     </p>
                     <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>You are <strong>free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</strong> copies of the software</li>
-                      <li>The software is provided <strong>"as is", without warranty</strong> of any kind</li>
-                      <li>The authors or copyright holders are <strong>not liable</strong> for any claims, damages or other liability</li>
-                    </ul>
-                    <p className="mt-1 sm:mt-2">
-                      For the complete license text, please refer to the <strong>MIT License</strong> link at the bottom of the page or visit our GitHub repository.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-              
-              <Separator className="my-4 sm:my-6" />
-              
-              <div className="bg-gray-50 p-3 sm:p-4 rounded-md border border-gray-100">
-                <div className="flex items-center gap-2 mb-1 sm:mb-2">
-                  <FileText className="h-4 w-4 sm:h-5 md:w-5 text-secure-600 mr-2" />
-                  <h3 className="font-medium text-gray-900 text-sm sm:text-base">Legal Documents</h3>
-                </div>
-                <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-4">
-                  Complete legal documents are available at the bottom of the page:
-                </p>
-                <ul className="list-disc pl-4 sm:pl-6 text-xs sm:text-sm text-secure-600">
-                  <li>
-                    <button 
-                      onClick={() => openDialog('Terms of Service')}
-                      className="hover:underline text-left"
-                      type="button"
-                    >
-                      <strong>Terms of Service</strong>
-                    </button>
-                  </li>
-                  <li>
-                    <button 
-                      onClick={() => openDialog('Privacy Policy')}
-                      className="hover:underline text-left"
-                      type="button"
-                    >
-                      <strong>Privacy Policy</strong>
-                    </button>
-                  </li>
-                  <li>
-                    <button 
-                      onClick={() => openDialog('MIT License')}
-                      className="hover:underline text-left"
-                      type="button"
-                    >
-                      <strong>MIT License</strong>
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-      
-      <div className="mt-8 sm:mt-12 p-3 sm:p-4 border-t border-gray-200 text-[10px] sm:text-xs text-gray-500">
-        <p className="font-bold mb-1 sm:mb-2">DISCLAIMER:</p>
-        <p>
-          We are <strong>not responsible</strong> for the use of this application or the data it manages. 
-          This tool is provided for <strong>educational and security purposes only</strong>. Users are <strong>solely responsible</strong> for their 
-          data, password management, and any consequences of using this service. <strong>Lost passwords cannot be recovered</strong> 
-          and will result in <strong>permanent loss</strong> of encrypted data.
-        </p>
-      </div>
-    </div>
-  );
-};
-
-export default FAQComponent;
+                      <li>You are <strong>free
