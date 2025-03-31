@@ -60,6 +60,36 @@ const EncryptionComponent = () => {
     return phrase;
   };
 
+  const clearTextInput = () => {
+    setTextInput("");
+  };
+
+  const clearPassword = () => {
+    setPassword("");
+  };
+  
+  const clearSeedPhrase = () => {
+    setSeedPhrase("");
+  };
+  
+  const clearFileSelection = () => {
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const clearAllInputs = () => {
+    setTextInput("");
+    setPassword("");
+    setOutput("");
+    setSeedPhrase("");
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   const processText = async () => {
     if (!textInput.trim() || !password.trim()) {
       toast({
@@ -211,17 +241,6 @@ const EncryptionComponent = () => {
     setShowPassword(!showPassword);
   };
 
-  const clearAllInputs = () => {
-    setTextInput("");
-    setPassword("");
-    setOutput("");
-    setSeedPhrase("");
-    setSelectedFile(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
   const cryptoSupported = isWebCryptoSupported();
   if (!cryptoSupported) {
     return <div className="satoshi-container my-8">
@@ -280,7 +299,7 @@ const EncryptionComponent = () => {
           onClick={clearAllInputs} 
           variant="outline" 
           size="sm" 
-          className="text-red-500 border-red-200 hover:bg-red-50 hover:border-red-300 hover:text-red-600 transition-colors"
+          className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:border-gray-300 hover:text-gray-700 transition-colors"
         >
           <Trash2 className="h-4 w-4 mr-1.5" />
           Erase All Inputs
@@ -315,15 +334,54 @@ const EncryptionComponent = () => {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4">
-                {isEncrypting ? <SeedPhraseInput onSeedPhraseChange={handleSeedPhraseChange} /> : <div className="grid gap-2">
-                    <Label htmlFor="seedPhraseInput" className="text-gray-700">
-                      Encrypted Seed Phrase
-                    </Label>
+                {isEncrypting ? (
+                  <div>
+                    <div className="flex justify-end mb-2">
+                      <Button 
+                        onClick={clearSeedPhrase} 
+                        variant="outline" 
+                        size="sm" 
+                        className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
+                      >
+                        <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+                        <span>Erase Seed Phrase</span>
+                      </Button>
+                    </div>
+                    <SeedPhraseInput onSeedPhraseChange={handleSeedPhraseChange} />
+                  </div>
+                ) : (
+                  <div className="grid gap-2">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="seedPhraseInput" className="text-gray-700">
+                        Encrypted Seed Phrase
+                      </Label>
+                      <Button 
+                        onClick={clearTextInput} 
+                        variant="outline" 
+                        size="sm" 
+                        className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
+                      >
+                        <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+                        <span>Erase</span>
+                      </Button>
+                    </div>
                     <Textarea id="seedPhraseInput" value={textInput} onChange={e => setTextInput(e.target.value)} placeholder="Paste the encrypted seed phrase here" className="min-h-32 satoshi-input" />
-                  </div>}
+                  </div>
+                )}
                 
                 <div className="grid gap-2">
-                  <Label htmlFor="seedPhrasePassword" className="text-gray-700">Password</Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="seedPhrasePassword" className="text-gray-700">Password</Label>
+                    <Button 
+                      onClick={clearPassword} 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
+                    >
+                      <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+                      <span>Erase</span>
+                    </Button>
+                  </div>
                   <div className="relative">
                     <Input id="seedPhrasePassword" type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter a strong password" className="satoshi-input pr-10 placeholder:text-xs placeholder:text-muted-foreground/50" />
                     <Button type="button" variant="ghost" size="icon" onClick={togglePasswordVisibility} className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8">
@@ -372,14 +430,36 @@ const EncryptionComponent = () => {
             <CardContent>
               <div className="grid gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="textInput" className="text-gray-700">
-                    {isEncrypting ? "Plain Text" : "Encrypted Text"}
-                  </Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="textInput" className="text-gray-700">
+                      {isEncrypting ? "Plain Text" : "Encrypted Text"}
+                    </Label>
+                    <Button 
+                      onClick={clearTextInput} 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
+                    >
+                      <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+                      <span>Erase</span>
+                    </Button>
+                  </div>
                   <Textarea id="textInput" value={textInput} onChange={e => setTextInput(e.target.value)} placeholder={isEncrypting ? "Enter the text you want to encrypt" : "Paste the encrypted text here"} className="min-h-32 satoshi-input" />
                 </div>
                 
                 <div className="grid gap-2">
-                  <Label htmlFor="password" className="text-gray-700">Password</Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="password" className="text-gray-700">Password</Label>
+                    <Button 
+                      onClick={clearPassword} 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
+                    >
+                      <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+                      <span>Erase</span>
+                    </Button>
+                  </div>
                   <div className="relative">
                     <Input id="password" type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter a strong password" className="satoshi-input pr-10 placeholder:text-xs placeholder:text-muted-foreground/50" />
                     <Button type="button" variant="ghost" size="icon" onClick={togglePasswordVisibility} className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8">
@@ -428,9 +508,22 @@ const EncryptionComponent = () => {
             <CardContent>
               <div className="grid gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="fileUpload" className="text-gray-700">
-                    {isEncrypting ? "Select File" : "Select Encrypted File"}
-                  </Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="fileUpload" className="text-gray-700">
+                      {isEncrypting ? "Select File" : "Select Encrypted File"}
+                    </Label>
+                    {selectedFile && (
+                      <Button 
+                        onClick={clearFileSelection} 
+                        variant="outline" 
+                        size="sm" 
+                        className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
+                      >
+                        <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+                        <span>Erase</span>
+                      </Button>
+                    )}
+                  </div>
                   <div className="flex items-center gap-2">
                     <Input ref={fileInputRef} id="fileUpload" type="file" onChange={handleFileSelect} className="satoshi-input" />
                   </div>
@@ -440,7 +533,18 @@ const EncryptionComponent = () => {
                 </div>
                 
                 <div className="grid gap-2">
-                  <Label htmlFor="filePassword" className="text-gray-700">Password</Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="filePassword" className="text-gray-700">Password</Label>
+                    <Button 
+                      onClick={clearPassword} 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
+                    >
+                      <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+                      <span>Erase</span>
+                    </Button>
+                  </div>
                   <div className="relative">
                     <Input id="filePassword" type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter a strong password" className="satoshi-input pr-10 placeholder:text-xs placeholder:text-muted-foreground/50" />
                     <Button type="button" variant="ghost" size="icon" onClick={togglePasswordVisibility} className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8">
