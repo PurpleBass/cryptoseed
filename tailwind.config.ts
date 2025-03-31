@@ -67,19 +67,19 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // SatoshiLabs inspired colors
-        satoshi: {
-          50: "#F5F8FF",
-          100: "#EBF1FF",
-          200: "#D6E4FF",
-          300: "#ADC8FF",
-          400: "#85A5FF",
-          500: "#4F7DF3", // Primary blue
-          600: "#3861D8",
-          700: "#2248C4",
-          800: "#1A3899",
-          900: "#0E1B4D",
-          950: "#091033",
+        // Security-inspired green colors
+        secure: {
+          50: "#F2FCF5",
+          100: "#E3F9EB",
+          200: "#C7F3D7",
+          300: "#A0E8BE",
+          400: "#6AD599",
+          500: "#4BC282", // Primary security green
+          600: "#3AA96D",
+          700: "#2D8755",
+          800: "#236844",
+          900: "#153C28",
+          950: "#0B2617",
         },
       },
       borderRadius: {
