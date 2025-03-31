@@ -1,10 +1,10 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { AlertCircle, HelpCircle, Shield } from "lucide-react";
+import { AlertCircle, HelpCircle, Shield, FileText } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Separator } from "@/components/ui/separator";
 
 const FAQComponent = () => {
   return (
@@ -24,6 +24,7 @@ const FAQComponent = () => {
           <TabsTrigger value="user">Non-Technical FAQ</TabsTrigger>
           <TabsTrigger value="technical">Technical Details</TabsTrigger>
           <TabsTrigger value="practices">Best Practices</TabsTrigger>
+          <TabsTrigger value="legal">Legal</TabsTrigger>
         </TabsList>
         
         <TabsContent value="user">
@@ -522,7 +523,125 @@ const FAQComponent = () => {
             </CardContent>
           </Card>
         </TabsContent>
+        
+        <TabsContent value="legal">
+          <Card>
+            <CardHeader>
+              <CardTitle>Legal Information</CardTitle>
+              <CardDescription>
+                Important legal information regarding the use of this service
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="disclaimer">
+                  <AccordionTrigger>Disclaimer of Responsibility</AccordionTrigger>
+                  <AccordionContent>
+                    <Alert className="bg-orange-50 text-orange-800 border-orange-200 mb-4">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription className="font-medium">
+                        We are not responsible for the use of this application or the data it manages.
+                      </AlertDescription>
+                    </Alert>
+                    <p className="text-muted-foreground">
+                      This tool is provided for educational and security purposes only. By using this service, you acknowledge and agree that:
+                    </p>
+                    <ul className="list-disc pl-6 mt-2 space-y-1 text-muted-foreground">
+                      <li>You are solely responsible for your data and password management</li>
+                      <li>We cannot recover lost passwords under any circumstances</li>
+                      <li>We provide no warranties or guarantees regarding the security, accuracy, or reliability of this service</li>
+                      <li>You use this tool at your own risk</li>
+                      <li>We are not liable for any damages, data loss, or other negative outcomes resulting from the use of this service</li>
+                    </ul>
+                  </AccordionContent>
+                </AccordionItem>
+                
+                <AccordionItem value="terms">
+                  <AccordionTrigger>Terms of Service Summary</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-muted-foreground">
+                      By using this service, you agree to our full Terms of Service, which include the following key points:
+                    </p>
+                    <ul className="list-disc pl-6 mt-2 space-y-1 text-muted-foreground">
+                      <li>The service is provided "as is" without warranty of any kind</li>
+                      <li>You are responsible for ensuring the lawful use of this service</li>
+                      <li>We are not liable for any direct, indirect, or consequential damages</li>
+                      <li>You are solely responsible for your passwords and data management</li>
+                      <li>We reserve the right to modify the service and these terms at any time</li>
+                    </ul>
+                    <p className="mt-2 text-muted-foreground">
+                      For the complete terms, please refer to the Terms of Service link at the bottom of the page.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+                
+                <AccordionItem value="privacy">
+                  <AccordionTrigger>Privacy Policy Overview</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-muted-foreground">
+                      Our privacy approach is simple: we don't collect, store, or process any of your data.
+                    </p>
+                    <ul className="list-disc pl-6 mt-2 space-y-1 text-muted-foreground">
+                      <li>All encryption operations happen locally in your browser</li>
+                      <li>No data is ever transmitted to our servers</li>
+                      <li>We don't use cookies, local storage, or analytics</li>
+                      <li>We don't integrate with any third-party services that would collect data</li>
+                    </ul>
+                    <p className="mt-2 text-muted-foreground">
+                      This is a zero-knowledge application, meaning we have no ability to access any information you encrypt using this service.
+                      For the complete privacy policy, please refer to the Privacy Policy link at the bottom of the page.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+                
+                <AccordionItem value="license">
+                  <AccordionTrigger>Open Source License</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-muted-foreground">
+                      This application is released under the MIT License, which means:
+                    </p>
+                    <ul className="list-disc pl-6 mt-2 space-y-1 text-muted-foreground">
+                      <li>You are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software</li>
+                      <li>The software is provided "as is", without warranty of any kind</li>
+                      <li>The authors or copyright holders are not liable for any claims, damages or other liability</li>
+                    </ul>
+                    <p className="mt-2 text-muted-foreground">
+                      For the complete license text, please refer to the MIT License link at the bottom of the page or visit our GitHub repository.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+              
+              <Separator className="my-6" />
+              
+              <div className="bg-gray-50 p-4 rounded-md border border-gray-100">
+                <div className="flex items-center gap-2 mb-2">
+                  <FileText className="h-5 w-5 text-secure-600" />
+                  <h3 className="font-medium text-gray-900">Legal Documents</h3>
+                </div>
+                <p className="text-sm text-gray-600 mb-4">
+                  Complete legal documents are available at the bottom of the page:
+                </p>
+                <ul className="list-disc pl-6 text-sm text-secure-600">
+                  <li><a href="#" className="hover:underline">Terms of Service</a></li>
+                  <li><a href="#" className="hover:underline">Privacy Policy</a></li>
+                  <li><a href="#" className="hover:underline">MIT License</a></li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
+      
+      <div className="mt-12 p-4 border-t border-gray-200 text-xs text-gray-500">
+        <p className="font-bold mb-2">DISCLAIMER:</p>
+        <p>
+          We are not responsible for the use of this application or the data it manages. 
+          This tool is provided for educational and security purposes only. Users are solely responsible for their 
+          data, password management, and any consequences of using this service. Lost passwords cannot be recovered 
+          and will result in permanent loss of encrypted data.
+        </p>
+      </div>
     </div>
   );
 };

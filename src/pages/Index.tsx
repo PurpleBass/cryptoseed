@@ -1,10 +1,12 @@
 
 import React, { useState } from "react";
-import { Shield, Key, Lock, FileText } from "lucide-react";
+import { Shield, Key, Lock, FileText, Book, FileCheck } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
 import EncryptionComponent from "@/components/EncryptionComponent";
 import CodeVerification from "@/components/CodeVerification";
 import FAQComponent from "@/components/FAQComponent";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewType>("encrypt");
@@ -67,12 +69,12 @@ const Index = () => {
       </main>
       
       <footer className="py-10 bg-gray-50 border-t border-gray-100">
-        <div className="satoshi-container text-center">
-          <div className="mb-4">
+        <div className="satoshi-container">
+          <div className="mb-4 text-center">
             <Shield className="h-8 w-8 text-secure-500 inline-block" />
             <p className="text-lg font-medium text-gray-800 mt-2">Crypto Seed</p>
           </div>
-          <p className="text-sm text-gray-600 max-w-xl mx-auto">
+          <p className="text-sm text-gray-600 max-w-xl mx-auto text-center">
             Open Source, Zero-Knowledge Encryption. Your data never leaves your device.
             All encryption happens locally in your browser.
           </p>
@@ -99,6 +101,140 @@ const Index = () => {
             >
               Security FAQ
             </a>
+          </div>
+          
+          {/* Legal section */}
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <div className="flex flex-wrap justify-center gap-4 mb-4">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="link" className="text-xs text-gray-500 hover:text-secure-600">
+                    Terms of Service
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>Terms of Service</DialogTitle>
+                    <DialogDescription>Last updated: {new Date().toLocaleDateString()}</DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 text-sm text-gray-600">
+                    <p>These Terms of Service ("Terms") govern your access to and use of Crypto Seed ("the Service"). Please read these Terms carefully before using the Service.</p>
+                    
+                    <h3 className="text-base font-medium text-gray-900">1. Acceptance of Terms</h3>
+                    <p>By accessing or using the Service, you agree to be bound by these Terms. If you do not agree to all the terms and conditions, you may not access or use the Service.</p>
+                    
+                    <h3 className="text-base font-medium text-gray-900">2. Description of Service</h3>
+                    <p>Crypto Seed is a client-side encryption tool that allows users to encrypt sensitive information using AES-256 encryption. The Service operates entirely within your browser and does not transmit your data to any servers.</p>
+                    
+                    <h3 className="text-base font-medium text-gray-900">3. No Warranty</h3>
+                    <p>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.</p>
+                    
+                    <h3 className="text-base font-medium text-gray-900">4. Limitation of Liability</h3>
+                    <p>IN NO EVENT SHALL THE SERVICE PROVIDERS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+                    
+                    <h3 className="text-base font-medium text-gray-900">5. User Responsibilities</h3>
+                    <p>You are solely responsible for:</p>
+                    <ul className="list-disc pl-5 space-y-1">
+                      <li>The security of your passwords used with the Service</li>
+                      <li>Maintaining backups of your encrypted data</li>
+                      <li>Ensuring the lawful use of the Service</li>
+                      <li>Understanding that lost passwords cannot be recovered by us and will result in permanent loss of access to encrypted data</li>
+                    </ul>
+                    
+                    <h3 className="text-base font-medium text-gray-900">6. Prohibited Uses</h3>
+                    <p>You agree not to use the Service for any illegal or unauthorized purpose, including but not limited to violating any applicable laws or regulations.</p>
+                    
+                    <h3 className="text-base font-medium text-gray-900">7. Modifications to Terms</h3>
+                    <p>We reserve the right to modify these Terms at any time. Your continued use of the Service after such modifications constitutes your acceptance of the modified Terms.</p>
+                    
+                    <h3 className="text-base font-medium text-gray-900">8. Governing Law</h3>
+                    <p>These Terms shall be governed by and construed in accordance with applicable laws, without regard to its conflict of law principles.</p>
+                  </div>
+                </DialogContent>
+              </Dialog>
+              
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="link" className="text-xs text-gray-500 hover:text-secure-600">
+                    Privacy Policy
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>Privacy Policy</DialogTitle>
+                    <DialogDescription>Last updated: {new Date().toLocaleDateString()}</DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 text-sm text-gray-600">
+                    <p>This Privacy Policy describes how Crypto Seed ("we", "our", or "us") handles user privacy and data protection.</p>
+                    
+                    <h3 className="text-base font-medium text-gray-900">1. Information Collection</h3>
+                    <p>We do not collect, store, or process any personal data. The Crypto Seed application operates entirely client-side, within your browser. Your data never leaves your device, and we do not have access to any information you enter or encrypt using our Service.</p>
+                    
+                    <h3 className="text-base font-medium text-gray-900">2. Local Storage</h3>
+                    <p>We do not use cookies, local storage, or any other browser storage mechanisms to store or track your data.</p>
+                    
+                    <h3 className="text-base font-medium text-gray-900">3. Analytics</h3>
+                    <p>We do not use any analytics tools or tracking mechanisms to monitor your usage of the Service.</p>
+                    
+                    <h3 className="text-base font-medium text-gray-900">4. Third-Party Services</h3>
+                    <p>The Service does not integrate with any third-party services that would collect or process your data.</p>
+                    
+                    <h3 className="text-base font-medium text-gray-900">5. Security</h3>
+                    <p>All encryption operations occur locally on your device. We use standard, well-reviewed cryptographic libraries to perform encryption functions. For maximum security, we recommend using the Service offline once it has loaded in your browser.</p>
+                    
+                    <h3 className="text-base font-medium text-gray-900">6. Changes to This Privacy Policy</h3>
+                    <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.</p>
+                    
+                    <h3 className="text-base font-medium text-gray-900">7. Contact Us</h3>
+                    <p>If you have any questions about this Privacy Policy, please contact us through the GitHub repository linked on this page.</p>
+                  </div>
+                </DialogContent>
+              </Dialog>
+              
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="link" className="text-xs text-gray-500 hover:text-secure-600">
+                    MIT License
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>MIT License</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 text-sm text-gray-600 font-mono">
+                    <p>Copyright (c) {new Date().getFullYear()} Crypto Seed</p>
+                    <p>
+                      Permission is hereby granted, free of charge, to any person obtaining a copy
+                      of this software and associated documentation files (the "Software"), to deal
+                      in the Software without restriction, including without limitation the rights
+                      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+                      copies of the Software, and to permit persons to whom the Software is
+                      furnished to do so, subject to the following conditions:
+                    </p>
+                    <p>
+                      The above copyright notice and this permission notice shall be included in all
+                      copies or substantial portions of the Software.
+                    </p>
+                    <p>
+                      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+                      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+                      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+                      AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+                      LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+                      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+                      SOFTWARE.
+                    </p>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+            
+            <p className="text-xs text-gray-500 text-center max-w-2xl mx-auto">
+              <strong>Disclaimer:</strong> We are not responsible for the use of this application or the data it manages. 
+              This tool is provided for educational and security purposes only. Users are solely responsible for their 
+              data, password management, and any consequences of using this service. Lost passwords cannot be recovered 
+              and will result in permanent loss of encrypted data.
+            </p>
           </div>
         </div>
       </footer>
