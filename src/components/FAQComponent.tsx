@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -56,7 +55,7 @@ const FAQComponent = () => {
             <CardContent className="px-1 sm:px-6">
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="what-is-encryption">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">What is encryption and why do I need it?</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">What is encryption and why do I need it?</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       Encryption is like a <strong>high-security digital safe</strong> for your information. It scrambles your 
@@ -75,7 +74,7 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="how-it-works">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">How does this app work?</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">How does this app work?</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       Our app uses a very strong encryption method called <strong>AES-256</strong> (the same technology used by
@@ -99,7 +98,7 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="is-it-secure">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">How secure is this encryption?</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">How secure is this encryption?</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       <strong>AES-256 encryption is extremely secure</strong>. If implemented correctly (as it is in this app):
@@ -117,7 +116,7 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="what-if-lose-password">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">What if I forget my password?</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">What if I forget my password?</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       Unfortunately, if you forget your password, your encrypted data is <strong>lost forever</strong>. 
@@ -136,7 +135,7 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="offline-usage">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">Why should I use this offline?</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Why should I use this offline?</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       While our app never sends your data anywhere, using it offline provides an <strong>extra 
@@ -155,7 +154,7 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="no-backdoors">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">What does "no backdoors" mean?</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">What does "no backdoors" mean?</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       A backdoor is a <strong>secret way to bypass normal security measures</strong>. Some encryption 
@@ -177,7 +176,7 @@ const FAQComponent = () => {
                 </AccordionItem>
               
                 <AccordionItem value="data-memory">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">
                     How will you remember my encryption?
                   </AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
@@ -224,7 +223,7 @@ const FAQComponent = () => {
             <CardContent className="px-1 sm:px-6">
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="crypto-implementation">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">Cryptographic Implementation</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Cryptographic Implementation</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       This application uses the <strong>Web Crypto API</strong> (SubtleCrypto) to perform all cryptographic operations. Here's a detailed breakdown:
@@ -266,7 +265,7 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="security-model">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">Security Model & Threat Considerations</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Security Model & Threat Considerations</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       Our security model makes the following assumptions and mitigations:
@@ -297,7 +296,7 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="cryptographic-properties">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">Cryptographic Properties & Guarantees</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Cryptographic Properties & Guarantees</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       Our implementation provides the following cryptographic properties:
@@ -328,7 +327,7 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="limitations">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">Limitations & Considerations</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Limitations & Considerations</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       While our implementation is cryptographically sound, users should be aware of these limitations:
@@ -360,7 +359,7 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="integrity-verification">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">Code Integrity Verification</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Code Integrity Verification</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       To verify the integrity of this application:
@@ -412,7 +411,7 @@ const FAQComponent = () => {
               
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="offline-usage">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left flex items-center gap-2">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
                     <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
                     <span>Offline Usage</span>
                   </AccordionTrigger>
@@ -447,7 +446,7 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="strong-passwords">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left flex items-center gap-2">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
                     <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
                     <span>Strong Passwords</span>
                   </AccordionTrigger>
@@ -479,7 +478,7 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="secure-environment">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left flex items-center gap-2">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
                     <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
                     <span>Secure Environment</span>
                   </AccordionTrigger>
@@ -511,7 +510,7 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="storing-encrypted-data">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left flex items-center gap-2">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
                     <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
                     <span>Storing Encrypted Data</span>
                   </AccordionTrigger>
@@ -541,7 +540,7 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="sharing-encrypted-data">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left flex items-center gap-2">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
                     <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
                     <span>Sharing Encrypted Data</span>
                   </AccordionTrigger>
@@ -586,7 +585,7 @@ const FAQComponent = () => {
             <CardContent className="px-1 sm:px-6">
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="disclaimer">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">Disclaimer of Responsibility</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Disclaimer of Responsibility</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <Alert className="bg-orange-50 text-orange-800 border-orange-200 mb-3 sm:mb-4">
                       <AlertCircle className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -608,7 +607,7 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="terms">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">Terms of Service Summary</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Terms of Service Summary</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       By using this service, you agree to our full Terms of Service, which include the following <strong>key points</strong>:
@@ -627,7 +626,7 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="privacy">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">Privacy Policy Overview</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Privacy Policy Overview</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       Our privacy approach is simple: <strong>we don't collect, store, or process any of your data</strong>.
@@ -646,7 +645,7 @@ const FAQComponent = () => {
                 </AccordionItem>
                 
                 <AccordionItem value="license">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">Open Source License</AccordionTrigger>
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Open Source License</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       This application is released under the <strong>MIT License</strong>, which means:
