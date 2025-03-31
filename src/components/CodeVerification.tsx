@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Github, Search, ChevronDown, Shield } from "lucide-react";
+import { FileText, Github, Search, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -11,7 +11,6 @@ const CodeVerification = () => {
     <div className="container mx-auto p-4 max-w-4xl">
       <div className="mb-6 text-center">
         <div className="flex items-center gap-2 justify-center">
-          <Shield className="h-5 w-5 text-secure-600" />
           <FileText className="h-5 w-5 text-secure-600" />
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Verify Our Code</h2>
         </div>
