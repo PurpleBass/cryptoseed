@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,25 +8,20 @@ import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 const FAQComponent = () => {
-  // Function to open the corresponding dialog from the footer
   const openDialog = (dialogType: string) => {
-    // Simulate a click on the corresponding dialog trigger in the footer
     setTimeout(() => {
-      // Find all dialog triggers in the footer
       const footerLinks = Array.from(document.querySelectorAll('footer a, footer button'));
       
-      // Find the link that contains the text we're looking for
       const targetLink = footerLinks.find(link => 
         link.textContent?.trim().includes(dialogType)
       );
       
-      // Click the link if found
       if (targetLink && targetLink instanceof HTMLElement) {
         targetLink.click();
       } else {
         console.error(`Could not find footer link for: ${dialogType}`);
       }
-    }, 100); // Small delay to ensure DOM is ready
+    }, 100);
   };
 
   return (
@@ -61,8 +55,8 @@ const FAQComponent = () => {
             <CardContent className="px-1 sm:px-6">
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="what-is-encryption">
-                  <AccordionTrigger className="text-sm sm:text-base py-2">What is encryption and why do I need it?</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">What is encryption and why do I need it?</AccordionTrigger>
+                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       Encryption is like a high-security digital safe for your information. It scrambles your 
                       text or files so that only someone with the correct password can read them.
