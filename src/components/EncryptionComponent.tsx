@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -225,7 +224,8 @@ const EncryptionComponent = () => {
       </div>;
   }
 
-  return <div className="satoshi-container py-10 bg-white">
+  return (
+    <div className="satoshi-container px-4 md:px-0 py-10 bg-white">
       <div className="mb-8 flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-3 rounded-lg gap-2">
         <div className="flex flex-col sm:flex-row items-center gap-2">
           <div className="flex items-center gap-2">
@@ -443,7 +443,8 @@ const EncryptionComponent = () => {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>;
+    </div>
+  );
 };
 
 export default EncryptionComponent;
