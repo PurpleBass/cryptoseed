@@ -19,6 +19,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["Inter", "sans-serif"],
+        heading: ["Montserrat", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -63,17 +67,19 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Custom colors for our encryption app
-        secure: {
-          100: "#E6F7FF",
-          200: "#BAE7FF",
-          300: "#91D5FF",
-          400: "#69C0FF",
-          500: "#40A9FF",
-          600: "#1890FF",
-          700: "#096DD9",
-          800: "#0050B3",
-          900: "#003A8C",
+        // SatoshiLabs inspired colors
+        satoshi: {
+          50: "#F5F8FF",
+          100: "#EBF1FF",
+          200: "#D6E4FF",
+          300: "#ADC8FF",
+          400: "#85A5FF",
+          500: "#4F7DF3", // Primary blue
+          600: "#3861D8",
+          700: "#2248C4",
+          800: "#1A3899",
+          900: "#0E1B4D",
+          950: "#091033",
         },
       },
       borderRadius: {

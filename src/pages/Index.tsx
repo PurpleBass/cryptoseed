@@ -12,42 +12,46 @@ const Index = () => {
     <div className="min-h-screen flex flex-col bg-background">
       <Header currentView={currentView} setCurrentView={setCurrentView} />
       
-      {currentView === "encrypt" && <EncryptionComponent />}
-      {currentView === "verify" && <CodeVerification />}
-      {currentView === "faq" && <FAQComponent />}
+      <main className="flex-1">
+        {currentView === "encrypt" && <EncryptionComponent />}
+        {currentView === "verify" && <CodeVerification />}
+        {currentView === "faq" && <FAQComponent />}
+      </main>
       
-      <footer className="mt-auto py-6 bg-muted">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>Secure Nomad Encryptor - Open Source, Zero-Knowledge Encryption</p>
-          <p className="mt-1">
-            Your data never leaves your device. All encryption happens locally in your browser.
+      <footer className="py-10 bg-gray-50 border-t border-gray-100">
+        <div className="satoshi-container text-center">
+          <div className="mb-4">
+            <Shield className="h-8 w-8 text-satoshi-500 inline-block" />
+            <p className="text-lg font-medium text-gray-800 mt-2">Secure Nomad Encryptor</p>
+          </div>
+          <p className="text-sm text-gray-600 max-w-xl mx-auto">
+            Open Source, Zero-Knowledge Encryption. Your data never leaves your device.
+            All encryption happens locally in your browser.
           </p>
-          <p className="mt-4">
+          <div className="mt-6 flex justify-center space-x-6">
             <a 
               href="https://github.com/yourusername/secure-nomad-encryptor" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-secure-600 hover:text-secure-700 hover:underline"
+              className="text-satoshi-500 hover:text-satoshi-700 hover:underline text-sm"
             >
               GitHub Repository
             </a>
-            {" | "}
             <a 
               href="#" 
               onClick={(e) => { e.preventDefault(); setCurrentView("verify"); }}
-              className="text-secure-600 hover:text-secure-700 hover:underline"
+              className="text-satoshi-500 hover:text-satoshi-700 hover:underline text-sm"
             >
               Verify Code
             </a>
-            {" | "}
             <a 
               href="#" 
               onClick={(e) => { e.preventDefault(); setCurrentView("faq"); }}
-              className="text-secure-600 hover:text-secure-700 hover:underline"
+              className="text-satoshi-500 hover:text-satoshi-700 hover:underline text-sm"
             >
               Security FAQ
             </a>
-          </p>
+          </div>
         </div>
       </footer>
     </div>

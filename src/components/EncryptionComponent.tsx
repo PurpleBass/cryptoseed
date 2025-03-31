@@ -172,7 +172,7 @@ const EncryptionComponent = () => {
 
   if (!cryptoSupported) {
     return (
-      <div className="container my-8">
+      <div className="satoshi-container my-8">
         <Alert variant="destructive" className="mb-4">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
@@ -185,16 +185,17 @@ const EncryptionComponent = () => {
   }
 
   return (
-    <div className="container mx-auto p-4 max-w-4xl">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="satoshi-container py-10">
+      <div className="mb-8 flex items-center justify-between">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-bold">{isEncrypting ? "Encrypt" : "Decrypt"}</h2>
+            <h2 className="text-2xl font-heading font-bold text-gray-900">{isEncrypting ? "Encrypt" : "Decrypt"}</h2>
             <Button 
               variant="ghost" 
               size="icon" 
               onClick={toggleEncryptDecrypt} 
               title="Switch between Encrypt and Decrypt"
+              className="text-satoshi-500 hover:text-satoshi-600 hover:bg-satoshi-50"
             >
               <ArrowDownUp className="h-4 w-4" />
             </Button>
@@ -213,7 +214,7 @@ const EncryptionComponent = () => {
             )}
             <Badge 
               variant="outline" 
-              className="flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-300"
+              className="flex items-center gap-1 bg-satoshi-100 text-satoshi-800 border-satoshi-200"
             >
               <Shield className="h-3 w-3" />
               <span>AES-256 Encryption</span>
@@ -222,13 +223,13 @@ const EncryptionComponent = () => {
         </div>
       </div>
 
-      <Card className="mb-8">
-        <CardHeader>
+      <Card className="mb-8 rounded-xl border border-gray-100 shadow-sm">
+        <CardHeader className="pb-3">
           <div className="flex gap-2 items-center">
-            <Lock className="h-5 w-5 text-secure-600" />
-            <CardTitle>Password</CardTitle>
+            <Lock className="h-5 w-5 text-satoshi-500" />
+            <CardTitle className="text-xl text-gray-900">Password</CardTitle>
           </div>
-          <CardDescription>
+          <CardDescription className="text-gray-600">
             Enter a strong password to {isEncrypting ? "encrypt" : "decrypt"} your data. 
             This password will be required to {isEncrypting ? "decrypt" : "encrypt"} the data later.
           </CardDescription>
@@ -236,30 +237,48 @@ const EncryptionComponent = () => {
         <CardContent>
           <div className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-gray-700">Password</Label>
               <Input 
                 id="password" 
                 type="password" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter a strong password"
+                className="satoshi-input"
               />
             </div>
           </div>
         </CardContent>
       </Card>
 
-      <Tabs defaultValue="text" value={mode} onValueChange={(v) => setMode(v as "text" | "file")}>
-        <TabsList className="mb-4">
-          <TabsTrigger value="text">Text</TabsTrigger>
-          <TabsTrigger value="file">File</TabsTrigger>
+      <Tabs 
+        defaultValue="text" 
+        value={mode} 
+        onValueChange={(v) => setMode(v as "text" | "file")}
+        className="mt-4"
+      >
+        <TabsList className="mb-4 rounded-full bg-gray-100 p-1">
+          <TabsTrigger 
+            value="text" 
+            className="rounded-full data-[state=active]:bg-white data-[state=active]:text-satoshi-700 data-[state=active]:shadow-sm"
+          >
+            Text
+          </TabsTrigger>
+          <TabsTrigger 
+            value="file" 
+            className="rounded-full data-[state=active]:bg-white data-[state=active]:text-satoshi-700 data-[state=active]:shadow-sm"
+          >
+            File
+          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="text">
-          <Card>
-            <CardHeader>
-              <CardTitle>{isEncrypting ? "Text to Encrypt" : "Encrypted Text to Decrypt"}</CardTitle>
-              <CardDescription>
+          <Card className="satoshi-card">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-xl text-gray-900">
+                {isEncrypting ? "Text to Encrypt" : "Encrypted Text to Decrypt"}
+              </CardTitle>
+              <CardDescription className="text-gray-600">
                 {isEncrypting 
                   ? "Enter the text you want to encrypt." 
                   : "Paste the encrypted text that you want to decrypt."}
@@ -268,7 +287,7 @@ const EncryptionComponent = () => {
             <CardContent>
               <div className="grid gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="textInput">
+                  <Label htmlFor="textInput" className="text-gray-700">
                     {isEncrypting ? "Plain Text" : "Encrypted Text"}
                   </Label>
                   <Textarea 
@@ -278,7 +297,7 @@ const EncryptionComponent = () => {
                     placeholder={isEncrypting 
                       ? "Enter the text you want to encrypt" 
                       : "Paste the encrypted text here"}
-                    className="min-h-32"
+                    className="min-h-32 satoshi-input"
                   />
                 </div>
               </div>
@@ -287,7 +306,7 @@ const EncryptionComponent = () => {
               <Button 
                 disabled={isProcessing || !textInput || !password} 
                 onClick={processText}
-                className="w-full bg-secure-600 hover:bg-secure-700"
+                className="w-full bg-satoshi-500 hover:bg-satoshi-600 text-white"
               >
                 {isProcessing ? (
                   "Processing..."
@@ -299,18 +318,25 @@ const EncryptionComponent = () => {
           </Card>
 
           {output && (
-            <Card className="mt-6">
-              <CardHeader>
+            <Card className="mt-6 satoshi-card">
+              <CardHeader className="pb-3">
                 <div className="flex justify-between items-center">
-                  <CardTitle>{isEncrypting ? "Encrypted Result" : "Decrypted Result"}</CardTitle>
-                  <Button variant="ghost" size="icon" onClick={copyToClipboard}>
+                  <CardTitle className="text-xl text-gray-900">
+                    {isEncrypting ? "Encrypted Result" : "Decrypted Result"}
+                  </CardTitle>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={copyToClipboard}
+                    className="text-satoshi-500 hover:text-satoshi-600 hover:bg-satoshi-50"
+                  >
                     <Copy className="h-4 w-4" />
                   </Button>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="p-4 bg-muted rounded-md overflow-auto max-h-96">
-                  <pre className="whitespace-pre-wrap break-all">{output}</pre>
+                <div className="p-4 bg-gray-50 rounded-md overflow-auto max-h-96 border border-gray-100">
+                  <pre className="whitespace-pre-wrap break-all text-gray-800">{output}</pre>
                 </div>
               </CardContent>
             </Card>
@@ -318,10 +344,12 @@ const EncryptionComponent = () => {
         </TabsContent>
         
         <TabsContent value="file">
-          <Card>
-            <CardHeader>
-              <CardTitle>{isEncrypting ? "File to Encrypt" : "Encrypted File to Decrypt"}</CardTitle>
-              <CardDescription>
+          <Card className="satoshi-card">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-xl text-gray-900">
+                {isEncrypting ? "File to Encrypt" : "Encrypted File to Decrypt"}
+              </CardTitle>
+              <CardDescription className="text-gray-600">
                 {isEncrypting 
                   ? "Select the file you want to encrypt." 
                   : "Select the encrypted file that you want to decrypt."}
@@ -330,7 +358,7 @@ const EncryptionComponent = () => {
             <CardContent>
               <div className="grid gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="fileUpload">
+                  <Label htmlFor="fileUpload" className="text-gray-700">
                     {isEncrypting ? "Select File" : "Select Encrypted File"}
                   </Label>
                   <div className="flex items-center gap-2">
@@ -339,10 +367,11 @@ const EncryptionComponent = () => {
                       id="fileUpload" 
                       type="file" 
                       onChange={handleFileSelect}
+                      className="satoshi-input"
                     />
                   </div>
                   {selectedFile && (
-                    <div className="text-sm text-muted-foreground mt-2">
+                    <div className="text-sm text-gray-500 mt-2">
                       Selected file: {selectedFile.name} ({Math.round(selectedFile.size / 1024)}KB)
                     </div>
                   )}
@@ -353,7 +382,7 @@ const EncryptionComponent = () => {
               <Button 
                 disabled={isProcessing || !selectedFile || !password} 
                 onClick={processFile}
-                className="w-full flex items-center gap-2 bg-secure-600 hover:bg-secure-700"
+                className="w-full flex items-center gap-2 bg-satoshi-500 hover:bg-satoshi-600 text-white"
               >
                 {isProcessing ? (
                   "Processing..."
