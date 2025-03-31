@@ -292,44 +292,29 @@ const EncryptionComponent = () => {
                   onSeedPhraseChange={handleSeedPhraseChange} 
                 />
               ) : (
-                <div className="grid gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="seedPhraseInput" className="text-gray-700">
-                      Encrypted Seed Phrase
-                    </Label>
-                    <Textarea 
-                      id="seedPhraseInput" 
-                      value={textInput} 
-                      onChange={e => setTextInput(e.target.value)} 
-                      placeholder="Paste your encrypted seed phrase" 
-                      className="min-h-32 satoshi-input text-sm text-gray-600 placeholder-gray-400 focus:ring-secure-100" 
-                    />
-                  </div>
-                  
-                  <div className="grid gap-2">
-                    <Label htmlFor="seedPhrasePassword" className="text-gray-700">Password</Label>
-                    <div className="relative">
-                      <Input 
-                        id="seedPhrasePassword" 
-                        type={showPassword ? "text" : "password"} 
-                        value={password} 
-                        onChange={e => setPassword(e.target.value)} 
-                        placeholder="Enter a strong password" 
-                        className="satoshi-input pr-10" 
-                      />
-                      <Button 
-                        type="button" 
-                        variant="ghost" 
-                        size="icon" 
-                        onClick={togglePasswordVisibility} 
-                        className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
-                      >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                      </Button>
-                    </div>
-                  </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="seedPhraseInput" className="text-gray-700">
+                    Encrypted Seed Phrase
+                  </Label>
+                  <Textarea 
+                    id="seedPhraseInput" 
+                    value={textInput} 
+                    onChange={e => setTextInput(e.target.value)} 
+                    placeholder="Paste your encrypted seed phrase" 
+                    className="min-h-32 satoshi-input text-sm text-gray-600 placeholder-gray-400 focus:ring-secure-100" 
+                  />
                 </div>
               )}
+              
+              <div className="grid gap-2">
+                <Label htmlFor="seedPhrasePassword" className="text-gray-700">Password</Label>
+                <div className="relative">
+                  <Input id="seedPhrasePassword" type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter a strong password" className="satoshi-input pr-10" />
+                  <Button type="button" variant="ghost" size="icon" onClick={togglePasswordVisibility} className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8">
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </Button>
+                </div>
+              </div>
             </CardContent>
             <CardFooter>
               <Button disabled={isProcessing || (isEncrypting ? !seedPhrase : !textInput) || !password} onClick={isEncrypting ? processSeedPhrase : processText} className="w-full bg-green-500 hover:bg-green-600 text-white">
@@ -387,21 +372,8 @@ const EncryptionComponent = () => {
                 <div className="grid gap-2">
                   <Label htmlFor="password" className="text-gray-700">Password</Label>
                   <div className="relative">
-                    <Input 
-                      id="password" 
-                      type={showPassword ? "text" : "password"} 
-                      value={password} 
-                      onChange={e => setPassword(e.target.value)} 
-                      placeholder="Enter a strong password" 
-                      className="satoshi-input pr-10" 
-                    />
-                    <Button 
-                      type="button" 
-                      variant="ghost" 
-                      size="icon" 
-                      onClick={togglePasswordVisibility} 
-                      className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
-                    >
+                    <Input id="password" type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter a strong password" className="satoshi-input pr-10" />
+                    <Button type="button" variant="ghost" size="icon" onClick={togglePasswordVisibility} className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8">
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </Button>
                   </div>
@@ -470,21 +442,8 @@ const EncryptionComponent = () => {
                 <div className="grid gap-2">
                   <Label htmlFor="filePassword" className="text-gray-700">Password</Label>
                   <div className="relative">
-                    <Input 
-                      id="filePassword" 
-                      type={showPassword ? "text" : "password"} 
-                      value={password} 
-                      onChange={e => setPassword(e.target.value)} 
-                      placeholder="Enter a strong password" 
-                      className="satoshi-input pr-10" 
-                    />
-                    <Button 
-                      type="button" 
-                      variant="ghost" 
-                      size="icon" 
-                      onClick={togglePasswordVisibility} 
-                      className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
-                    >
+                    <Input id="filePassword" type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter a strong password" className="satoshi-input pr-10" />
+                    <Button type="button" variant="ghost" size="icon" onClick={togglePasswordVisibility} className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8">
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </Button>
                   </div>
