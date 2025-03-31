@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -57,6 +56,20 @@ const EncryptionComponent = () => {
 
   const handleSeedPhraseChange = (phrase: string) => {
     setSeedPhrase(phrase);
+  };
+
+  const formatSeedPhrase = (phrase: string) => {
+    if (!phrase.trim()) return "";
+    
+    // Check if this is likely a seed phrase (multiple words separated by spaces)
+    const words = phrase.trim().split(/\s+/);
+    if (words.length >= 12) {
+      // Format as a numbered list
+      return words.map((word, index) => `${index + 1}. ${word}`).join('\n');
+    }
+    
+    // If not a seed phrase, return as is
+    return phrase;
   };
 
   const processText = async () => {
@@ -118,7 +131,7 @@ const EncryptionComponent = () => {
         });
       } else {
         const decrypted = await decryptMessage(seedPhrase, password);
-        setOutput(decrypted);
+        setOutput(formatSeedPhrase(decrypted));
         toast({
           title: "Decryption successful",
           description: "Your seed phrase has been decrypted"
