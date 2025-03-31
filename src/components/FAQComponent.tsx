@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -175,44 +176,44 @@ const FAQComponent = () => {
                   </AccordionContent>
                 </AccordionItem>
               
-              <AccordionItem value="data-memory">
-                <AccordionTrigger className="text-sm sm:text-base py-2 text-left">
-                  How will you remember my encryption?
-                </AccordionTrigger>
-                <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                  <p>
-                    <strong>We won't – and more importantly, we can't</strong>. Our entire application 
-                    is designed with a zero-knowledge architecture that makes it <strong>impossible 
-                    for us to store or remember anything about your encrypted data</strong>.
-                  </p>
-                  <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                    <li>
-                      <strong>All encryption happens directly in your browser</strong>, on your device
-                    </li>
-                    <li>
-                      <strong>No data is ever transmitted to our servers</strong>
-                    </li>
-                    <li>
-                      <strong>We have no way to access your password or decryption key</strong>
-                    </li>
-                    <li>
-                      <strong>Each encryption session is completely isolated</strong> and exists 
-                      only in your browser's memory
-                    </li>
-                  </ul>
-                  <p className="mt-1 sm:mt-2">
-                    Even if someone demanded we reveal your data, we <strong>physically cannot</strong>. 
-                    Our design ensures that only you, with your specific password, can decrypt 
-                    the information.
-                  </p>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </CardContent>
-        </Card>
-      </TabsContent>
+                <AccordionItem value="data-memory">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left">
+                    How will you remember my encryption?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
+                    <p>
+                      <strong>We won't – and more importantly, we can't</strong>. Our entire application 
+                      is designed with a zero-knowledge architecture that makes it <strong>impossible 
+                      for us to store or remember anything about your encrypted data</strong>.
+                    </p>
+                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
+                      <li>
+                        <strong>All encryption happens directly in your browser</strong>, on your device
+                      </li>
+                      <li>
+                        <strong>No data is ever transmitted to our servers</strong>
+                      </li>
+                      <li>
+                        <strong>We have no way to access your password or decryption key</strong>
+                      </li>
+                      <li>
+                        <strong>Each encryption session is completely isolated</strong> and exists 
+                        only in your browser's memory
+                      </li>
+                    </ul>
+                    <p className="mt-1 sm:mt-2">
+                      Even if someone demanded we reveal your data, we <strong>physically cannot</strong>. 
+                      Our design ensures that only you, with your specific password, can decrypt 
+                      the information.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </CardContent>
+          </Card>
+        </TabsContent>
       
-      <TabsContent value="technical">
+        <TabsContent value="technical">
           <Card className="border-0 sm:border shadow-none sm:shadow-sm">
             <CardHeader className="px-2 sm:px-6 py-3 sm:py-4">
               <CardTitle className="text-lg sm:text-xl">Technical Implementation</CardTitle>
@@ -651,4 +652,24 @@ const FAQComponent = () => {
                       This application is released under the <strong>MIT License</strong>, which means:
                     </p>
                     <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>You are <strong>free
+                      <li>You are <strong>free to use, modify, and distribute</strong> this software</li>
+                      <li>You may use it for <strong>personal or commercial</strong> purposes</li>
+                      <li>The code is provided <strong>as-is</strong> with no warranty</li>
+                      <li>We are not liable for any issues arising from its use</li>
+                      <li>You must <strong>include the original license</strong> if you redistribute the code</li>
+                    </ul>
+                    <p className="mt-1 sm:mt-2">
+                      The full license is available in our GitHub repository.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
+
+export default FAQComponent;
