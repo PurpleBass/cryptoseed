@@ -1,5 +1,5 @@
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -25,7 +25,7 @@ const EncryptionComponent = () => {
   const { toast } = useToast();
 
   // Monitor online/offline status
-  React.useEffect(() => {
+  useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 
@@ -201,12 +201,12 @@ const EncryptionComponent = () => {
           </div>
           <div className="flex gap-2 items-center">
             {isOnline ? (
-              <Badge variant="outline" className="flex items-center gap-1 bg-yellow-50 text-yellow-800 border-yellow-300">
+              <Badge variant="outline" className="flex items-center gap-1 bg-red-100 text-red-800 border-red-300">
                 <Wifi className="h-3 w-3" />
                 <span>Online</span>
               </Badge>
             ) : (
-              <Badge variant="outline" className="flex items-center gap-1 bg-green-50 text-green-800 border-green-300">
+              <Badge variant="outline" className="flex items-center gap-1 bg-green-100 text-green-800 border-green-300">
                 <WifiOff className="h-3 w-3" />
                 <span>Offline (Recommended)</span>
               </Badge>
