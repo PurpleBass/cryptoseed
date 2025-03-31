@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -639,4 +640,52 @@ const FAQComponent = () => {
                 <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-4">
                   Complete legal documents are available at the bottom of the page:
                 </p>
-                <
+                <ul className="list-disc pl-4 sm:pl-6 text-xs sm:text-sm text-secure-600">
+                  <li>
+                    <button 
+                      onClick={() => openDialog('Terms of Service')}
+                      className="hover:underline text-left"
+                      type="button"
+                    >
+                      <strong>Terms of Service</strong>
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => openDialog('Privacy Policy')}
+                      className="hover:underline text-left"
+                      type="button"
+                    >
+                      <strong>Privacy Policy</strong>
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => openDialog('MIT License')}
+                      className="hover:underline text-left"
+                      type="button"
+                    >
+                      <strong>MIT License</strong>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+      
+      <div className="mt-8 sm:mt-12 p-3 sm:p-4 border-t border-gray-200 text-[10px] sm:text-xs text-gray-500">
+        <p className="font-bold mb-1 sm:mb-2">DISCLAIMER:</p>
+        <p>
+          We are <strong>not responsible</strong> for the use of this application or the data it manages. 
+          This tool is provided for <strong>educational and security purposes only</strong>. Users are <strong>solely responsible</strong> for their 
+          data, password management, and any consequences of using this service. <strong>Lost passwords cannot be recovered</strong> 
+          and will result in <strong>permanent loss</strong> of encrypted data.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default FAQComponent;
