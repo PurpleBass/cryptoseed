@@ -6,53 +6,62 @@ import CodeVerification from "@/components/CodeVerification";
 import FAQComponent from "@/components/FAQComponent";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
+
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewType>("encrypt");
-  return <div className="min-h-screen flex flex-col bg-background">
+  const isMobile = useIsMobile();
+  
+  return (
+    <div className="min-h-screen flex flex-col bg-background">
       <Header currentView={currentView} setCurrentView={setCurrentView} />
       
-      {currentView === "encrypt" && <div className="bg-gradient-to-b from-secure-50 to-white pt-8 pb-6 border-b border-gray-100">
+      {currentView === "encrypt" && (
+        <div className="bg-gradient-to-b from-secure-50 to-white pt-4 md:pt-8 pb-4 md:pb-6 border-b border-gray-100">
           <div className="satoshi-container text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Secure Your Crypto Seed Phrases</h1>
-            <div className="max-w-3xl mx-auto">
-              <p className="text-gray-700 mb-6">
+            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4">Secure Your Crypto Seed Phrases</h1>
+            <div className="max-w-3xl mx-auto px-2 md:px-0">
+              <p className="text-sm md:text-base text-gray-700 mb-4 md:mb-6">
                 Protect your critical seed phrases with advanced zero-knowledge encryption. 
                 Safeguard the keys to your crypto wallets with military-grade security.
               </p>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                  <div className="flex items-center mb-2">
-                    <Key className="h-5 w-5 text-secure-600 mr-2" />
-                    <h3 className="font-medium text-gray-900">Seed Phrase Protection</h3>
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-6 text-left">
+                <div className="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-gray-100">
+                  <div className="flex items-center mb-1 md:mb-2">
+                    <Key className="h-4 w-4 md:h-5 md:w-5 text-secure-600 mr-2" />
+                    <h3 className="font-medium text-sm md:text-base text-gray-900">Seed Phrase Protection</h3>
                   </div>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-xs md:text-sm text-gray-600">
                     Securely encrypt and store your wallet recovery phrases using AES-256 encryption. 
                     Prevent unauthorized access to your crypto assets.
                   </p>
                 </div>
                 
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                  <div className="flex items-center mb-2">
-                    <FileText className="h-5 w-5 text-secure-600 mr-2" />
-                    <h3 className="font-medium text-gray-900">Text Encryption</h3>
+                <div className="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-gray-100">
+                  <div className="flex items-center mb-1 md:mb-2">
+                    <FileText className="h-4 w-4 md:h-5 md:w-5 text-secure-600 mr-2" />
+                    <h3 className="font-medium text-sm md:text-base text-gray-900">Text Encryption</h3>
                   </div>
-                  <p className="text-sm text-gray-600">
-Encrypt sensitive text messages, passwords, or confidential notes with robust encryption.</p>
+                  <p className="text-xs md:text-sm text-gray-600">
+                    Encrypt sensitive text messages, passwords, or confidential notes with robust encryption.
+                  </p>
                 </div>
                 
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                  <div className="flex items-center mb-2">
-                    <Lock className="h-5 w-5 text-secure-600 mr-2" />
-                    <h3 className="font-medium text-gray-900">File Encryption</h3>
+                <div className="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-gray-100">
+                  <div className="flex items-center mb-1 md:mb-2">
+                    <Lock className="h-4 w-4 md:h-5 md:w-5 text-secure-600 mr-2" />
+                    <h3 className="font-medium text-sm md:text-base text-gray-900">File Encryption</h3>
                   </div>
-                  <p className="text-sm text-gray-600">
-Encrypt any file with a password. Secure your documents, images, and other sensitive files.</p>
+                  <p className="text-xs md:text-sm text-gray-600">
+                    Encrypt any file with a password. Secure your documents, images, and other sensitive files.
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-        </div>}
+        </div>
+      )}
       
       <main className="flex-1">
         {currentView === "encrypt" && <EncryptionComponent />}
@@ -60,44 +69,44 @@ Encrypt any file with a password. Secure your documents, images, and other sensi
         {currentView === "faq" && <FAQComponent />}
       </main>
       
-      <footer className="py-10 bg-gray-50 border-t border-gray-100">
+      <footer className="py-6 md:py-10 bg-gray-50 border-t border-gray-100">
         <div className="satoshi-container">
-          <div className="mb-4 text-center">
-            <Shield className="h-8 w-8 text-secure-500 inline-block" />
-            <p className="text-lg font-medium text-gray-800 mt-2">Crypto Seed</p>
+          <div className="mb-3 md:mb-4 text-center">
+            <Shield className="h-6 w-6 md:h-8 md:w-8 text-secure-500 inline-block" />
+            <p className="text-base md:text-lg font-medium text-gray-800 mt-1 md:mt-2">Crypto Seed</p>
           </div>
-          <p className="text-sm text-gray-600 max-w-xl mx-auto text-center">
+          <p className="text-xs md:text-sm text-gray-600 max-w-xl mx-auto text-center px-4 md:px-0">
             Open Source, Zero-Knowledge Encryption. Your data never leaves your device.
             All encryption happens locally in your browser.
           </p>
-          <div className="mt-6 flex justify-center space-x-6">
-            <a href="https://github.com/yourusername/secure-nomad-encryptor" target="_blank" rel="noopener noreferrer" className="text-secure-500 hover:text-secure-700 hover:underline text-sm">
+          <div className="mt-4 md:mt-6 flex flex-wrap justify-center gap-3 md:gap-6 px-2 md:px-0">
+            <a href="https://github.com/yourusername/secure-nomad-encryptor" target="_blank" rel="noopener noreferrer" className="text-secure-500 hover:text-secure-700 hover:underline text-xs md:text-sm">
               GitHub Repository
             </a>
             <a href="#" onClick={e => {
             e.preventDefault();
             setCurrentView("verify");
-          }} className="text-secure-500 hover:text-secure-700 hover:underline text-sm">
+          }} className="text-secure-500 hover:text-secure-700 hover:underline text-xs md:text-sm">
               Verify Code
             </a>
             <a href="#" onClick={e => {
             e.preventDefault();
             setCurrentView("faq");
-          }} className="text-secure-500 hover:text-secure-700 hover:underline text-sm">
+          }} className="text-secure-500 hover:text-secure-700 hover:underline text-xs md:text-sm">
               Security FAQ
             </a>
           </div>
           
           {/* Legal section */}
-          <div className="mt-8 pt-6 border-t border-gray-200">
-            <div className="flex flex-wrap justify-center gap-4 mb-4">
+          <div className="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-gray-200">
+            <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-3 md:mb-4">
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="link" className="text-xs text-gray-500 hover:text-secure-600">
+                  <Button variant="link" className="text-xs text-gray-500 hover:text-secure-600 h-auto py-1 px-2">
                     Terms of Service
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                <DialogContent className="max-w-[90vw] md:max-w-3xl max-h-[80vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle>Terms of Service</DialogTitle>
                     <DialogDescription>Last updated: {new Date().toLocaleDateString()}</DialogDescription>
@@ -140,11 +149,11 @@ Encrypt any file with a password. Secure your documents, images, and other sensi
               
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="link" className="text-xs text-gray-500 hover:text-secure-600">
+                  <Button variant="link" className="text-xs text-gray-500 hover:text-secure-600 h-auto py-1 px-2">
                     Privacy Policy
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                <DialogContent className="max-w-[90vw] md:max-w-3xl max-h-[80vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle>Privacy Policy</DialogTitle>
                     <DialogDescription>Last updated: {new Date().toLocaleDateString()}</DialogDescription>
@@ -178,11 +187,11 @@ Encrypt any file with a password. Secure your documents, images, and other sensi
               
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="link" className="text-xs text-gray-500 hover:text-secure-600">
+                  <Button variant="link" className="text-xs text-gray-500 hover:text-secure-600 h-auto py-1 px-2">
                     MIT License
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                <DialogContent className="max-w-[90vw] md:max-w-3xl max-h-[80vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle>MIT License</DialogTitle>
                   </DialogHeader>
@@ -214,7 +223,7 @@ Encrypt any file with a password. Secure your documents, images, and other sensi
               </Dialog>
             </div>
             
-            <p className="text-xs text-gray-500 text-center max-w-2xl mx-auto">
+            <p className="text-xs text-gray-500 text-center max-w-2xl mx-auto px-4 md:px-0">
               <strong>Disclaimer:</strong> We are not responsible for the use of this application or the data it manages. 
               This tool is provided for educational and security purposes only. Users are solely responsible for their 
               data, password management, and any consequences of using this service. Lost passwords cannot be recovered 
@@ -223,6 +232,8 @@ Encrypt any file with a password. Secure your documents, images, and other sensi
           </div>
         </div>
       </footer>
-    </div>;
+    </div>
+  );
 };
+
 export default Index;
