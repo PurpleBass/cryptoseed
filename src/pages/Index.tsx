@@ -22,10 +22,13 @@ const Index = () => {
     }
   }, [location]);
 
-  return <div className="min-h-screen flex flex-col bg-background">
+  return (
+    <div className="min-h-screen flex flex-col bg-background">
       <Header currentView={currentView} setCurrentView={setCurrentView} />
       
-      {currentView === "encrypt" && <div className="bg-gradient-to-b from-secure-50 to-white pt-4 md:pt-8 pb-4 md:pb-6 border-b border-gray-100">
+      {/* Hero section - only show on encrypt view */}
+      {currentView === "encrypt" && (
+        <div className="bg-gradient-to-b from-secure-50 to-white pt-4 md:pt-8 pb-4 md:pb-6 border-b border-gray-100">
           <div className="satoshi-container text-center">
             <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4">Secure Your Crypto Seed Phrases</h1>
             <div className="max-w-3xl mx-auto px-2 md:px-0">
@@ -68,7 +71,8 @@ const Index = () => {
               </div>
             </div>
           </div>
-        </div>}
+        </div>
+      )}
       
       <main className="flex-1">
         {currentView === "encrypt" && <EncryptionComponent />}
@@ -239,6 +243,8 @@ const Index = () => {
           </div>
         </div>
       </footer>
-    </div>;
+    </div>
+  );
 };
+
 export default Index;
