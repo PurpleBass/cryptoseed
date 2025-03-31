@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -5,8 +6,30 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { AlertCircle, HelpCircle, Shield, FileText } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 const FAQComponent = () => {
+  // Function to open the corresponding dialog from the footer
+  const openDialog = (dialogType: string) => {
+    // Simulate a click on the corresponding dialog trigger in the footer
+    setTimeout(() => {
+      // Find all dialog triggers in the footer
+      const footerLinks = Array.from(document.querySelectorAll('footer a, footer button'));
+      
+      // Find the link that contains the text we're looking for
+      const targetLink = footerLinks.find(link => 
+        link.textContent?.trim().includes(dialogType)
+      );
+      
+      // Click the link if found
+      if (targetLink && targetLink instanceof HTMLElement) {
+        targetLink.click();
+      } else {
+        console.error(`Could not find footer link for: ${dialogType}`);
+      }
+    }, 100); // Small delay to ensure DOM is ready
+  };
+
   return (
     <div className="w-full mx-auto px-2 sm:px-4 max-w-4xl">
       <div className="mb-4 sm:mb-6">
@@ -625,42 +648,27 @@ const FAQComponent = () => {
                 <ul className="list-disc pl-4 sm:pl-6 text-xs sm:text-sm text-secure-600">
                   <li>
                     <button 
-                      onClick={() => {
-                        const termsDialog = document.querySelector('[aria-label="Terms of Service"]');
-                        if (termsDialog) {
-                          const button = termsDialog.parentElement?.querySelector('button');
-                          button?.click();
-                        }
-                      }} 
-                      className="hover:underline"
+                      onClick={() => openDialog('Terms of Service')}
+                      className="hover:underline text-left"
+                      type="button"
                     >
                       Terms of Service
                     </button>
                   </li>
                   <li>
                     <button 
-                      onClick={() => {
-                        const privacyDialog = document.querySelector('[aria-label="Privacy Policy"]');
-                        if (privacyDialog) {
-                          const button = privacyDialog.parentElement?.querySelector('button');
-                          button?.click();
-                        }
-                      }} 
-                      className="hover:underline"
+                      onClick={() => openDialog('Privacy Policy')}
+                      className="hover:underline text-left"
+                      type="button"
                     >
                       Privacy Policy
                     </button>
                   </li>
                   <li>
                     <button 
-                      onClick={() => {
-                        const licenseDialog = document.querySelector('[aria-label="MIT License"]');
-                        if (licenseDialog) {
-                          const button = licenseDialog.parentElement?.querySelector('button');
-                          button?.click();
-                        }
-                      }} 
-                      className="hover:underline"
+                      onClick={() => openDialog('MIT License')}
+                      className="hover:underline text-left"
+                      type="button"
                     >
                       MIT License
                     </button>
