@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertCircle, ArrowDownUp, Copy, Download, Eye, EyeOff, FileUp, Lock, LockOpen, Shield, Wifi, WifiOff } from "lucide-react";
+import { AlertCircle, ArrowDownUp, Copy, Download, Eye, EyeOff, FileUp, Lock, LockOpen, QrCode, Shield, Wifi, WifiOff } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
@@ -61,14 +61,11 @@ const EncryptionComponent = () => {
   const formatSeedPhrase = (phrase: string) => {
     if (!phrase.trim()) return "";
     
-    // Check if this is likely a seed phrase (multiple words separated by spaces)
     const words = phrase.trim().split(/\s+/);
     if (words.length >= 12) {
-      // Format as a numbered list with each word on a new line
       return words.map((word, index) => `${index + 1}. ${word}`).join('\n');
     }
     
-    // If not a seed phrase, return as is
     return phrase;
   };
 
@@ -93,7 +90,6 @@ const EncryptionComponent = () => {
         });
       } else {
         const decrypted = await decryptMessage(textInput, password);
-        // Apply formatting to the decrypted text in case it's a seed phrase
         setOutput(formatSeedPhrase(decrypted));
         toast({
           title: "Decryption successful",
@@ -216,6 +212,34 @@ const EncryptionComponent = () => {
     toast({
       title: "Copied to clipboard",
       description: "The output has been copied to your clipboard"
+    });
+  };
+
+  const createQRCode = () => {
+    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(output)}`;
+    
+    window.open(qrCodeUrl, "_blank");
+    
+    toast({
+      title: "QR Code created",
+      description: "QR Code has been generated in a new tab"
+    });
+  };
+
+  const saveToFile = () => {
+    const blob = new Blob([output], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${isEncrypting ? "encrypted" : "decrypted"}_content.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    toast({
+      title: "Saved to file",
+      description: "Content has been saved to a text file"
     });
   };
 
@@ -396,14 +420,35 @@ const EncryptionComponent = () => {
                   <CardTitle className="text-xl text-gray-900">
                     {isEncrypting ? "Encrypted Result" : "Decrypted Result"}
                   </CardTitle>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={copyToClipboard}
-                    className="text-satoshi-500 hover:text-satoshi-600 hover:bg-satoshi-50"
-                  >
-                    <Copy className="h-4 w-4" />
-                  </Button>
+                  <div className="flex space-x-2">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={copyToClipboard}
+                      className="text-secure-500 hover:text-secure-600 hover:bg-secure-50"
+                      title="Copy to clipboard"
+                    >
+                      <Copy className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={createQRCode}
+                      className="text-secure-500 hover:text-secure-600 hover:bg-secure-50"
+                      title="Create QR code"
+                    >
+                      <QrCode className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={saveToFile}
+                      className="text-secure-500 hover:text-secure-600 hover:bg-secure-50"
+                      title="Save to file"
+                    >
+                      <Download className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
@@ -490,14 +535,35 @@ const EncryptionComponent = () => {
                   <CardTitle className="text-xl text-gray-900">
                     {isEncrypting ? "Encrypted Result" : "Decrypted Result"}
                   </CardTitle>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={copyToClipboard}
-                    className="text-satoshi-500 hover:text-satoshi-600 hover:bg-satoshi-50"
-                  >
-                    <Copy className="h-4 w-4" />
-                  </Button>
+                  <div className="flex space-x-2">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={copyToClipboard}
+                      className="text-secure-500 hover:text-secure-600 hover:bg-secure-50"
+                      title="Copy to clipboard"
+                    >
+                      <Copy className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={createQRCode}
+                      className="text-secure-500 hover:text-secure-600 hover:bg-secure-50"
+                      title="Create QR code"
+                    >
+                      <QrCode className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={saveToFile}
+                      className="text-secure-500 hover:text-secure-600 hover:bg-secure-50"
+                      title="Save to file"
+                    >
+                      <Download className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
