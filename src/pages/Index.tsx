@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Shield, Key, Lock, FileText, Book, FileCheck } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
@@ -8,17 +7,13 @@ import FAQComponent from "@/components/FAQComponent";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
-
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewType>("encrypt");
   const isMobile = useIsMobile();
-  
-  return (
-    <div className="min-h-screen flex flex-col bg-background">
+  return <div className="min-h-screen flex flex-col bg-background">
       <Header currentView={currentView} setCurrentView={setCurrentView} />
       
-      {currentView === "encrypt" && (
-        <div className="bg-gradient-to-b from-secure-50 to-white pt-4 md:pt-8 pb-4 md:pb-6 border-b border-gray-100">
+      {currentView === "encrypt" && <div className="bg-gradient-to-b from-secure-50 to-white pt-4 md:pt-8 pb-4 md:pb-6 border-b border-gray-100">
           <div className="satoshi-container text-center">
             <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4">Secure Your Crypto Seed Phrases</h1>
             <div className="max-w-3xl mx-auto px-2 md:px-0">
@@ -45,8 +40,7 @@ const Index = () => {
                     <h3 className="font-medium text-sm md:text-base text-gray-900">Text Encryption</h3>
                   </div>
                   <p className="text-xs md:text-sm text-gray-600">
-                    Encrypt sensitive text messages, passwords, or confidential notes with robust encryption.
-                  </p>
+Encrypt sensitive text messages, passwords, or confidential notes with robust encryption.</p>
                 </div>
                 
                 <div className="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-gray-100">
@@ -55,14 +49,12 @@ const Index = () => {
                     <h3 className="font-medium text-sm md:text-base text-gray-900">File Encryption</h3>
                   </div>
                   <p className="text-xs md:text-sm text-gray-600">
-                    Encrypt any file with a password. Secure your documents, images, and other sensitive files.
-                  </p>
+Encrypt any file with a password. Secure your documents, images, and other sensitive files.</p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        </div>}
       
       <main className="flex-1">
         {currentView === "encrypt" && <EncryptionComponent />}
@@ -233,8 +225,6 @@ const Index = () => {
           </div>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
