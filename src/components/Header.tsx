@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Shield, FileText, HelpCircle } from "lucide-react";
+import { FileText, HelpCircle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useBreakpoint } from "@/hooks/use-mobile";
@@ -21,7 +21,11 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
       <div className="satoshi-container">
         <div className="flex flex-col items-center space-y-4 md:space-y-6">
           <div className="flex items-center gap-2 md:gap-3">
-            <Shield className="h-8 w-8 md:h-10 md:w-10 text-secure-500" />
+            <img 
+              src="/lovable-uploads/a0b9a6e5-ef5a-4c95-929d-cb6a257495eb.png" 
+              alt="Crypto Seed Logo"
+              className="h-8 w-8 md:h-10 md:w-10 text-secure-500" 
+            />
             <h1 className="text-2xl md:text-3xl font-heading font-bold tracking-tight text-gray-900">
               Crypto Seed
             </h1>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Shield, Key, Lock, FileText, Book, FileCheck } from "lucide-react";
+import { Key, Lock, FileText, Book, FileCheck } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
 import EncryptionComponent from "@/components/EncryptionComponent";
 import CodeVerification from "@/components/CodeVerification";
@@ -87,7 +87,11 @@ const Index = () => {
       <footer className="py-6 md:py-10 bg-gray-50 border-t border-gray-100">
         <div className="satoshi-container">
           <div className="mb-3 md:mb-4 text-center">
-            <Shield className="h-6 w-6 md:h-8 md:w-8 text-secure-500 inline-block" />
+            <img 
+              src="/lovable-uploads/a0b9a6e5-ef5a-4c95-929d-cb6a257495eb.png" 
+              alt="Crypto Seed Logo"
+              className="h-6 w-6 md:h-8 md:w-8 text-secure-500 inline-block" 
+            />
             <p className="text-base md:text-lg font-medium text-gray-800 mt-1 md:mt-2">Crypto Seed</p>
           </div>
           <p className="text-xs md:text-sm text-gray-600 max-w-xl mx-auto text-center px-4 md:px-0">
