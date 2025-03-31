@@ -1,10 +1,10 @@
 
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, Github, Search } from "lucide-react";
+import { FileText, Github, Search, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const CodeVerification = () => {
   return (
@@ -28,22 +28,21 @@ const CodeVerification = () => {
         </AlertDescription>
       </Alert>
       
-      <Tabs defaultValue="encryption">
-        <TabsList className="mb-4">
-          <TabsTrigger value="encryption">Encryption Logic</TabsTrigger>
-          <TabsTrigger value="webapp">Web App</TabsTrigger>
-          <TabsTrigger value="verify">How to Verify</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="encryption">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg sm:text-xl">Core Encryption Implementation</CardTitle>
-              <CardDescription className="text-xs sm:text-sm">
+      <div className="space-y-4">
+        {/* Encryption Logic Dropdown */}
+        <Collapsible className="border rounded-lg overflow-hidden">
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-4 bg-muted/50 text-left">
+            <div className="flex items-center gap-2">
+              <FileText className="h-4 w-4 text-secure-600" />
+              <span className="text-sm font-medium">Core Encryption Implementation</span>
+            </div>
+            <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200" />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="p-4 border-t">
+              <div className="text-xs sm:text-sm text-muted-foreground mb-3 text-left">
                 This is the exact implementation of our AES-256 encryption using the Web Crypto API.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </div>
               <div className="p-4 bg-muted rounded-md overflow-auto max-h-[600px]">
                 <pre className="text-xs md:text-sm whitespace-pre text-left ml-0 text-gray-700">
 {`/**
@@ -153,23 +152,28 @@ export async function decryptMessage(encryptedMessage: string, password: string)
 }`}
                 </pre>
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="webapp">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg sm:text-xl">Web Application Architecture</CardTitle>
-              <CardDescription className="text-xs sm:text-sm">
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Web App Architecture Dropdown */}
+        <Collapsible className="border rounded-lg overflow-hidden">
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-4 bg-muted/50 text-left">
+            <div className="flex items-center gap-2">
+              <FileText className="h-4 w-4 text-secure-600" />
+              <span className="text-sm font-medium">Web Application Architecture</span>
+            </div>
+            <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200" />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="p-4 border-t">
+              <div className="text-xs sm:text-sm text-muted-foreground mb-3 text-left">
                 Our app is a client-side only application. No server communication happens at any point.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </div>
               <div className="p-4 bg-muted rounded-md overflow-auto max-h-[600px]">
-                <div className="space-y-6 text-xs sm:text-sm text-gray-700">
+                <div className="space-y-6 text-left text-xs sm:text-sm text-gray-700">
                   <div>
-                    <h3 className="text-sm font-medium mb-2">Key Components:</h3>
+                    <h3 className="text-sm font-medium mb-2 text-left">Key Components:</h3>
                     <ul className="list-disc pl-6 space-y-2">
                       <li>
                         <strong>Web Crypto API:</strong> We use the browser's built-in cryptography 
@@ -195,7 +199,7 @@ export async function decryptMessage(encryptedMessage: string, password: string)
                     </ul>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium mb-2">Key Files:</h3>
+                    <h3 className="text-sm font-medium mb-2 text-left">Key Files:</h3>
                     <ul className="list-disc pl-6 space-y-2">
                       <li>
                         <code className="bg-gray-100 px-1 rounded text-xs">src/lib/encryption.ts</code> - Core encryption/decryption logic
@@ -211,27 +215,32 @@ export async function decryptMessage(encryptedMessage: string, password: string)
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="verify">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg sm:text-xl">How to Verify Our Code</CardTitle>
-              <CardDescription className="text-xs sm:text-sm">
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* How to Verify Dropdown */}
+        <Collapsible className="border rounded-lg overflow-hidden">
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-4 bg-muted/50 text-left">
+            <div className="flex items-center gap-2">
+              <Search className="h-4 w-4 text-secure-600" />
+              <span className="text-sm font-medium">How to Verify Our Code</span>
+            </div>
+            <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200" />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="p-4 border-t">
+              <div className="text-xs sm:text-sm text-muted-foreground mb-3 text-left">
                 There are several ways you can verify that our code is secure and contains no backdoors.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6 text-xs sm:text-sm text-gray-700">
+              </div>
+              <div className="space-y-6 text-xs sm:text-sm text-gray-700 text-left">
                 <div>
                   <h3 className="text-sm font-medium mb-2">View Source in Browser</h3>
-                  <p className="text-muted-foreground mb-2">
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-2">
                     This web application is built with Vite and React. You can view the compiled source
                     code directly in your browser by using the browser's developer tools:
                   </p>
-                  <ol className="list-decimal pl-6 space-y-1">
+                  <ol className="list-decimal pl-6 space-y-1 text-xs sm:text-sm">
                     <li>Right-click on this page and select "View Page Source" or press Ctrl+U</li>
                     <li>Look at the JavaScript files being loaded</li>
                     <li>Use developer tools (F12) to examine network requests (there should be none after initial load)</li>
@@ -240,10 +249,10 @@ export async function decryptMessage(encryptedMessage: string, password: string)
                 
                 <div>
                   <h3 className="text-sm font-medium mb-2">Check Network Activity</h3>
-                  <p className="text-muted-foreground mb-2">
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-2">
                     To verify that no data is being sent to any server:
                   </p>
-                  <ol className="list-decimal pl-6 space-y-1">
+                  <ol className="list-decimal pl-6 space-y-1 text-xs sm:text-sm">
                     <li>Open your browser's developer tools (F12)</li>
                     <li>Go to the "Network" tab</li>
                     <li>Perform an encryption or decryption operation</li>
@@ -253,10 +262,10 @@ export async function decryptMessage(encryptedMessage: string, password: string)
                 
                 <div>
                   <h3 className="text-sm font-medium mb-2">Clone the GitHub Repository</h3>
-                  <p className="text-muted-foreground mb-2">
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-2">
                     For a thorough code review, you can clone our GitHub repository and examine the code directly:
                   </p>
-                  <div className="mt-4 flex justify-center">
+                  <div className="mt-4 flex justify-start">
                     <Button 
                       className="flex items-center gap-2 text-xs"
                       variant="outline"
@@ -272,20 +281,20 @@ export async function decryptMessage(encryptedMessage: string, password: string)
                 
                 <div>
                   <h3 className="text-sm font-medium mb-2">Offline Usage</h3>
-                  <p className="text-muted-foreground mb-2">
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-2">
                     For maximum security, disconnect from the internet after loading this page:
                   </p>
-                  <ol className="list-decimal pl-6 space-y-1">
+                  <ol className="list-decimal pl-6 space-y-1 text-xs sm:text-sm">
                     <li>Once the page is loaded, disconnect your device from WiFi/Ethernet</li>
                     <li>The application will continue to function normally</li>
                     <li>This ensures no data can possibly leave your device</li>
                   </ol>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+      </div>
     </div>
   );
 };
