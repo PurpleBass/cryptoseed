@@ -170,6 +170,18 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
           </div>
         ))}
       </div>
+
+      <div className="grid gap-2">
+        <Label htmlFor="seedPhrasePassword" className="text-gray-700">Password</Label>
+        <div className="relative">
+          <Input 
+            id="seedPhrasePassword" 
+            type="password" 
+            placeholder="Enter a strong password" 
+            className="satoshi-input" 
+          />
+        </div>
+      </div>
     </div>
   );
 };
