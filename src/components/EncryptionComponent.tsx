@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -265,7 +266,7 @@ const EncryptionComponent = () => {
 
       <Tabs defaultValue="seedphrase" value={mode} onValueChange={v => setMode(v as "seedphrase" | "text" | "file")} className="mt-4">
         <TabsList className="mb-4 rounded-full bg-white p-1 border border-gray-100 shadow-sm">
-          <TabsTrigger value="seedphrase" className="rounded-full data-[state=active]:text-gray-900 data-[state=active]:shadow-sm bg-secure-100">
+          <TabsTrigger value="seedphrase" className="rounded-full data-[state=active]:bg-gray-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">
             Seed Phrase
           </TabsTrigger>
           <TabsTrigger value="text" className="rounded-full data-[state=active]:bg-gray-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">
