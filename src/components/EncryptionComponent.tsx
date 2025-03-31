@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertCircle, ArrowDownUp, Copy, Download, Eye, EyeOff, FileUp, Lock, LockOpen, Shield, Wifi, WifiOff } from "lucide-react";
+import { AlertCircle, ArrowDownUp, Copy, Download, Eye, EyeOff, FileUp, Lock, LockOpen, Shield, Wifi, WifiOff, Sprout, FileText, File } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
@@ -264,15 +265,18 @@ const EncryptionComponent = () => {
       </div>
 
       <Tabs defaultValue="seedphrase" value={mode} onValueChange={v => setMode(v as "seedphrase" | "text" | "file")} className="mt-4">
-        <TabsList className="mb-4 rounded-full bg-white p-1 border border-gray-100 shadow-sm">
-          <TabsTrigger value="seedphrase" className="rounded-full data-[state=active]:bg-secure-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">
-            Seed Phrase
+        <TabsList className="mb-4 bg-secure-50 p-1 border border-secure-100 shadow-sm rounded-full">
+          <TabsTrigger value="seedphrase" className="flex items-center gap-1.5 rounded-full data-[state=active]:bg-secure-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">
+            <Sprout className="h-3.5 w-3.5" />
+            <span>Seed Phrase</span>
           </TabsTrigger>
-          <TabsTrigger value="text" className="rounded-full data-[state=active]:bg-secure-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">
-            Text
+          <TabsTrigger value="text" className="flex items-center gap-1.5 rounded-full data-[state=active]:bg-secure-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">
+            <FileText className="h-3.5 w-3.5" />
+            <span>Text</span>
           </TabsTrigger>
-          <TabsTrigger value="file" className="rounded-full data-[state=active]:bg-secure-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">
-            File
+          <TabsTrigger value="file" className="flex items-center gap-1.5 rounded-full data-[state=active]:bg-secure-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">
+            <File className="h-3.5 w-3.5" />
+            <span>File</span>
           </TabsTrigger>
         </TabsList>
         
