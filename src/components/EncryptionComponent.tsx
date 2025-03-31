@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +11,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { encryptMessage, decryptMessage, encryptFile, decryptFile, isWebCryptoSupported } from "@/lib/encryption";
+import { Switch } from "@/components/ui/switch";
 
 const EncryptionComponent = () => {
   const [mode, setMode] = useState<"text" | "file">("text");
@@ -193,16 +195,19 @@ const EncryptionComponent = () => {
       <div className="mb-8 flex items-center justify-between">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-heading font-bold text-gray-900">{isEncrypting ? "Encrypt" : "Decrypt"}</h2>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={toggleEncryptDecrypt} 
-              title="Switch between Encrypt and Decrypt"
-              className="text-satoshi-500 hover:text-satoshi-600 hover:bg-satoshi-50"
-            >
-              <ArrowDownUp className="h-4 w-4" />
-            </Button>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center space-x-2">
+                <Switch 
+                  id="encrypt-mode" 
+                  checked={isEncrypting}
+                  onCheckedChange={setIsEncrypting}
+                  className="data-[state=checked]:bg-satoshi-500"
+                />
+                <span className="text-2xl font-heading font-bold text-gray-900">
+                  {isEncrypting ? "Encrypt" : "Decrypt"}
+                </span>
+              </div>
+            </div>
           </div>
           <div className="flex gap-2 items-center">
             {isOnline ? (
