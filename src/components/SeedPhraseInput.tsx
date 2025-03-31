@@ -16,7 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { MinusCircle, PlusCircle, ChevronDown } from "lucide-react";
+import { MinusCircle, PlusCircle, ChevronDown, Trash2 } from "lucide-react";
 
 interface SeedPhraseInputProps {
   onSeedPhraseChange: (seedPhrase: string) => void;
@@ -77,6 +77,12 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
 
   const returnToDropdown = () => {
     setIsCustomCount(false);
+  };
+  
+  // Fixed clear function that properly resets the words state
+  const clearAllWords = () => {
+    const emptyWords = Array(wordCount).fill("");
+    setWords(emptyWords);
   };
 
   return (
@@ -166,22 +172,37 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        {words.map((word, index) => (
-          <div key={index} className="flex items-center">
-            <span className="mr-2 text-sm text-gray-500 w-6">{index + 1}:</span>
-            <Input
-              value={word}
-              onChange={(e) => handleWordChange(index, e.target.value)}
-              placeholder={`Word ${index + 1}`}
-              className="satoshi-input placeholder:text-xs placeholder:text-muted-foreground/50"
-            />
-          </div>
-        ))}
+      <div className="grid gap-4">
+        {/* Erase button above the input grid */}
+        <div className="flex justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={clearAllWords}
+            className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
+          >
+            <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+            <span>Erase Seed Phrase</span>
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {words.map((word, index) => (
+            <div key={index} className="flex items-center">
+              <span className="mr-2 text-sm text-gray-500 w-6">{index + 1}:</span>
+              <Input
+                value={word}
+                onChange={(e) => handleWordChange(index, e.target.value)}
+                placeholder={`Word ${index + 1}`}
+                className="satoshi-input placeholder:text-xs placeholder:text-muted-foreground/50"
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
 export default SeedPhraseInput;
-
