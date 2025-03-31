@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,6 +26,7 @@ const EncryptionComponent = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
+  // Monitor online/offline status
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
@@ -38,6 +40,7 @@ const EncryptionComponent = () => {
     };
   }, []);
 
+  // Clear output when switching between encryption and decryption
   React.useEffect(() => {
     setOutput("");
     setSelectedFile(null);
@@ -105,6 +108,7 @@ const EncryptionComponent = () => {
       if (isEncrypting) {
         const { encryptedData, fileName } = await encryptFile(selectedFile, password);
         
+        // Create a download link
         const url = URL.createObjectURL(encryptedData);
         const a = document.createElement('a');
         a.href = url;
@@ -121,6 +125,7 @@ const EncryptionComponent = () => {
       } else {
         const { decryptedData, fileName } = await decryptFile(selectedFile, password);
         
+        // Create a download link
         const url = URL.createObjectURL(decryptedData);
         const a = document.createElement('a');
         a.href = url;
@@ -136,6 +141,7 @@ const EncryptionComponent = () => {
         });
       }
       
+      // Reset the file input
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -189,28 +195,18 @@ const EncryptionComponent = () => {
       <div className="mb-8 flex items-center justify-between">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-4 bg-gray-100 rounded-full p-1">
-              <span 
-                className={`px-4 py-1 rounded-full text-sm transition-colors ${isEncrypting ? 'bg-blue-500 text-white' : 'text-gray-700'}`}
-              >
-                Encrypt
-              </span>
-              <Switch 
-                id="encrypt-mode" 
-                checked={isEncrypting}
-                onCheckedChange={setIsEncrypting}
-                className={`
-                  ${isEncrypting 
-                    ? 'data-[state=checked]:bg-blue-500' 
-                    : 'data-[state=checked]:bg-green-500'
-                  }
-                `}
-              />
-              <span 
-                className={`px-4 py-1 rounded-full text-sm transition-colors ${!isEncrypting ? 'bg-green-500 text-white' : 'text-gray-700'}`}
-              >
-                Decrypt
-              </span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center space-x-2">
+                <Switch 
+                  id="encrypt-mode" 
+                  checked={isEncrypting}
+                  onCheckedChange={setIsEncrypting}
+                  className="data-[state=checked]:bg-satoshi-500"
+                />
+                <span className="text-2xl font-heading font-bold text-gray-900">
+                  {isEncrypting ? "Encrypt" : "Decrypt"}
+                </span>
+              </div>
             </div>
           </div>
           <div className="flex gap-2 items-center">
