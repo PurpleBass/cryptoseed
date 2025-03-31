@@ -22,7 +22,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
           <div className="flex items-center gap-3">
             <Shield className="h-10 w-10 text-satoshi-500" />
             <h1 className="text-3xl font-heading font-bold tracking-tight text-gray-900">
-              Secure Nomad Encryptor
+              Crypto Seed
             </h1>
           </div>
           <p className="text-center text-gray-600 max-w-2xl mx-auto">

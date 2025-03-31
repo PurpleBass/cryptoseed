@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Shield, Key, Lock, FileText } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
@@ -16,11 +15,11 @@ const Index = () => {
       {currentView === "encrypt" && (
         <div className="bg-gradient-to-b from-satoshi-50 to-white pt-8 pb-6 border-b border-gray-100">
           <div className="satoshi-container text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Secure Your Crypto Assets</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Secure Your Crypto Seed Phrases</h1>
             <div className="max-w-3xl mx-auto">
               <p className="text-gray-700 mb-6">
-                Protect your valuable seed phrases with zero-knowledge encryption. All encryption happens locally in your 
-                browser - your sensitive data never leaves your device.
+                Protect your critical seed phrases with advanced zero-knowledge encryption. 
+                Safeguard the keys to your crypto wallets with military-grade security.
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
@@ -30,7 +29,8 @@ const Index = () => {
                     <h3 className="font-medium text-gray-900">Seed Phrase Protection</h3>
                   </div>
                   <p className="text-sm text-gray-600">
-                    Securely encrypt your wallet recovery phrases using AES-256 encryption. Perfect for offline storage or backups.
+                    Securely encrypt and store your wallet recovery phrases using AES-256 encryption. 
+                    Prevent unauthorized access to your crypto assets.
                   </p>
                 </div>
                 
@@ -40,7 +40,7 @@ const Index = () => {
                     <h3 className="font-medium text-gray-900">Text Encryption</h3>
                   </div>
                   <p className="text-sm text-gray-600">
-                    Encrypt sensitive text messages, passwords, notes or any confidential information.
+                    Encrypt sensitive text messages, passwords, or confidential notes with robust encryption.
                   </p>
                 </div>
                 
@@ -69,7 +69,7 @@ const Index = () => {
         <div className="satoshi-container text-center">
           <div className="mb-4">
             <Shield className="h-8 w-8 text-satoshi-500 inline-block" />
-            <p className="text-lg font-medium text-gray-800 mt-2">Secure Nomad Encryptor</p>
+            <p className="text-lg font-medium text-gray-800 mt-2">Crypto Seed</p>
           </div>
           <p className="text-sm text-gray-600 max-w-xl mx-auto">
             Open Source, Zero-Knowledge Encryption. Your data never leaves your device.
