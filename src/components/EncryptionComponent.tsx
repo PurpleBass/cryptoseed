@@ -254,11 +254,11 @@ const EncryptionComponent = () => {
                   id="encrypt-mode" 
                   checked={isEncrypting}
                   onCheckedChange={setIsEncrypting}
-                  className="data-[state=checked]:bg-satoshi-500"
+                  className="data-[state=checked]:bg-secure-500"
                 />
                 <div className="flex items-center">
                   {isEncrypting ? (
-                    <Lock className="h-4 w-4 mr-2 text-satoshi-500" />
+                    <Lock className="h-4 w-4 mr-2 text-secure-500" />
                   ) : (
                     <LockOpen className="h-4 w-4 mr-2 text-gray-500" />
                   )}
@@ -283,7 +283,7 @@ const EncryptionComponent = () => {
             )}
             <Badge 
               variant="outline" 
-              className="flex items-center gap-1 bg-satoshi-100 text-satoshi-800 border-satoshi-200"
+              className="flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200"
             >
               <Shield className="h-3 w-3" />
               <span>AES-256 Encryption</span>
@@ -298,22 +298,22 @@ const EncryptionComponent = () => {
         onValueChange={(v) => setMode(v as "seedphrase" | "text" | "file")}
         className="mt-4"
       >
-        <TabsList className="mb-4 rounded-full bg-gray-100 p-1">
+        <TabsList className="mb-4 rounded-full bg-secure-50 p-1 border border-secure-100">
           <TabsTrigger 
             value="seedphrase" 
-            className="rounded-full data-[state=active]:bg-white data-[state=active]:text-satoshi-700 data-[state=active]:shadow-sm"
+            className="rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
           >
             Seed Phrase
           </TabsTrigger>
           <TabsTrigger 
             value="text" 
-            className="rounded-full data-[state=active]:bg-white data-[state=active]:text-satoshi-700 data-[state=active]:shadow-sm"
+            className="rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
           >
             Text
           </TabsTrigger>
           <TabsTrigger 
             value="file" 
-            className="rounded-full data-[state=active]:bg-white data-[state=active]:text-satoshi-700 data-[state=active]:shadow-sm"
+            className="rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
           >
             File
           </TabsTrigger>
