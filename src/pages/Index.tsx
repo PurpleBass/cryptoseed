@@ -8,25 +8,20 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useLocation } from "react-router-dom";
-
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewType>("encrypt");
   const isMobile = useIsMobile();
   const location = useLocation();
-  
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     if (searchParams.has('faq')) {
       setCurrentView("faq");
     }
   }, [location]);
-
-  return (
-    <div className="min-h-screen flex flex-col bg-background">
+  return <div className="min-h-screen flex flex-col bg-background">
       <Header currentView={currentView} setCurrentView={setCurrentView} />
       
-      {currentView === "encrypt" && (
-        <div className="bg-gradient-to-b from-secure-50 to-white pt-4 md:pt-8 pb-4 md:pb-6 border-b border-gray-100">
+      {currentView === "encrypt" && <div className="bg-gradient-to-b from-secure-50 to-white pt-4 md:pt-8 pb-4 md:pb-6 border-b border-gray-100">
           <div className="satoshi-container text-center">
             <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
               <h1 className="text-2xl md:text-4xl font-bold text-gray-900">
@@ -74,8 +69,7 @@ const Index = () => {
               </div>
             </div>
           </div>
-        </div>
-      )}
+        </div>}
       
       <main className="flex-1">
         {currentView === "encrypt" && <EncryptionComponent />}
@@ -86,12 +80,8 @@ const Index = () => {
       <footer className="py-6 md:py-10 bg-gray-50 border-t border-gray-100">
         <div className="satoshi-container">
           <div className="mb-3 md:mb-4 text-center">
-            <img 
-              src="/lovable-uploads/a0b9a6e5-ef5a-4c95-929d-cb6a257495eb.png" 
-              alt="Crypto Seed Logo"
-              className="h-6 w-6 md:h-8 md:w-8 text-secure-500 inline-block" 
-            />
-            <p className="text-base md:text-lg font-medium text-gray-800 mt-1 md:mt-2">Crypto Seed</p>
+            <img src="/lovable-uploads/a0b9a6e5-ef5a-4c95-929d-cb6a257495eb.png" alt="Crypto Seed Logo" className="h-6 w-6 md:h-8 md:w-8 text-secure-500 inline-block" />
+            <p className="text-base md:text-lg text-gray-800 mt-1 md:mt-2 font-bold">Crypto Seed</p>
           </div>
           <p className="text-xs md:text-sm text-gray-600 max-w-xl mx-auto text-center px-4 md:px-0">
             Open Source, Zero-Knowledge Encryption. Your data never leaves your device.
@@ -249,8 +239,6 @@ const Index = () => {
           </div>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
