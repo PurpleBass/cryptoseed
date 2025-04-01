@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from "react";
-import { Key, Lock, FileText, Book, FileCheck, Shield } from "lucide-react";
+import { Key, Lock, FileText, Book, FileCheck } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
 import EncryptionComponent from "@/components/EncryptionComponent";
 import CodeVerification from "@/components/CodeVerification";
@@ -30,7 +29,6 @@ const Index = () => {
         <div className="bg-gradient-to-b from-secure-50 to-white pt-4 md:pt-8 pb-4 md:pb-6 border-b border-gray-100">
           <div className="satoshi-container text-center">
             <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
-              <Shield className="h-6 w-6 md:h-8 md:w-8 text-secure-500" />
               <h1 className="text-2xl md:text-4xl font-bold text-gray-900">
                 Secure Your Crypto Seed Phrases
               </h1>
