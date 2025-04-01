@@ -691,7 +691,7 @@ const FAQComponent = () => {
                   <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Open Source License</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
-                      This application is released under the <strong>MIT License</strong>, which means:
+                      This application is released under the <strong>GNU General Public License v3.0</strong>, which means:
                     </p>
                     <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
                       <li>You are <strong>free to use, modify, and distribute</strong> this software</li>
