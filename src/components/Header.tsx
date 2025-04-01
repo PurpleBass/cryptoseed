@@ -1,6 +1,6 @@
 
 import React from "react";
-import { FileText, HelpCircle } from "lucide-react";
+import { FileText, HelpCircle, Shield } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useBreakpoint } from "@/hooks/use-mobile";
@@ -20,9 +20,16 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
     <header className="w-full py-4 md:py-8 bg-white border-b border-gray-100">
       <div className="satoshi-container">
         <div className="flex flex-col items-center space-y-4 md:space-y-6">
-          <h1 className="text-2xl md:text-3xl font-heading font-bold tracking-tight text-gray-900">
-            Crypto Seed
-          </h1>
+          <div className="flex items-center gap-2 md:gap-3">
+            <img 
+              src="/lovable-uploads/a0b9a6e5-ef5a-4c95-929d-cb6a257495eb.png" 
+              alt="Crypto Seed Logo"
+              className="h-8 w-8 md:h-10 md:w-10 text-secure-500" 
+            />
+            <h1 className="text-2xl md:text-3xl font-heading font-bold tracking-tight text-gray-900">
+              Crypto Seed
+            </h1>
+          </div>
           <p className="text-center text-sm md:text-base text-gray-600 max-w-2xl mx-auto px-2">
             A zero-knowledge, open-source AES-256 encryption tool that works offline.
             No data leaves your device, no backdoors, completely verifiable.
@@ -45,6 +52,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                     value="encrypt" 
                     className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm text-xs py-1.5"
                   >
+                    <Shield className="h-3 w-3" />
                     <span>Encrypt</span>
                   </TabsTrigger>
                   
@@ -52,6 +60,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                     value="verify" 
                     className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm text-xs py-1.5"
                   >
+                    <FileText className="h-3 w-3" />
                     <span>Verify</span>
                   </TabsTrigger>
                   
@@ -59,6 +68,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                     value="faq" 
                     className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm text-xs py-1.5"
                   >
+                    <HelpCircle className="h-3 w-3" />
                     <span>FAQ</span>
                   </TabsTrigger>
                 </>
@@ -67,20 +77,23 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                 <>
                   <TabsTrigger 
                     value="encrypt" 
-                    className="flex items-center justify-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm py-2"
+                    className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
                   >
+                    <Shield className="h-4 w-4" />
                     <span>Encrypt & Decrypt</span>
                   </TabsTrigger>
                   <TabsTrigger 
                     value="verify" 
-                    className="flex items-center justify-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm py-2"
+                    className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
                   >
+                    <FileText className="h-4 w-4" />
                     <span>Verify Code</span>
                   </TabsTrigger>
                   <TabsTrigger 
                     value="faq" 
-                    className="flex items-center justify-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm py-2"
+                    className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
                   >
+                    <HelpCircle className="h-4 w-4" />
                     <span>FAQ & Best Practices</span>
                   </TabsTrigger>
                 </>
