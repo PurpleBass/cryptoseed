@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { encryptMessage, decryptMessage, encryptFile, decryptFile, isWebCryptoSupported } from "@/lib/encryption";
 import { Switch } from "@/components/ui/switch";
-import SeedPhraseInput from "./SeedPhraseInput";
+import SeedPhraseInput, { WalletMetadata } from "./SeedPhraseInput";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useNavigate } from "react-router-dom";
 
@@ -25,10 +25,12 @@ const EncryptionComponent = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [seedPhrase, setSeedPhrase] = useState("");
+  const [walletMetadata, setWalletMetadata] = useState<WalletMetadata>({
+    name: "",
+    description: ""
+  });
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -47,6 +49,10 @@ const EncryptionComponent = () => {
 
   const handleSeedPhraseChange = (phrase: string) => {
     setSeedPhrase(phrase);
+  };
+
+  const handleWalletMetadataChange = (metadata: WalletMetadata) => {
+    setWalletMetadata(metadata);
   };
 
   const formatSeedPhrase = (phrase: string) => {
@@ -142,7 +148,13 @@ const EncryptionComponent = () => {
     setIsProcessing(true);
     try {
       if (isEncrypting) {
-        const encrypted = await encryptMessage(seedPhrase, password);
+        // Format the data to include wallet metadata
+        const dataToEncrypt = JSON.stringify({
+          seedPhrase,
+          metadata: walletMetadata
+        });
+        
+        const encrypted = await encryptMessage(dataToEncrypt, password);
         setOutput(encrypted);
         toast({
           title: "Encryption successful",
@@ -150,7 +162,24 @@ const EncryptionComponent = () => {
         });
       } else {
         const decrypted = await decryptMessage(seedPhrase, password);
-        setOutput(formatSeedPhrase(decrypted));
+        
+        // Try to parse the decrypted result as JSON to extract wallet metadata
+        try {
+          const parsedData = JSON.parse(decrypted);
+          if (parsedData.seedPhrase && parsedData.metadata) {
+            // If it's our wallet format with metadata
+            setOutput(formatSeedPhrase(parsedData.seedPhrase));
+            // Update the wallet metadata state
+            setWalletMetadata(parsedData.metadata);
+          } else {
+            // If it's just a seed phrase
+            setOutput(formatSeedPhrase(decrypted));
+          }
+        } catch (parseError) {
+          // If it's not JSON, treat it as plain seed phrase
+          setOutput(formatSeedPhrase(decrypted));
+        }
+        
         toast({
           title: "Decryption successful",
           description: "Your seed phrase has been decrypted"
@@ -337,7 +366,7 @@ const EncryptionComponent = () => {
                 {isEncrypting ? "Seed Phrase to Encrypt" : "Encrypted Seed Phrase to Decrypt"}
               </CardTitle>
               <CardDescription className="text-gray-600">
-                {isEncrypting ? "Enter your seed phrase words." : "Paste the encrypted text that you want to decrypt."}
+                {isEncrypting ? "Enter your seed phrase words and wallet information." : "Paste the encrypted text that you want to decrypt."}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -346,7 +375,10 @@ const EncryptionComponent = () => {
                     <div className="flex justify-end mb-2">
                       
                     </div>
-                    <SeedPhraseInput onSeedPhraseChange={handleSeedPhraseChange} />
+                    <SeedPhraseInput 
+                      onSeedPhraseChange={handleSeedPhraseChange} 
+                      onWalletMetadataChange={handleWalletMetadataChange}
+                    />
                   </div> : <div className="grid gap-2">
                     <div className="flex items-center justify-between">
                       <Label htmlFor="seedPhraseInput" className="text-gray-700">
