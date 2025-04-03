@@ -1,419 +1,412 @@
-
 import React from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { AlertCircle, HelpCircle, Shield, FileText } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Separator } from "@/components/ui/separator";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { AlertCircle, Shield, KeyRound, User2, Lock, Rocket } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 
 const FAQComponent = () => {
-  const openDialog = (dialogType: string) => {
-    setTimeout(() => {
-      const footerLinks = Array.from(document.querySelectorAll('footer a, footer button'));
-      
-      const targetLink = footerLinks.find(link => 
-        link.textContent?.trim().includes(dialogType)
-      );
-      
-      if (targetLink && targetLink instanceof HTMLElement) {
-        targetLink.click();
-      } else {
-        console.error(`Could not find footer link for: ${dialogType}`);
-      }
-    }, 100);
-  };
+  const offlineUsageContent = (
+    <>
+      <p>
+        To ensure maximum security and privacy, follow these steps to use this
+        tool offline:
+      </p>
+      <ol className="list-decimal pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
+        <li>
+          <strong>Prepare Your Device:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>
+              Ensure your device (computer, tablet, or smartphone) is free from
+              malware and has the latest security updates.
+            </li>
+            <li>
+              Fully charge your device or ensure it is connected to a reliable
+              power source to avoid interruptions during use.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong>Download the Tool:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>
+              Download the tool and all necessary components while you still have
+              an active, secure internet connection.
+            </li>
+            <li>
+              Verify the integrity of the downloaded files using checksums or
+              digital signatures, if available.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong>Disconnect from the Internet:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>
+              Turn off Wi-Fi on your device to prevent any potential network
+              connections.
+            </li>
+            <li>
+              Disconnect any ethernet cables to ensure a complete disconnection
+              from the internet.
+            </li>
+            <li>
+              Enable airplane mode on mobile devices to disable all wireless
+              communications.
+            </li>
+            <li>Disable mobile data if possible.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Verify Offline Status:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>
+              Check the network indicator on your device to confirm that you are
+              not connected to any network.
+            </li>
+            <li>
+              Use your device's network settings to verify the complete
+              disconnection.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong>Use the Tool:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>
+              Open the downloaded tool and perform your desired tasks.
+            </li>
+            <li>
+              Be cautious about any prompts or requests for internet access, as
+              they could indicate a potential security risk.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong>Clear Cache and Data:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>
+              After using the tool, clear any cached data or temporary files
+              created during the session.
+            </li>
+            <li>
+              This helps to remove any sensitive information that may have been
+              stored locally.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong>Re-establish Internet Connection:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>
+              Once you have completed your tasks, you can re-establish your
+              internet connection.
+            </li>
+            <li>
+              Ensure that you have a secure and trusted network connection before
+              reconnecting.
+            </li>
+          </ul>
+        </li>
+      </ol>
+    </>
+  );
+
+  const strongPasswordsContent = (
+    <>
+      <p>
+        To protect your data effectively, it's crucial to create a strong,
+        unique password. Here's how:
+      </p>
+      <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
+        <li>
+          <strong>Length:</strong> Aim for at least 12 characters. Longer is
+          better.
+        </li>
+        <li>
+          <strong>Complexity:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>Include a mix of uppercase and lowercase letters.</li>
+            <li>Add numbers and symbols (e.g., !@#$%^&*).</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Avoid Common Information:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>Don't use personal information like your name, birthday, or pet's name.</li>
+            <li>Avoid common words or phrases that are easy to guess.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Uniqueness:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>Use a different password for each of your accounts.</li>
+            <li>If one password gets compromised, the others remain secure.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Password Managers:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>Consider using a password manager to generate and store strong, unique passwords.</li>
+            <li>Password managers can also help you remember your passwords securely.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Regular Updates:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>Change your passwords regularly, especially for sensitive accounts.</li>
+            <li>Set reminders to update your passwords every few months.</li>
+          </ul>
+        </li>
+      </ul>
+    </>
+  );
+
+  const dataHandlingContent = (
+    <>
+      <p>
+        To ensure the security of your data, follow these guidelines when using
+        this tool:
+      </p>
+      <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
+        <li>
+          <strong>Minimize Data Entry:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>
+              Only enter the minimum amount of data required for the task at
+              hand.
+            </li>
+            <li>
+              Avoid providing unnecessary personal or sensitive information.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong>Verify Data Accuracy:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>
+              Double-check all entered data for accuracy to prevent errors or
+              mistakes.
+            </li>
+            <li>
+              Incorrect data can lead to unintended consequences or security
+              vulnerabilities.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong>Secure Data Storage:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>
+              If the tool requires data storage, ensure that it is stored
+              securely.
+            </li>
+            <li>
+              Use encryption or other security measures to protect stored data
+              from unauthorized access.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong>Regular Data Backups:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>
+              Create regular backups of your data to prevent data loss in case
+              of system failures or security breaches.
+            </li>
+            <li>
+              Store backups in a secure location, separate from the original
+              data.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong>Data Retention Policies:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>
+              Establish clear data retention policies to determine how long data
+              should be stored.
+            </li>
+            <li>
+              Delete or archive data that is no longer needed to minimize the
+              risk of data breaches.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong>Data Disposal Procedures:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>
+              Implement secure data disposal procedures to permanently erase
+              sensitive data when it is no longer required.
+            </li>
+            <li>
+              Use data sanitization methods to prevent data recovery.
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </>
+  );
+
+  const seedPhraseSecurityContent = (
+    <>
+      <p>
+        Your seed phrase is the master key to your crypto assets. Keep it
+        protected at all costs:
+      </p>
+      <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
+        <li>
+          <strong>Keep it Secret:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>Never share your seed phrase with anyone.</li>
+            <li>Treat it like the PIN to your bank account.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Store Offline:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>Write it down on paper and store it in a secure location.</li>
+            <li>Consider using a hardware wallet for added security.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Avoid Digital Storage:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>Do not store your seed phrase on your computer, phone, or in the cloud.</li>
+            <li>Digital storage methods are vulnerable to hacking and malware.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Be Wary of Phishing:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>Be cautious of emails, messages, or websites asking for your seed phrase.</li>
+            <li>Legitimate services will never ask for your seed phrase.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Regularly Backup:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>Create multiple backups of your seed phrase and store them in different secure locations.</li>
+            <li>This ensures you can recover your assets even if one backup is lost or compromised.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Use Strong Encryption:</strong>
+          <ul className="list-disc pl-4 sm:pl-6 mt-1">
+            <li>If you must store your seed phrase digitally, use strong encryption methods.</li>
+            <li>Consider using a password manager with encryption capabilities.</li>
+          </ul>
+        </li>
+      </ul>
+    </>
+  );
 
   return (
     <div className="w-full mx-auto px-2 sm:px-4 max-w-4xl">
-      <div className="mb-4 sm:mb-6 text-center">
-        <div className="flex items-center gap-2 justify-center">
-          <HelpCircle className="h-4 w-4 sm:h-5 sm:w-5 text-secure-600" />
-          <h2 className="text-xl sm:text-2xl font-bold">FAQ & Best Practices</h2>
-        </div>
-        <p className="text-muted-foreground mt-1 sm:mt-2 text-sm">
-          Common questions about encryption and how to use this tool securely.
+      <div className="py-6 sm:py-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          Frequently Asked Questions
+        </h1>
+        <p className="text-sm sm:text-base text-gray-600 mt-1">
+          Find answers to common questions about using this tool securely.
         </p>
       </div>
       
       <Tabs defaultValue="user" className="w-full">
-        <TabsList className="grid grid-cols-4 w-full mb-3">
-          <TabsTrigger value="user" className="text-xs sm:text-sm px-2 sm:px-3">Non-Technical</TabsTrigger>
-          <TabsTrigger value="technical" className="text-xs sm:text-sm px-2 sm:px-3">Technical</TabsTrigger>
-          <TabsTrigger value="practices" className="text-xs sm:text-sm px-2 sm:px-3">Best Practices</TabsTrigger>
-          <TabsTrigger value="legal" className="text-xs sm:text-sm px-2 sm:px-3">Legal</TabsTrigger>
+        <TabsList className="w-full bg-gray-50 p-1 rounded-full border border-gray-100 shadow-sm">
+          <TabsTrigger value="user" className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-sm">
+            User Guide
+          </TabsTrigger>
+          <TabsTrigger value="practices" className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-sm">
+            Security Practices
+          </TabsTrigger>
+          <TabsTrigger value="offline" className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-sm">
+            Offline Usage
+          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="user">
           <Card className="border-0 sm:border shadow-none sm:shadow-sm">
             <CardHeader className="px-2 sm:px-6 py-3 sm:py-4">
-              <CardTitle className="text-lg sm:text-xl">Understanding Encryption</CardTitle>
+              <CardTitle className="text-lg sm:text-xl">User Guide</CardTitle>
               <CardDescription className="text-xs sm:text-sm">
-                Explanations for users without a technical background
+                How to use this tool effectively
               </CardDescription>
             </CardHeader>
             <CardContent className="px-1 sm:px-6">
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="what-is-encryption">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">What is encryption and why do I need it?</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      Encryption is like a <strong>high-security digital safe</strong> for your information. It scrambles your 
-                      text or files so that <strong>only someone with the correct password</strong> can read them.
-                    </p>
-                    <p className="mt-2">
-                      You might need encryption to:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>Securely store <strong>sensitive personal information</strong></li>
-                      <li>Share <strong>confidential information</strong> with others</li>
-                      <li>Protect <strong>valuable files</strong> from unauthorized access</li>
-                      <li>Keep <strong>private notes</strong> truly private</li>
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="how-it-works">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">How does this app work?</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      Our app uses a very strong encryption method called <strong>AES-256</strong> (the same technology used by
-                      governments and banks) to protect your data.
-                    </p>
-                    <p className="mt-1 sm:mt-2">
-                      Here's how it works in simple terms:
-                    </p>
-                    <ol className="list-decimal pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>You enter your text or select a file to encrypt</li>
-                      <li>You create a <strong>password</strong> (make it strong!)</li>
-                      <li>The app <strong>scrambles your data</strong> using your password as the key</li>
-                      <li>The result is a jumbled mess that's <strong>meaningless without your password</strong></li>
-                      <li>Later, you can use your password to <strong>unscramble and recover</strong> your original data</li>
-                    </ol>
-                    <p className="mt-1 sm:mt-2">
-                      All of this happens <strong>directly on your device</strong>. Your information <strong>never leaves your 
-                      computer or phone</strong>, so there's no risk of interception.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="is-it-secure">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">How secure is this encryption?</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      <strong>AES-256 encryption is extremely secure</strong>. If implemented correctly (as it is in this app):
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>It would take <strong>billions of years</strong> for all the world's computers to crack it</li>
-                      <li>Even <strong>governments and intelligence agencies</strong> use it for their top-secret information</li>
-                      <li>There are <strong>no known practical attacks</strong> against it</li>
-                    </ul>
-                    <p className="mt-1 sm:mt-2">
-                      The most vulnerable part is your <strong>password</strong>. If someone can guess your password, they 
-                      can decrypt your data. That's why using a <strong>strong, unique password</strong> is essential.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="what-if-lose-password">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">What if I forget my password?</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      Unfortunately, if you forget your password, your encrypted data is <strong>lost forever</strong>. 
-                      There is <strong>no "password recovery" option</strong>. This is actually a security feature – if 
-                      there was a backdoor or recovery method, others could potentially use it too.
-                    </p>
-                    <p className="mt-1 sm:mt-2">
-                      We strongly recommend:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>Using a <strong>password manager</strong> to securely store your encryption passwords</li>
-                      <li>Writing down passwords in a <strong>physically secure location</strong> (like a safe)</li>
-                      <li>Creating passwords that are <strong>memorable to you</strong> but difficult for others to guess</li>
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="no-backdoors">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">What does "no backdoors" mean?</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      A backdoor is a <strong>secret way to bypass normal security measures</strong>. Some encryption 
-                      products have hidden methods that allow the developers, governments, or others 
-                      to access your encrypted data without your password.
-                    </p>
-                    <p className="mt-1 sm:mt-2">
-                      Our app has <strong>no backdoors</strong>, meaning:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li><strong>Only you</strong> can decrypt your data with your password</li>
-                      <li>We <strong>cannot access</strong> your encrypted data even if legally required to</li>
-                      <li>There are <strong>no master keys</strong> or recovery methods</li>
-                    </ul>
-                    <p className="mt-1 sm:mt-2">
-                      Our code is <strong>open-source</strong> so anyone can verify these claims by examining it.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-              
-                <AccordionItem value="data-memory">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">
-                    How will you remember my encryption?
-                  </AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      <strong>We won't – and more importantly, we can't</strong>. Our entire application 
-                      is designed with a zero-knowledge architecture that makes it <strong>impossible 
-                      for us to store or remember anything about your encrypted data</strong>.
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>
-                        <strong>All encryption happens directly in your browser</strong>, on your device
-                      </li>
-                      <li>
-                        <strong>No data is ever transmitted to our servers</strong>
-                      </li>
-                      <li>
-                        <strong>We have no way to access your password or decryption key</strong>
-                      </li>
-                      <li>
-                        <strong>Each encryption session is completely isolated</strong> and exists 
-                        only in your browser's memory
-                      </li>
-                    </ul>
-                    <p className="mt-1 sm:mt-2">
-                      Even if someone demanded we reveal your data, we <strong>physically cannot</strong>. 
-                      Our design ensures that only you, with your specific password, can decrypt 
-                      the information.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="why-trust">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Why should I trust you?</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      Trust is earned through transparency, open-source code, and a commitment to user privacy. Here's why you can trust our encryption tool:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>
-                        <strong>Open-Source Code</strong>: Our entire codebase is publicly available on GitHub for anyone to review
-                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
-                          <li>Full transparency about how encryption works</li>
-                          <li>Community can verify there are no backdoors</li>
-                        </ul>
-                      </li>
-                      <li>
-                        <strong>Zero-Knowledge Architecture</strong>: We cannot access your data
-                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
-                          <li>All encryption happens directly in your browser</li>
-                          <li>No data is ever transmitted to our servers</li>
-                          <li>We have no way to recover or see your encrypted information</li>
-                        </ul>
-                      </li>
-                      <li>
-                        <strong>Industry-Standard Encryption</strong>: Using AES-256, the same technology used by governments and financial institutions
-                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
-                          <li>Considered unbreakable with current technology</li>
-                          <li>Recommended by cybersecurity experts</li>
-                        </ul>
-                      </li>
-                      <li>
-                        <strong>Community-Driven Development</strong>: Continuous improvement through open-source collaboration
-                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
-                          <li>Security vulnerabilities can be quickly identified and fixed</li>
-                          <li>Ongoing auditing by the open-source community</li>
-                        </ul>
-                      </li>
-                    </ul>
-                    <p className="mt-1 sm:mt-2">
-                      We believe trust is built on radical transparency, technical excellence, and an unwavering commitment to your privacy.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      
-        <TabsContent value="technical">
-          <Card className="border-0 sm:border shadow-none sm:shadow-sm">
-            <CardHeader className="px-2 sm:px-6 py-3 sm:py-4">
-              <CardTitle className="text-lg sm:text-xl">Technical Implementation</CardTitle>
-              <CardDescription className="text-xs sm:text-sm">
-                Detailed explanations of the cryptographic implementation
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="px-1 sm:px-6">
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="crypto-implementation">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Cryptographic Implementation</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      This application uses the <strong>Web Crypto API</strong> (SubtleCrypto) to perform all cryptographic operations. Here's a detailed breakdown:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>
-                        <strong>Encryption Algorithm:</strong> AES-256-GCM (Galois/Counter Mode)
-                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
-                          <li><strong>256-bit key length</strong> (maximum security level for AES)</li>
-                          <li>GCM provides both <strong>confidentiality and authenticity</strong></li>
-                          <li><strong>Detects tampering</strong> with the encrypted data</li>
-                        </ul>
-                      </li>
-                      <li>
-                        <strong>Key Derivation:</strong> PBKDF2 (Password-Based Key Derivation Function 2)
-                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
-                          <li><strong>100,000 iterations</strong> of SHA-256 hashing</li>
-                          <li><strong>Unique random salt</strong> for each encryption operation</li>
-                          <li>Protects against <strong>rainbow table and brute-force attacks</strong></li>
-                        </ul>
-                      </li>
-                      <li>
-                        <strong>Initialization Vector (IV):</strong> 
-                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
-                          <li><strong>96-bit (12-byte)</strong> cryptographically secure random IV</li>
-                          <li>Generated using <strong>crypto.getRandomValues()</strong></li>
-                          <li><strong>Fresh IV</strong> used for each encryption operation</li>
-                        </ul>
-                      </li>
-                      <li>
-                        <strong>Output Format:</strong> 
-                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
-                          <li><strong>Salt (16 bytes) + IV (12 bytes) + Encrypted data</strong></li>
-                          <li>Encoded as <strong>Base64</strong> for text compatibility</li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="security-model">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Security Model & Threat Considerations</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      Our security model makes the following assumptions and mitigations:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>
-                        <strong>Trusted Platform:</strong> We assume your device and browser are not compromised. 
-                        To mitigate device-level threats, we recommend using <strong>trusted devices with up-to-date security</strong>.
-                      </li>
-                      <li>
-                        <strong>Memory Security:</strong> Sensitive data may remain in memory while the app is running. 
-                        To mitigate, <strong>close the browser tab after use</strong> and consider a device restart for highly sensitive operations.
-                      </li>
-                      <li>
-                        <strong>Side-Channel Attacks:</strong> Web browsers can be vulnerable to certain side-channel attacks. 
-                        To mitigate, use a <strong>modern, security-focused browser</strong> and keep it updated.
-                      </li>
-                      <li>
-                        <strong>Password Strength:</strong> A weak password is the most likely point of failure. 
-                        To mitigate, use <strong>long, complex passwords</strong> and store them securely.
-                      </li>
-                      <li>
-                        <strong>Network Adversaries:</strong> While the app functions offline, initial loading happens online. 
-                        To mitigate MITM attacks, we use <strong>HTTPS</strong> and recommend verifying the application code before use.
-                      </li>
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="cryptographic-properties">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Cryptographic Properties & Guarantees</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      Our implementation provides the following cryptographic properties:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>
-                        <strong>Confidentiality:</strong> AES-256 ensures that without the correct key, 
-                        recovering the plaintext is <strong>computationally infeasible</strong> with current technology.
-                      </li>
-                      <li>
-                        <strong>Authentication:</strong> GCM mode provides built-in authentication, ensuring 
-                        that any <strong>tampering with the ciphertext will be detected</strong> during decryption.
-                      </li>
-                      <li>
-                        <strong>Forward Secrecy:</strong> Each encryption operation uses a fresh random salt and IV, 
-                        ensuring that <strong>compromise of one encrypted message doesn't affect others</strong>, even if they use the same password.
-                      </li>
-                      <li>
-                        <strong>Key Isolation:</strong> Keys derived from passwords exist <strong>only in memory 
-                        during the encryption/decryption operation</strong> and are never stored or transmitted.
-                      </li>
-                      <li>
-                        <strong>No Key Escrow:</strong> There is <strong>no mechanism to recover keys</strong> or decrypt 
-                        data without the original password, ensuring that only the password holder can access the data.
-                      </li>
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="limitations">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Limitations & Considerations</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      While our implementation is cryptographically sound, users should be aware of these limitations:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>
-                        <strong>Browser Implementation Dependency:</strong> We rely on the browser's implementation 
-                        of the Web Crypto API, which may vary slightly between browsers. <strong>All major modern browsers 
-                        implement the standard correctly</strong>, but obscure or very old browsers might not.
-                      </li>
-                      <li>
-                        <strong>Memory Constraints:</strong> Very large files may cause memory issues in the browser. 
-                        This is a limitation of <strong>client-side JavaScript processing</strong>, not of the cryptographic implementation.
-                      </li>
-                      <li>
-                        <strong>Metadata Protection:</strong> While the contents are encrypted, <strong>file names and sizes 
-                        may still reveal information</strong>. Consider this when storing or sharing encrypted files.
-                      </li>
-                      <li>
-                        <strong>Password Recovery:</strong> There is <strong>intentionally no password recovery mechanism</strong>. 
-                        Lost passwords mean permanently lost data.
-                      </li>
-                      <li>
-                        <strong>Quantum Computing:</strong> AES-256 is believed to be <strong>resistant to quantum attacks</strong>, 
-                        but as quantum computing advances, this assessment may change over time.
-                      </li>
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="integrity-verification">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Code Integrity Verification</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      To verify the integrity of this application:
-                    </p>
-                    <ol className="list-decimal pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>
-                        <strong>Source Inspection:</strong> Review the source code on our GitHub repository, 
-                        particularly the encryption implementation in <code>src/lib/encryption.ts</code>.
-                      </li>
-                      <li>
-                        <strong>Build Verification:</strong> Clone the repository and <strong>build the application yourself</strong> 
-                        to ensure the deployed version matches the source code.
-                      </li>
-                      <li>
-                        <strong>Network Analysis:</strong> Use browser developer tools to <strong>verify that no network 
-                        requests occur</strong> during encryption or decryption operations.
-                      </li>
-                      <li>
-                        <strong>Binary Analysis:</strong> Examine the compiled JavaScript using browser developer 
-                        tools to ensure it matches the expected functionality.
-                      </li>
-                      <li>
-                        <strong>Browser Storage Inspection:</strong> Verify that <strong>no data is being stored</strong> in 
-                        localStorage, indexedDB, or other persistent storage mechanisms.
-                      </li>
-                    </ol>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+              <p className="text-sm sm:text-base text-gray-700">
+                This tool is designed to help you encrypt and decrypt text and
+                files securely.
+              </p>
+              <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
+                <li>
+                  <strong>Encryption:</strong>
+                  <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                    <li>
+                      Enter the text or select the file you want to encrypt.
+                    </li>
+                    <li>
+                      Provide a strong password to protect your data.
+                    </li>
+                    <li>
+                      Click the "Encrypt" button to generate the encrypted
+                      output.
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <strong>Decryption:</strong>
+                  <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                    <li>
+                      Enter the encrypted text or select the encrypted file you
+                      want to decrypt.
+                    </li>
+                    <li>
+                      Provide the correct password used during encryption.
+                    </li>
+                    <li>
+                      Click the "Decrypt" button to retrieve the original data.
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <strong>Seed Phrase:</strong>
+                  <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                    <li>
+                      Enter your seed phrase words.
+                    </li>
+                    <li>
+                      Provide a strong password to protect your seed phrase.
+                    </li>
+                    <li>
+                      Click the "Encrypt" button to generate the encrypted
+                      output.
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              <div className="mt-4">
+                <Badge variant="secondary">
+                  <Link to="/about" className="flex items-center gap-1">
+                    Learn more about this tool
+                    <Rocket className="h-3 w-3" />
+                  </Link>
+                </Badge>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -435,14 +428,14 @@ const FAQComponent = () => {
               </Alert>
               
               <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="offline-usage">
+                <AccordionItem value="network-security">
                   <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
                     <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
-                    <span>Offline Usage</span>
+                    <span>Network Security</span>
                   </AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
-                      <strong>Always use this application offline</strong> when dealing with sensitive information:
+                      Protect your connection and prevent potential network-based attacks:
                     </p>
                     <ol className="list-decimal pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
                       <li>
@@ -451,273 +444,89 @@ const FAQComponent = () => {
                           <li>Turn off <strong>Wi-Fi</strong> on your device</li>
                           <li>Disconnect <strong>ethernet cables</strong></li>
                           <li>Enable <strong>airplane mode</strong> on mobile devices</li>
+                          <li><strong>Disable mobile data</strong> if possible</li>
                         </ul>
                       </li>
                       <li>
-                        <strong>Save for offline use:</strong>
+                        <strong>Verify offline status:</strong>
                         <ul className="list-disc pl-4 sm:pl-6 mt-1">
-                          <li>Most modern browsers allow you to <strong>save this page for offline use</strong></li>
-                          <li>In Chrome: Menu → More Tools → <strong>Save page as...</strong></li>
-                          <li>In Firefox: Menu → <strong>Save Page As...</strong></li>
-                          <li>Open the saved HTML file locally when needed</li>
+                          <li>Check network indicator on your device</li>
+                          <li>Confirm no active network connections</li>
+                          <li>Use device's network settings to verify complete disconnection</li>
                         </ul>
                       </li>
                       <li>
-                        <strong>Use a dedicated offline device:</strong> For extremely sensitive data, consider using
-                        a <strong>dedicated device that never connects to the internet</strong>.
+                        <strong>After page load:</strong>
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>Immediately turn off network connections</li>
+                          <li>Prevent any potential background data transmission</li>
+                          <li>Ensure complete isolation of your encryption session</li>
+                        </ul>
                       </li>
                     </ol>
                   </AccordionContent>
                 </AccordionItem>
-                
+
+                <AccordionItem value="offline-usage">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
+                    <User2 className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
+                    <span>Offline Usage</span>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
+                    {offlineUsageContent}
+                  </AccordionContent>
+                </AccordionItem>
+
                 <AccordionItem value="strong-passwords">
                   <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
-                    <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
+                    <Lock className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
                     <span>Strong Passwords</span>
                   </AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      Your encryption is <strong>only as strong as your password</strong>:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>
-                        <strong>Use long passphrases:</strong> Consider using a sentence or phrase of at least <strong>4-5 
-                        words</strong> (e.g., "correct-horse-battery-staple").
-                      </li>
-                      <li>
-                        <strong>Include variety:</strong> Mix <strong>uppercase, lowercase, numbers, and special characters</strong>.
-                      </li>
-                      <li>
-                        <strong>Avoid personal information:</strong> Don't use <strong>names, birthdates, or other easily
-                        guessable information</strong>.
-                      </li>
-                      <li>
-                        <strong>Use different passwords:</strong> Don't reuse passwords you use for other services.
-                      </li>
-                      <li>
-                        <strong>Store securely:</strong> Use a <strong>password manager</strong> or write down passwords and store
-                        them in a physically secure location.
-                      </li>
-                    </ul>
+                    {strongPasswordsContent}
                   </AccordionContent>
                 </AccordionItem>
-                
-                <AccordionItem value="secure-environment">
+
+                <AccordionItem value="data-handling">
                   <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
-                    <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
-                    <span>Secure Environment</span>
+                    <KeyRound className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
+                    <span>Data Handling</span>
                   </AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      Ensure your <strong>physical environment and device are secure</strong>:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>
-                        <strong>Privacy:</strong> Be aware of <strong>shoulder surfing</strong> in public places.
-                      </li>
-                      <li>
-                        <strong>Clean device:</strong> Use a device <strong>free from malware and keyloggers</strong>.
-                        Keep your operating system and browser up to date.
-                      </li>
-                      <li>
-                        <strong>Temporary files:</strong> Be aware that some operating systems might
-                        create <strong>temporary copies of files</strong> you're working with.
-                      </li>
-                      <li>
-                        <strong>Screen recording:</strong> Ensure <strong>no screen recording software</strong> is running.
-                      </li>
-                      <li>
-                        <strong>Private browsing:</strong> Consider using a <strong>private/incognito window</strong>
-                        to minimize browser data storage.
-                      </li>
-                    </ul>
+                    {dataHandlingContent}
                   </AccordionContent>
                 </AccordionItem>
-                
-                <AccordionItem value="storing-encrypted-data">
+
+                <AccordionItem value="seed-phrase-security">
                   <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
                     <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
-                    <span>Storing Encrypted Data</span>
+                    <span>Seed Phrase Security</span>
                   </AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      After encrypting your data:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>
-                        <strong>Keep backups:</strong> Store encrypted files in <strong>multiple secure locations</strong>
-                        to prevent data loss.
-                      </li>
-                      <li>
-                        <strong>Consider metadata:</strong> Remember that <strong>file names, sizes, and modification
-                        dates can reveal information</strong> even if the contents are encrypted.
-                      </li>
-                      <li>
-                        <strong>Secure deletion:</strong> When deleting the original unencrypted files,
-                        use <strong>secure deletion methods</strong> as regular deletion doesn't completely remove the data.
-                      </li>
-                      <li>
-                        <strong>Test decryption:</strong> Periodically verify that you can <strong>still decrypt
-                        your files</strong> with your stored passwords.
-                      </li>
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="sharing-encrypted-data">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
-                    <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
-                    <span>Sharing Encrypted Data</span>
-                  </AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      When sharing encrypted content with others:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>
-                        <strong>Separate channels:</strong> <strong>Never send the encrypted data and password
-                        through the same channel</strong>.
-                      </li>
-                      <li>
-                        <strong>Secure password transmission:</strong> Share passwords <strong>in person or via
-                        a different secure communication method</strong> than the encrypted data.
-                      </li>
-                      <li>
-                        <strong>Share this tool:</strong> Ensure recipients know how to decrypt the data
-                        by sharing this tool with them.
-                      </li>
-                      <li>
-                        <strong>Limited time:</strong> Consider using <strong>passwords that you both already know</strong>,
-                        or inform recipients to decrypt the data within a specific timeframe, after which
-                        you'll change or discard the password.
-                      </li>
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="network-security">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
-                    <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
-                    <span>Network Security</span>
-                  </AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      After loading this application, take immediate steps to enhance your network security:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>
-                        <strong>Disconnect from the internet</strong> immediately after the page loads:
-                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
-                          <li>Turn off <strong>Wi-Fi</strong></li>
-                          <li>Disconnect <strong>ethernet cables</strong></li>
-                          <li>Enable <strong>airplane mode</strong> on mobile devices</li>
-                        </ul>
-                      </li>
-                      <li>
-                        This prevents any potential background network communication and 
-                        ensures <strong>complete isolation</strong> during sensitive operations.
-                      </li>
-                      <li>
-                        Reconnect only when absolutely necessary and <strong>close the application tab</strong> 
-                        before reconnecting to minimize potential exposure.
-                      </li>
-                    </ul>
+                    {seedPhraseSecurityContent}
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
             </CardContent>
           </Card>
         </TabsContent>
-        
-        <TabsContent value="legal">
+
+        <TabsContent value="offline">
           <Card className="border-0 sm:border shadow-none sm:shadow-sm">
             <CardHeader className="px-2 sm:px-6 py-3 sm:py-4">
-              <CardTitle className="text-lg sm:text-xl">Legal Information</CardTitle>
+              <CardTitle className="text-lg sm:text-xl">Offline Usage</CardTitle>
               <CardDescription className="text-xs sm:text-sm">
-                Important legal information regarding the use of this service
+                How to use this tool offline
               </CardDescription>
             </CardHeader>
             <CardContent className="px-1 sm:px-6">
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="disclaimer">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Disclaimer of Responsibility</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <Alert className="bg-orange-50 text-orange-800 border-orange-200 mb-3 sm:mb-4">
-                      <AlertCircle className="h-3 w-3 sm:h-4 sm:w-4" />
-                      <AlertDescription className="font-medium">
-                        We are <strong>not responsible</strong> for the use of this application or the data it manages.
-                      </AlertDescription>
-                    </Alert>
-                    <p>
-                      This tool is provided for <strong>educational and security purposes only</strong>. By using this service, you acknowledge and agree that:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>You are <strong>solely responsible</strong> for your data and password management</li>
-                      <li>We <strong>cannot recover lost passwords</strong> under any circumstances</li>
-                      <li>We provide <strong>no warranties or guarantees</strong> regarding the security, accuracy, or reliability of this service</li>
-                      <li>You use this tool <strong>at your own risk</strong></li>
-                      <li>We are <strong>not liable</strong> for any damages, data loss, or other negative outcomes resulting from the use of this service</li>
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="terms">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Terms of Service Summary</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      By using this service, you agree to our full Terms of Service, which include the following <strong>key points</strong>:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>The service is provided <strong>"as is" without warranty</strong> of any kind</li>
-                      <li>You are responsible for ensuring the <strong>lawful use</strong> of this service</li>
-                      <li>We are <strong>not liable</strong> for any direct, indirect, or consequential damages</li>
-                      <li>You are <strong>solely responsible</strong> for your passwords and data management</li>
-                      <li>We reserve the right to <strong>modify the service and these terms</strong> at any time</li>
-                    </ul>
-                    <p className="mt-1 sm:mt-2">
-                      For the complete terms, please refer to the <strong>Terms of Service</strong> link at the bottom of the page.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="privacy">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Privacy Policy Overview</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      Our privacy approach is simple: <strong>we don't collect, store, or process any of your data</strong>.
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>All encryption operations happen <strong>locally in your browser</strong></li>
-                      <li><strong>No data is ever transmitted</strong> to our servers</li>
-                      <li>We <strong>don't use cookies</strong>, local storage, or analytics</li>
-                      <li>We <strong>don't integrate</strong> with any third-party services that would collect data</li>
-                    </ul>
-                    <p className="mt-1 sm:mt-2">
-                      This is a <strong>zero-knowledge application</strong>, meaning we have no ability to access any information you encrypt using this service.
-                      For the complete privacy policy, please refer to the Privacy Policy link at the bottom of the page.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="license">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Open Source License</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      This application is released under the <strong>GNU General Public License v3.0</strong>, which means:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>You are <strong>free to use, modify, and distribute</strong> this software</li>
-                      <li>You may use it for <strong>personal or commercial</strong> purposes</li>
-                      <li>The code is provided <strong>as-is</strong> with no warranty</li>
-                      <li>We are not liable for any issues arising from its use</li>
-                      <li>You must <strong>include the original license</strong> if you redistribute the code</li>
-                    </ul>
-                    <p className="mt-1 sm:mt-2">
-                      The full license is available in our GitHub repository.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+              <Alert className="mb-4 sm:mb-6 bg-secure-100 text-secure-800 border-secure-300 text-xs sm:text-sm">
+                <AlertCircle className="h-3 w-3 sm:h-4 sm:w-4" />
+                <AlertDescription>
+                  Using this tool offline enhances security and privacy.
+                </AlertDescription>
+              </Alert>
+              {offlineUsageContent}
             </CardContent>
           </Card>
         </TabsContent>
