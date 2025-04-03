@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -77,6 +78,40 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
   const clearAllWords = () => {
     const emptyWords = Array(wordCount).fill("");
     setWords(emptyWords);
+  };
+
+  // Create vertical columns layout
+  const renderWordInputs = () => {
+    // Calculate how many words per column
+    const wordsPerColumn = Math.ceil(wordCount / 3);
+    const columns = [];
+
+    for (let col = 0; col < 3; col++) {
+      const columnWords = [];
+      for (let row = 0; row < wordsPerColumn; row++) {
+        const index = col * wordsPerColumn + row;
+        if (index < wordCount) {
+          columnWords.push(
+            <div key={index} className="flex items-center mb-3">
+              <span className="mr-2 text-sm text-gray-500 w-6 text-right">{index + 1}:</span>
+              <Input
+                value={words[index]}
+                onChange={(e) => handleWordChange(index, e.target.value)}
+                placeholder={`Word ${index + 1}`}
+                className="satoshi-input placeholder:text-xs placeholder:text-muted-foreground/50"
+              />
+            </div>
+          );
+        }
+      }
+      columns.push(
+        <div key={col} className="flex flex-col">
+          {columnWords}
+        </div>
+      );
+    }
+
+    return columns;
   };
 
   return (
@@ -180,18 +215,9 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {words.map((word, index) => (
-            <div key={index} className="flex items-center">
-              <span className="mr-2 text-sm text-gray-500 w-6">{index + 1}:</span>
-              <Input
-                value={word}
-                onChange={(e) => handleWordChange(index, e.target.value)}
-                placeholder={`Word ${index + 1}`}
-                className="satoshi-input placeholder:text-xs placeholder:text-muted-foreground/50"
-              />
-            </div>
-          ))}
+        {/* Replace the old grid with the new vertical columns layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {renderWordInputs()}
         </div>
       </div>
     </div>
