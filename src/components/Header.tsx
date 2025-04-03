@@ -22,7 +22,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
         <div className="flex flex-col items-center space-y-4 md:space-y-6">
           <div className="flex items-center gap-2 md:gap-3">
             <img 
-              src="/lovable-uploads/a0b9a6e5-ef5a-4c95-929d-cb6a257495eb.png" 
+              src="/lovable-uploads/a4785684-02b2-4340-8f14-8aa8892682f2.png" 
               alt="Crypto Seed Logo"
               className="h-8 w-8 md:h-10 md:w-10 text-secure-500" 
             />
