@@ -148,36 +148,60 @@ const EncryptionComponent = () => {
     setIsProcessing(true);
     try {
       if (isEncrypting) {
-        // Format the data to include wallet metadata
-        const dataToEncrypt = JSON.stringify({
-          seedPhrase,
-          metadata: walletMetadata
-        });
+        // Just encrypt the seed phrase itself without the metadata
+        const encrypted = await encryptMessage(seedPhrase, password);
         
-        const encrypted = await encryptMessage(dataToEncrypt, password);
-        setOutput(encrypted);
+        // Create the output with metadata as plain text
+        let outputText = "";
+        
+        if (walletMetadata.name) {
+          outputText += `Wallet Alias: ${walletMetadata.name}\n`;
+        }
+        
+        if (walletMetadata.description) {
+          outputText += `Wallet Notes: ${walletMetadata.description}\n`;
+        }
+        
+        if (outputText) {
+          outputText += "\n";
+        }
+        
+        outputText += encrypted;
+        setOutput(outputText);
+        
         toast({
           title: "Encryption successful",
           description: "Your seed phrase has been encrypted"
         });
       } else {
-        const decrypted = await decryptMessage(seedPhrase, password);
+        // For decryption, we need to parse out the metadata first
+        let encryptedText = textInput;
+        let extractedMetadata = { name: "", description: "" };
         
-        // Try to parse the decrypted result as JSON to extract wallet metadata
-        try {
-          const parsedData = JSON.parse(decrypted);
-          if (parsedData.seedPhrase && parsedData.metadata) {
-            // If it's our wallet format with metadata
-            setOutput(formatSeedPhrase(parsedData.seedPhrase));
-            // Update the wallet metadata state
-            setWalletMetadata(parsedData.metadata);
-          } else {
-            // If it's just a seed phrase
-            setOutput(formatSeedPhrase(decrypted));
-          }
-        } catch (parseError) {
-          // If it's not JSON, treat it as plain seed phrase
-          setOutput(formatSeedPhrase(decrypted));
+        // Extract wallet alias if present
+        const aliasMatch = encryptedText.match(/^Wallet Alias: (.+?)$/m);
+        if (aliasMatch) {
+          extractedMetadata.name = aliasMatch[1].trim();
+        }
+        
+        // Extract wallet notes if present
+        const notesMatch = encryptedText.match(/^Wallet Notes: (.+?)$/m);
+        if (notesMatch) {
+          extractedMetadata.description = notesMatch[1].trim();
+        }
+        
+        // Remove the metadata lines to get the actual encrypted text
+        encryptedText = encryptedText.replace(/^Wallet Alias: .+?$/m, "");
+        encryptedText = encryptedText.replace(/^Wallet Notes: .+?$/m, "");
+        encryptedText = encryptedText.trim();
+        
+        // Decrypt the remaining text
+        const decrypted = await decryptMessage(encryptedText, password);
+        setOutput(formatSeedPhrase(decrypted));
+        
+        // Update the wallet metadata state with extracted values
+        if (aliasMatch || notesMatch) {
+          setWalletMetadata(extractedMetadata);
         }
         
         toast({
