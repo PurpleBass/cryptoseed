@@ -134,25 +134,6 @@ const FAQComponent = () => {
                   </AccordionContent>
                 </AccordionItem>
                 
-                <AccordionItem value="offline-usage">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Why should I use this offline?</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      While our app never sends your data anywhere, using it offline provides an <strong>extra 
-                      layer of security</strong>:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>It <strong>physically prevents any data transmission</strong></li>
-                      <li>It protects against any potential <strong>browser vulnerabilities</strong></li>
-                      <li>It eliminates the possibility of <strong>monitoring by network devices</strong></li>
-                    </ul>
-                    <p className="mt-1 sm:mt-2">
-                      To use offline: simply load this page once, then <strong>disconnect from the internet</strong>
-                      (turn off WiFi or unplug your ethernet cable). The app will continue to work perfectly.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-                
                 <AccordionItem value="no-backdoors">
                   <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">What does "no backdoors" mean?</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
@@ -674,44 +655,4 @@ const FAQComponent = () => {
                     <p>
                       Our privacy approach is simple: <strong>we don't collect, store, or process any of your data</strong>.
                     </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>All encryption operations happen <strong>locally in your browser</strong></li>
-                      <li><strong>No data is ever transmitted</strong> to our servers</li>
-                      <li>We <strong>don't use cookies</strong>, local storage, or analytics</li>
-                      <li>We <strong>don't integrate</strong> with any third-party services that would collect data</li>
-                    </ul>
-                    <p className="mt-1 sm:mt-2">
-                      This is a <strong>zero-knowledge application</strong>, meaning we have no ability to access any information you encrypt using this service.
-                      For the complete privacy policy, please refer to the Privacy Policy link at the bottom of the page.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="license">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Open Source License</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      This application is released under the <strong>GNU General Public License v3.0</strong>, which means:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>You are <strong>free to use, modify, and distribute</strong> this software</li>
-                      <li>You may use it for <strong>personal or commercial</strong> purposes</li>
-                      <li>The code is provided <strong>as-is</strong> with no warranty</li>
-                      <li>We are not liable for any issues arising from its use</li>
-                      <li>You must <strong>include the original license</strong> if you redistribute the code</li>
-                    </ul>
-                    <p className="mt-1 sm:mt-2">
-                      The full license is available in our GitHub repository.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
-};
-
-export default FAQComponent;
+                    <ul className="list-
