@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -559,6 +558,35 @@ const FAQComponent = () => {
                     </ul>
                   </AccordionContent>
                 </AccordionItem>
+                <AccordionItem value="network-security">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
+                    <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
+                    <span>Network Security</span>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
+                    <p>
+                      After loading this application, take immediate steps to enhance your network security:
+                    </p>
+                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
+                      <li>
+                        <strong>Disconnect from the internet</strong> immediately after the page loads:
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>Turn off <strong>Wi-Fi</strong></li>
+                          <li>Disconnect <strong>ethernet cables</strong></li>
+                          <li>Enable <strong>airplane mode</strong> on mobile devices</li>
+                        </ul>
+                      </li>
+                      <li>
+                        This prevents any potential background network communication and 
+                        ensures <strong>complete isolation</strong> during sensitive operations.
+                      </li>
+                      <li>
+                        Reconnect only when absolutely necessary and <strong>close the application tab</strong> 
+                        before reconnecting to minimize potential exposure.
+                      </li>
+                    </ul>
+                  </AccordionContent>
+                </AccordionItem>
               </Accordion>
             </CardContent>
           </Card>
@@ -625,40 +653,4 @@ const FAQComponent = () => {
                       <li>All encryption operations happen <strong>locally in your browser</strong></li>
                       <li><strong>No data is ever transmitted</strong> to our servers</li>
                       <li>We <strong>don't use cookies</strong>, local storage, or analytics</li>
-                      <li>We <strong>don't integrate</strong> with any third-party services that would collect data</li>
-                    </ul>
-                    <p className="mt-1 sm:mt-2">
-                      This is a <strong>zero-knowledge application</strong>, meaning we have no ability to access any information you encrypt using this service.
-                      For the complete privacy policy, please refer to the Privacy Policy link at the bottom of the page.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="license">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Open Source License</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      This application is released under the <strong>GNU General Public License v3.0</strong>, which means:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>You are <strong>free to use, modify, and distribute</strong> this software</li>
-                      <li>You may use it for <strong>personal or commercial</strong> purposes</li>
-                      <li>The code is provided <strong>as-is</strong> with no warranty</li>
-                      <li>We are not liable for any issues arising from its use</li>
-                      <li>You must <strong>include the original license</strong> if you redistribute the code</li>
-                    </ul>
-                    <p className="mt-1 sm:mt-2">
-                      The full license is available in our GitHub repository.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
-};
-
-export default FAQComponent;
+                      <li>We <strong>don't integrate</strong>
