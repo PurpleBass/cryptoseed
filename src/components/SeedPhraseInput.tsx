@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -80,9 +79,7 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
     setWords(emptyWords);
   };
 
-  // Create vertical columns layout
   const renderWordInputs = () => {
-    // Calculate how many words per column
     const wordsPerColumn = Math.ceil(wordCount / 3);
     const columns = [];
 
@@ -116,109 +113,106 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <Label htmlFor="wordCount" className="text-gray-700">Number of Words</Label>
-        {isCustomCount ? (
-          <div className="flex items-center gap-2">
-            <Button 
-              type="button" 
-              variant="outline" 
-              size="icon" 
-              onClick={decreaseWordCount}
-              disabled={wordCount <= 3}
-            >
-              <MinusCircle className="h-4 w-4" />
-            </Button>
-            <span className="w-8 text-center font-medium">{wordCount}</span>
-            <Button 
-              type="button" 
-              variant="outline" 
-              size="icon" 
-              onClick={increaseWordCount}
-              disabled={wordCount >= 24}
-            >
-              <PlusCircle className="h-4 w-4" />
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="ml-2">
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => {
-                  setIsCustomCount(false); 
-                  setWordCount(12);
-                }}>
-                  12 words
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => {
-                  setIsCustomCount(false);
-                  setWordCount(15);
-                }}>
-                  15 words
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => {
-                  setIsCustomCount(false);
-                  setWordCount(18);
-                }}>
-                  18 words
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => {
-                  setIsCustomCount(false);
-                  setWordCount(21);
-                }}>
-                  21 words
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => {
-                  setIsCustomCount(false);
-                  setWordCount(24);
-                }}>
-                  24 words
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => {
-                  setIsCustomCount(true);
-                }}>
-                  Custom
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        ) : (
-          <Select onValueChange={handleWordCountChange} defaultValue="12">
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select length" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="12">12 words</SelectItem>
-              <SelectItem value="15">15 words</SelectItem>
-              <SelectItem value="18">18 words</SelectItem>
-              <SelectItem value="21">21 words</SelectItem>
-              <SelectItem value="24">24 words</SelectItem>
-              <SelectItem value="custom">Custom</SelectItem>
-            </SelectContent>
-          </Select>
-        )}
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2">
+          <Label htmlFor="wordCount" className="text-gray-700 whitespace-nowrap">Number of Words</Label>
+          {isCustomCount ? (
+            <div className="flex items-center gap-2">
+              <Button 
+                type="button" 
+                variant="outline" 
+                size="icon" 
+                onClick={decreaseWordCount}
+                disabled={wordCount <= 3}
+              >
+                <MinusCircle className="h-4 w-4" />
+              </Button>
+              <span className="w-8 text-center font-medium">{wordCount}</span>
+              <Button 
+                type="button" 
+                variant="outline" 
+                size="icon" 
+                onClick={increaseWordCount}
+                disabled={wordCount >= 24}
+              >
+                <PlusCircle className="h-4 w-4" />
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="ml-2">
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => {
+                    setIsCustomCount(false); 
+                    setWordCount(12);
+                  }}>
+                    12 words
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => {
+                    setIsCustomCount(false);
+                    setWordCount(15);
+                  }}>
+                    15 words
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => {
+                    setIsCustomCount(false);
+                    setWordCount(18);
+                  }}>
+                    18 words
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => {
+                    setIsCustomCount(false);
+                    setWordCount(21);
+                  }}>
+                    21 words
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => {
+                    setIsCustomCount(false);
+                    setWordCount(24);
+                  }}>
+                    24 words
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => {
+                    setIsCustomCount(true);
+                  }}>
+                    Custom
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ) : (
+            <Select onValueChange={handleWordCountChange} defaultValue="12">
+              <SelectTrigger className="w-[180px] ml-2">
+                <SelectValue placeholder="Select length" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="12">12 words</SelectItem>
+                <SelectItem value="15">15 words</SelectItem>
+                <SelectItem value="18">18 words</SelectItem>
+                <SelectItem value="21">21 words</SelectItem>
+                <SelectItem value="24">24 words</SelectItem>
+                <SelectItem value="custom">Custom</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+        </div>
+        
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={clearAllWords}
+          className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
+        >
+          <Eraser className="h-3.5 w-3.5 mr-1.5" />
+          <span>Clear Seed Phrase</span>
+        </Button>
       </div>
 
-      <div className="grid gap-4">
-        <div className="flex justify-end">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={clearAllWords}
-            className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700"
-          >
-            <Eraser className="h-3.5 w-3.5 mr-1.5" />
-            <span>Clear Seed Phrase</span>
-          </Button>
-        </div>
-
-        {/* Replace the old grid with the new vertical columns layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {renderWordInputs()}
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {renderWordInputs()}
       </div>
     </div>
   );
