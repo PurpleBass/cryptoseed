@@ -1,11 +1,9 @@
-
 import React, { useState, useEffect } from "react";
-import { Key, Lock, FileText, Book, FileCheck, Image } from "lucide-react";
+import { Key, Lock, FileText, Book, FileCheck } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
 import EncryptionComponent from "@/components/EncryptionComponent";
 import CodeVerification from "@/components/CodeVerification";
 import FAQComponent from "@/components/FAQComponent";
-import SteganographyComponent from "@/components/SteganographyComponent";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -40,7 +38,7 @@ const Index = () => {
                 Safeguard the keys to your crypto wallets with military-grade security.
               </p>
               
-              <div className="grid grid-cols-1 gap-3 md:grid-cols-4 md:gap-6 text-left">
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-6 text-left">
                 <div className="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-gray-100">
                   <div className="flex items-center mb-1 md:mb-2">
                     <Key className="h-4 w-4 md:h-5 md:w-5 text-secure-600 mr-2" />
@@ -71,16 +69,6 @@ const Index = () => {
                     Encrypt any file with a password. Secure your documents, images, and other sensitive files.
                   </p>
                 </div>
-                
-                <div className="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-gray-100">
-                  <div className="flex items-center mb-1 md:mb-2">
-                    <Image className="h-4 w-4 md:h-5 md:w-5 text-secure-600 mr-2" />
-                    <h3 className="font-medium text-sm md:text-base text-gray-900">Steganography</h3>
-                  </div>
-                  <p className="text-xs md:text-sm text-gray-600 min-h-[3rem]">
-                    Hide sensitive messages within images using steganography. Conceal data invisibly for maximum security.
-                  </p>
-                </div>
               </div>
             </div>
           </div>
@@ -90,7 +78,6 @@ const Index = () => {
         {currentView === "encrypt" && <EncryptionComponent />}
         {currentView === "verify" && <CodeVerification />}
         {currentView === "faq" && <FAQComponent />}
-        {currentView === "stego" && <SteganographyComponent />}
       </main>
       
       <footer className="py-6 md:py-10 bg-gray-50 border-t border-gray-100">
