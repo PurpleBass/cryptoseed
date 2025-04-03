@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -434,6 +435,41 @@ const FAQComponent = () => {
               </Alert>
               
               <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="offline-usage">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
+                    <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
+                    <span>Offline Usage</span>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
+                    <p>
+                      <strong>Always use this application offline</strong> when dealing with sensitive information:
+                    </p>
+                    <ol className="list-decimal pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
+                      <li>
+                        <strong>Disconnect from the internet:</strong>
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>Turn off <strong>Wi-Fi</strong> on your device</li>
+                          <li>Disconnect <strong>ethernet cables</strong></li>
+                          <li>Enable <strong>airplane mode</strong> on mobile devices</li>
+                        </ul>
+                      </li>
+                      <li>
+                        <strong>Save for offline use:</strong>
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>Most modern browsers allow you to <strong>save this page for offline use</strong></li>
+                          <li>In Chrome: Menu → More Tools → <strong>Save page as...</strong></li>
+                          <li>In Firefox: Menu → <strong>Save Page As...</strong></li>
+                          <li>Open the saved HTML file locally when needed</li>
+                        </ul>
+                      </li>
+                      <li>
+                        <strong>Use a dedicated offline device:</strong> For extremely sensitive data, consider using
+                        a <strong>dedicated device that never connects to the internet</strong>.
+                      </li>
+                    </ol>
+                  </AccordionContent>
+                </AccordionItem>
+                
                 <AccordionItem value="strong-passwords">
                   <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
                     <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
@@ -558,6 +594,7 @@ const FAQComponent = () => {
                     </ul>
                   </AccordionContent>
                 </AccordionItem>
+                
                 <AccordionItem value="network-security">
                   <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
                     <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
@@ -653,4 +690,40 @@ const FAQComponent = () => {
                       <li>All encryption operations happen <strong>locally in your browser</strong></li>
                       <li><strong>No data is ever transmitted</strong> to our servers</li>
                       <li>We <strong>don't use cookies</strong>, local storage, or analytics</li>
-                      <li>We <strong>don't integrate</strong>
+                      <li>We <strong>don't integrate</strong> with any third-party services that would collect data</li>
+                    </ul>
+                    <p className="mt-1 sm:mt-2">
+                      This is a <strong>zero-knowledge application</strong>, meaning we have no ability to access any information you encrypt using this service.
+                      For the complete privacy policy, please refer to the Privacy Policy link at the bottom of the page.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+                
+                <AccordionItem value="license">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Open Source License</AccordionTrigger>
+                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
+                    <p>
+                      This application is released under the <strong>GNU General Public License v3.0</strong>, which means:
+                    </p>
+                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
+                      <li>You are <strong>free to use, modify, and distribute</strong> this software</li>
+                      <li>You may use it for <strong>personal or commercial</strong> purposes</li>
+                      <li>The code is provided <strong>as-is</strong> with no warranty</li>
+                      <li>We are not liable for any issues arising from its use</li>
+                      <li>You must <strong>include the original license</strong> if you redistribute the code</li>
+                    </ul>
+                    <p className="mt-1 sm:mt-2">
+                      The full license is available in our GitHub repository.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
+
+export default FAQComponent;
