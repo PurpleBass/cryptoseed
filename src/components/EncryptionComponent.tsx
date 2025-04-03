@@ -262,7 +262,7 @@ const EncryptionComponent = () => {
   };
 
   return <div className="satoshi-container px-4 md:px-0 py-10 bg-white">
-      <div className="mb-8 flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-3 rounded-lg gap-2">
+      <div className="mb-8 flex flex-col sm:flex-row items-center justify-center bg-gray-50 p-3 rounded-lg space-x-4">
         <div className="flex flex-col sm:flex-row items-center gap-2">
           <div className="flex items-center gap-2">
             <div className="flex items-center space-x-2">
