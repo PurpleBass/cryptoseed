@@ -1,6 +1,6 @@
 
-import React, { useState, useRef, useCallback } from "react";
-import { Image, FileUp, Eye, Lock, Download, Key, Upload, BrainCircuit, File, Dice5, Dices } from "lucide-react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
+import { Image, FileUp, Eye, Lock, Download, Key, Upload, File, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -8,25 +8,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  hideLSB,
-  extractLSB,
-  hideSCC,
-  extractSCC,
-  hideUD,
-  extractUD,
   hideMessageWithAllTechniques,
   extractMessageWithAllTechniques,
-  textToBinary,
-  binaryToText,
   prepareFileForSteganography,
   extractFileFromSteganography
 } from "@/lib/steganography";
 
-// Type for the steganography technique
-type StegoTechnique = "lsb" | "scc" | "ud" | "all";
 type InputType = "text" | "file";
 
 const SteganographyComponent: React.FC = () => {
@@ -39,8 +28,7 @@ const SteganographyComponent: React.FC = () => {
   const [mode, setMode] = useState<"hide" | "extract">("hide");
   const [isOpen, setIsOpen] = useState(false);
   const [password, setPassword] = useState("");
-  const [technique, setTechnique] = useState<StegoTechnique>("all");
-  const [seed, setSeed] = useState<number>(Math.floor(Math.random() * 1000000));
+  const [seed, setSeed] = useState<number>(0);
   const [inputType, setInputType] = useState<InputType>("text");
   const [secretFile, setSecretFile] = useState<File | null>(null);
   const [extractedFile, setExtractedFile] = useState<{ data: Blob, fileType: string, isFile: boolean } | null>(null);
@@ -51,11 +39,16 @@ const SteganographyComponent: React.FC = () => {
   const stegoFileInputRef = useRef<HTMLInputElement>(null);
   const secretFileInputRef = useRef<HTMLInputElement>(null);
 
+  // Generate a random seed when component mounts
+  useEffect(() => {
+    generateRandomSeed();
+  }, []);
+
   // Generate a random seed
   const generateRandomSeed = () => {
     const newSeed = Math.floor(Math.random() * 1000000);
     setSeed(newSeed);
-    toast.success(`New random seed generated: ${newSeed}`);
+    console.log(`Generated random seed: ${newSeed}`);
   };
 
   // Handle cover image upload
@@ -113,6 +106,7 @@ const SteganographyComponent: React.FC = () => {
     const file = event.target.files?.[0];
     if (file) {
       setSecretFile(file);
+      toast.success(`File selected: ${file.name}`);
     }
   };
 
@@ -168,67 +162,20 @@ const SteganographyComponent: React.FC = () => {
           
           try {
             if (inputType === 'file' && secretFile) {
+              // Prepare file data
               dataToHide = await prepareFileForSteganography(secretFile, password);
             } else {
-              // For text, we'll encrypt directly in the steganography functions
+              // For text, we'll use the secret message directly
               dataToHide = secretMessage;
             }
             
-            // Hide message using selected technique
-            let newImageData;
-            
-            switch (technique) {
-              case "lsb":
-                if (inputType === 'file') {
-                  // For file data, we've already encrypted it
-                  newImageData = hideLSB(imageData.data, textToBinary(dataToHide));
-                } else {
-                  const encryptedMessage = await hideMessageWithAllTechniques(
-                    imageData.data,
-                    dataToHide,
-                    password,
-                    seed
-                  );
-                  newImageData = encryptedMessage;
-                }
-                break;
-              case "scc":
-                if (inputType === 'file') {
-                  // For file data, we've already encrypted it
-                  newImageData = hideSCC(imageData.data, textToBinary(dataToHide));
-                } else {
-                  // For text, encrypt then hide
-                  const binaryMessage = textToBinary(await prepareFileForSteganography(
-                    new Blob([dataToHide], { type: 'text/plain' }), 
-                    password
-                  ));
-                  newImageData = hideSCC(imageData.data, binaryMessage);
-                }
-                break;
-              case "ud":
-                if (inputType === 'file') {
-                  // For file data, we've already encrypted it
-                  newImageData = hideUD(imageData.data, textToBinary(dataToHide), seed);
-                } else {
-                  // For text, encrypt then hide
-                  const binaryMessage = textToBinary(await prepareFileForSteganography(
-                    new Blob([dataToHide], { type: 'text/plain' }), 
-                    password
-                  ));
-                  newImageData = hideUD(imageData.data, binaryMessage, seed);
-                }
-                break;
-              case "all":
-              default:
-                // Use all techniques for maximum security
-                newImageData = await hideMessageWithAllTechniques(
-                  imageData.data,
-                  dataToHide,
-                  password,
-                  seed
-                );
-                break;
-            }
+            // Use all techniques for maximum security
+            const newImageData = await hideMessageWithAllTechniques(
+              imageData.data,
+              dataToHide,
+              password,
+              seed
+            );
             
             // Put modified image data back to canvas
             const modifiedImageData = new ImageData(
@@ -247,6 +194,7 @@ const SteganographyComponent: React.FC = () => {
             } else {
               toast.error("Failed to hide secret data");
             }
+            console.error("Error hiding data:", error);
           } finally {
             setIsProcessing(false);
           }
@@ -260,9 +208,10 @@ const SteganographyComponent: React.FC = () => {
         } else {
           toast.error("Failed to process image");
         }
+        console.error("Error processing image:", error);
       }
     }, 100);
-  }, [coverImage, secretMessage, secretFile, technique, password, seed, inputType]);
+  }, [coverImage, secretMessage, secretFile, password, seed, inputType]);
 
   // Extract message from the stego image
   const extractMessage = useCallback(async () => {
@@ -301,31 +250,14 @@ const SteganographyComponent: React.FC = () => {
           // Get image data
           const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
           
-          // Extract message based on technique
           try {
-            let extractedData = "";
-            
-            switch (technique) {
-              case "lsb":
-                extractedData = extractLSB(imageData.data);
-                break;
-              case "scc":
-                extractedData = extractSCC(imageData.data);
-                break;
-              case "ud":
-                extractedData = extractUD(imageData.data, seed);
-                break;
-              case "all":
-              default:
-                // Try to extract using each technique
-                extractedData = await extractMessageWithAllTechniques(
-                  imageData.data,
-                  technique,
-                  password,
-                  seed
-                );
-                break;
-            }
+            // Extract using all techniques
+            const extractedData = await extractMessageWithAllTechniques(
+              imageData.data,
+              "all", // Always use all techniques
+              password,
+              seed
+            );
             
             try {
               // Try to process as a file first
@@ -355,6 +287,7 @@ const SteganographyComponent: React.FC = () => {
             } else {
               toast.error("Failed to extract message");
             }
+            console.error("Error extracting message:", error);
           } finally {
             setIsProcessing(false);
           }
@@ -368,9 +301,10 @@ const SteganographyComponent: React.FC = () => {
         } else {
           toast.error("Failed to process image");
         }
+        console.error("Error processing image:", error);
       }
     }, 100);
-  }, [stegoImage, technique, password, seed]);
+  }, [stegoImage, password, seed]);
 
   // Download stego image
   const downloadStegoImage = () => {
@@ -451,41 +385,6 @@ const SteganographyComponent: React.FC = () => {
             className="h-8 min-w-40 text-sm"
           />
         </div>
-        
-        <div className="flex items-center border rounded-lg p-2 bg-gray-50">
-          <BrainCircuit className="h-4 w-4 mr-2 text-secure-600" />
-          <Label htmlFor="technique-select" className="text-sm mr-2 whitespace-nowrap">Technique:</Label>
-          <Select value={technique} onValueChange={(value) => setTechnique(value as StegoTechnique)}>
-            <SelectTrigger id="technique-select" className="h-8 min-w-40">
-              <SelectValue placeholder="Select technique" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Techniques (Maximum Security)</SelectItem>
-              <SelectItem value="lsb">Least Significant Bit (LSB)</SelectItem>
-              <SelectItem value="scc">Sequential Color Cycle (SCC)</SelectItem>
-              <SelectItem value="ud">Uniform Distribution (UD)</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        
-        {(technique === "ud" || technique === "all") && (
-          <div className="flex items-center border rounded-lg p-2 bg-gray-50">
-            <Dice5 className="h-4 w-4 mr-2 text-secure-600" />
-            <Label htmlFor="seed-input" className="text-sm mr-2 whitespace-nowrap">Seed:</Label>
-            <div className="flex space-x-1">
-              <Input
-                id="seed-input"
-                type="number"
-                value={seed}
-                onChange={(e) => setSeed(parseInt(e.target.value) || 0)}
-                className="h-8 w-24 text-sm"
-              />
-              <Button size="sm" variant="outline" className="h-8 p-1" onClick={generateRandomSeed}>
-                <Dices className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -607,7 +506,7 @@ const SteganographyComponent: React.FC = () => {
                 <CardHeader>
                   <CardTitle className="text-lg md:text-xl">Steganographic Image</CardTitle>
                   <CardDescription>
-                    Your data is now hidden in this image
+                    Your data is now hidden in this image using triple-layer protection
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -726,18 +625,18 @@ const SteganographyComponent: React.FC = () => {
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
           <CollapsibleTrigger asChild>
             <Button variant="outline" className="w-full">
-              {isOpen ? "Hide" : "Show"} Advanced Steganography Information
+              {isOpen ? "Hide" : "Show"} Steganography Information
             </Button>
           </CollapsibleTrigger>
           <CollapsibleContent className="mt-4 p-4 bg-gray-50 rounded-md text-sm">
             <h3 className="font-medium mb-2">What is Steganography?</h3>
             <p className="mb-3">
-              Steganography is the practice of hiding secret information within non-secret data or a physical object to avoid detection. This implementation uses three advanced techniques for maximum security.
+              Steganography is the practice of hiding secret information within non-secret data or a physical object to avoid detection. This application uses three advanced techniques combined for maximum security.
             </p>
             
-            <h3 className="font-medium mb-2">Multi-Technique Steganography</h3>
+            <h3 className="font-medium mb-2">Triple-Layer Steganography</h3>
             <p className="mb-3">
-              This tool implements three different steganography techniques that can be used individually or combined:
+              This tool implements three different steganography techniques applied simultaneously for military-grade security:
             </p>
             
             <ul className="list-disc pl-5 space-y-1 mb-3">
@@ -754,10 +653,10 @@ const SteganographyComponent: React.FC = () => {
             <h3 className="font-medium mb-2">Security Considerations</h3>
             <ul className="list-disc pl-5 space-y-1 mb-3">
               <li>Always use a strong, unique password that you can remember</li>
-              <li>The seed value is crucial when using the Uniform Distribution technique - keep it secret</li>
+              <li>The seed is automatically generated and encrypted along with your data</li>
               <li>The image format matters - PNG is lossless and preserves the hidden data</li>
               <li>Image compression or editing will likely destroy the hidden data</li>
-              <li>For maximum security, use the "All Techniques" option</li>
+              <li>This implementation uses all three techniques for maximum security</li>
             </ul>
           </CollapsibleContent>
         </Collapsible>

@@ -379,11 +379,16 @@ export const hideMessageWithAllTechniques = async (
   seed: number
 ): Promise<Uint8ClampedArray> => {
   try {
+    // Combine message with the seed (so we don't need to ask user for seed when extracting)
+    const messageWithSeed = `SEED:${seed}:${message}`;
+    
     // First encrypt the message with AES-256
-    const encryptedMessage = await encryptMessage(message, password);
+    const encryptedMessage = await encryptMessage(messageWithSeed, password);
     
     // Convert encrypted message to binary
     let binaryMessage = textToBinary(encryptedMessage);
+    
+    console.log("Applying triple-layer steganography...");
     
     // Apply LSB technique first
     let resultData = hideLSB(imageData, binaryMessage);
@@ -393,6 +398,8 @@ export const hideMessageWithAllTechniques = async (
     
     // Finally apply UD technique over the combined result
     resultData = hideUD(resultData, binaryMessage, seed);
+    
+    console.log("Steganography complete!");
     
     return resultData;
   } catch (error) {
@@ -405,47 +412,77 @@ export const extractMessageWithAllTechniques = async (
   imageData: Uint8ClampedArray,
   technique: "lsb" | "scc" | "ud" | "all",
   password: string,
-  seed: number
+  providedSeed?: number
 ): Promise<string> => {
   try {
     let extractedBinary = "";
     
-    // Extract using the specified technique
-    switch (technique) {
-      case "lsb":
-        extractedBinary = extractLSB(imageData);
-        break;
-      case "scc":
+    // Try all techniques and use the one that succeeds
+    try {
+      // First try LSB as it's the most common
+      extractedBinary = extractLSB(imageData);
+      const decrypted = await decryptMessage(extractedBinary, password);
+      
+      // Check if the decrypted content has a seed embedded
+      if (decrypted.startsWith('SEED:')) {
+        const parts = decrypted.split(':', 3);
+        if (parts.length >= 3) {
+          const extractedSeed = parseInt(parts[1]);
+          const actualMessage = decrypted.substring(parts[0].length + parts[1].length + 2); // +2 for two colons
+          console.log(`Successfully extracted message using LSB. Found seed: ${extractedSeed}`);
+          return actualMessage;
+        }
+      }
+      
+      // If no seed found, just return the message
+      return decrypted;
+    } catch (error1) {
+      console.log("LSB extraction failed, trying SCC...");
+      
+      try {
         extractedBinary = extractSCC(imageData);
-        break;
-      case "ud":
-        extractedBinary = extractUD(imageData, seed);
-        break;
-      case "all":
-        // Try all techniques and use the one that succeeds
-        // In a real-world scenario, we'd need to include metadata about which technique was used
-        try {
-          extractedBinary = extractLSB(imageData);
-          // If the decryption works, we've found the right technique
-          await decryptMessage(extractedBinary, password);
-        } catch (error1) {
-          try {
-            extractedBinary = extractSCC(imageData);
-            await decryptMessage(extractedBinary, password);
-          } catch (error2) {
-            try {
-              extractedBinary = extractUD(imageData, seed);
-              await decryptMessage(extractedBinary, password);
-            } catch (error3) {
-              throw new Error("Could not extract message with any technique");
-            }
+        const decrypted = await decryptMessage(extractedBinary, password);
+        
+        // Check if the decrypted content has a seed embedded
+        if (decrypted.startsWith('SEED:')) {
+          const parts = decrypted.split(':', 3);
+          if (parts.length >= 3) {
+            const extractedSeed = parseInt(parts[1]);
+            const actualMessage = decrypted.substring(parts[0].length + parts[1].length + 2); // +2 for two colons
+            console.log(`Successfully extracted message using SCC. Found seed: ${extractedSeed}`);
+            return actualMessage;
           }
         }
-        break;
+        
+        // If no seed found, just return the message
+        return decrypted;
+      } catch (error2) {
+        console.log("SCC extraction failed, trying UD...");
+        
+        try {
+          // If we have a provided seed, use it, otherwise try a default seed
+          const seedToUse = providedSeed || 12345;
+          extractedBinary = extractUD(imageData, seedToUse);
+          const decrypted = await decryptMessage(extractedBinary, password);
+          
+          // Check if the decrypted content has a seed embedded
+          if (decrypted.startsWith('SEED:')) {
+            const parts = decrypted.split(':', 3);
+            if (parts.length >= 3) {
+              const extractedSeed = parseInt(parts[1]);
+              const actualMessage = decrypted.substring(parts[0].length + parts[1].length + 2); // +2 for two colons
+              console.log(`Successfully extracted message using UD. Found seed: ${extractedSeed}`);
+              return actualMessage;
+            }
+          }
+          
+          // If no seed found, just return the message
+          return decrypted;
+        } catch (error3) {
+          throw new Error("Could not extract message with any technique. The password may be incorrect or the image does not contain hidden data.");
+        }
+      }
     }
-    
-    // Decrypt the extracted message
-    return await decryptMessage(extractedBinary, password);
   } catch (error) {
     console.error("Error in extracting message:", error);
     throw error;
@@ -457,17 +494,24 @@ export const prepareFileForSteganography = async (
   file: File,
   password: string
 ): Promise<string> => {
-  // Read file as array buffer
-  const arrayBuffer = await fileToArrayBuffer(file);
-  
-  // Convert to base64
-  const base64 = arrayBufferToBase64(arrayBuffer);
-  
-  // Add file metadata header
-  const dataWithHeader = addFileHeader(base64, true, file.type);
-  
-  // Encrypt the data with password
-  return await encryptMessage(dataWithHeader, password);
+  try {
+    // Read file as array buffer
+    const arrayBuffer = await fileToArrayBuffer(file);
+    
+    // Convert to base64
+    const base64 = arrayBufferToBase64(arrayBuffer);
+    
+    // Add file metadata header
+    const dataWithHeader = addFileHeader(base64, true, file.type);
+    
+    console.log(`Preparing file: ${file.name} (${file.type}, ${(file.size / 1024).toFixed(2)} KB)`);
+    
+    // We don't encrypt here - the encryption will be done in hideMessageWithAllTechniques
+    return dataWithHeader;
+  } catch (error) {
+    console.error("Error preparing file:", error);
+    throw error;
+  }
 };
 
 // Convert steganography-extracted data back to a file
@@ -476,11 +520,8 @@ export const extractFileFromSteganography = async (
   password: string
 ): Promise<{ data: Blob, fileType: string, isFile: boolean }> => {
   try {
-    // Decrypt the data
-    const decryptedData = await decryptMessage(extractedData, password);
-    
     // Parse the header
-    const { type, fileType, content } = parseHeader(decryptedData);
+    const { type, fileType, content } = parseHeader(extractedData);
     
     if (type === 'file') {
       // Convert base64 back to blob
@@ -500,6 +541,7 @@ export const extractFileFromSteganography = async (
       }
       
       const blob = new Blob(byteArrays, { type: fileType });
+      console.log(`Extracted file of type: ${fileType}, size: ${(blob.size / 1024).toFixed(2)} KB`);
       return { data: blob, fileType, isFile: true };
     } else {
       // It's just text

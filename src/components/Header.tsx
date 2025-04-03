@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
             className="text-xs md:text-sm h-8 md:h-9"
           >
             <BrainCircuit className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
-            <span className="hidden sm:inline">Advanced</span> Steganography
+            Steganography
           </Button>
           
           <Button
