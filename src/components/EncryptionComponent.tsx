@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { encryptMessage, decryptMessage, encryptFile, decryptFile, isWebCryptoSupported } from "@/lib/encryption";
 import { Switch } from "@/components/ui/switch";
-import SeedPhraseInput, { WalletMetadata } from "./SeedPhraseInput";
+import SeedPhraseInput from "./SeedPhraseInput";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useNavigate } from "react-router-dom";
 
@@ -25,12 +25,10 @@ const EncryptionComponent = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [seedPhrase, setSeedPhrase] = useState("");
-  const [walletMetadata, setWalletMetadata] = useState<WalletMetadata>({
-    name: "",
-    description: ""
-  });
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -49,10 +47,6 @@ const EncryptionComponent = () => {
 
   const handleSeedPhraseChange = (phrase: string) => {
     setSeedPhrase(phrase);
-  };
-
-  const handleWalletMetadataChange = (metadata: WalletMetadata) => {
-    setWalletMetadata(metadata);
   };
 
   const formatSeedPhrase = (phrase: string) => {
@@ -148,62 +142,15 @@ const EncryptionComponent = () => {
     setIsProcessing(true);
     try {
       if (isEncrypting) {
-        // Just encrypt the seed phrase itself without the metadata
         const encrypted = await encryptMessage(seedPhrase, password);
-        
-        // Create the output with metadata as plain text
-        let outputText = "";
-        
-        if (walletMetadata.name) {
-          outputText += `Wallet Alias: ${walletMetadata.name}\n`;
-        }
-        
-        if (walletMetadata.description) {
-          outputText += `Wallet Notes: ${walletMetadata.description}\n`;
-        }
-        
-        if (outputText) {
-          outputText += "\n";
-        }
-        
-        outputText += encrypted;
-        setOutput(outputText);
-        
+        setOutput(encrypted);
         toast({
           title: "Encryption successful",
           description: "Your seed phrase has been encrypted"
         });
       } else {
-        // For decryption, we need to parse out the metadata first
-        let encryptedText = textInput;
-        let extractedMetadata = { name: "", description: "" };
-        
-        // Extract wallet alias if present
-        const aliasMatch = encryptedText.match(/^Wallet Alias: (.+?)$/m);
-        if (aliasMatch) {
-          extractedMetadata.name = aliasMatch[1].trim();
-        }
-        
-        // Extract wallet notes if present
-        const notesMatch = encryptedText.match(/^Wallet Notes: (.+?)$/m);
-        if (notesMatch) {
-          extractedMetadata.description = notesMatch[1].trim();
-        }
-        
-        // Remove the metadata lines to get the actual encrypted text
-        encryptedText = encryptedText.replace(/^Wallet Alias: .+?$/m, "");
-        encryptedText = encryptedText.replace(/^Wallet Notes: .+?$/m, "");
-        encryptedText = encryptedText.trim();
-        
-        // Decrypt the remaining text
-        const decrypted = await decryptMessage(encryptedText, password);
+        const decrypted = await decryptMessage(seedPhrase, password);
         setOutput(formatSeedPhrase(decrypted));
-        
-        // Update the wallet metadata state with extracted values
-        if (aliasMatch || notesMatch) {
-          setWalletMetadata(extractedMetadata);
-        }
-        
         toast({
           title: "Decryption successful",
           description: "Your seed phrase has been decrypted"
@@ -390,7 +337,7 @@ const EncryptionComponent = () => {
                 {isEncrypting ? "Seed Phrase to Encrypt" : "Encrypted Seed Phrase to Decrypt"}
               </CardTitle>
               <CardDescription className="text-gray-600">
-                {isEncrypting ? "Enter your seed phrase words and wallet information." : "Paste the encrypted text that you want to decrypt."}
+                {isEncrypting ? "Enter your seed phrase words." : "Paste the encrypted text that you want to decrypt."}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -399,10 +346,7 @@ const EncryptionComponent = () => {
                     <div className="flex justify-end mb-2">
                       
                     </div>
-                    <SeedPhraseInput 
-                      onSeedPhraseChange={handleSeedPhraseChange} 
-                      onWalletMetadataChange={handleWalletMetadataChange}
-                    />
+                    <SeedPhraseInput onSeedPhraseChange={handleSeedPhraseChange} />
                   </div> : <div className="grid gap-2">
                     <div className="flex items-center justify-between">
                       <Label htmlFor="seedPhraseInput" className="text-gray-700">
