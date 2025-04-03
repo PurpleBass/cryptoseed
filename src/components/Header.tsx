@@ -1,11 +1,9 @@
 
 import React from "react";
-import { FileText, HelpCircle, Shield } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
-import { useBreakpoint } from "@/hooks/use-mobile";
+import { Button } from "@/components/ui/button";
+import { Key, Lock, FileCheck, Book, Image } from "lucide-react";
 
-export type ViewType = "encrypt" | "verify" | "faq";
+export type ViewType = "encrypt" | "verify" | "faq" | "stego";
 
 interface HeaderProps {
   currentView: ViewType;
@@ -13,94 +11,55 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
-  const breakpoint = useBreakpoint();
-  const isMobile = breakpoint === 'mobile';
-
   return (
-    <header className="w-full py-4 md:py-8 bg-white border-b border-gray-100">
-      <div className="satoshi-container">
-        <div className="flex flex-col items-center space-y-4 md:space-y-6">
-          <div className="flex items-center gap-2 md:gap-3">
-            <img 
-              src="/lovable-uploads/a0b9a6e5-ef5a-4c95-929d-cb6a257495eb.png" 
-              alt="Crypto Seed Logo"
-              className="h-8 w-8 md:h-10 md:w-10 text-secure-500" 
-            />
-            <h1 className="text-2xl md:text-3xl font-heading font-bold tracking-tight text-gray-900">
-              Crypto Seed
-            </h1>
-          </div>
-          <p className="text-center text-sm md:text-base text-gray-600 max-w-2xl mx-auto px-2">
-            A zero-knowledge, open-source AES-256 encryption tool that works offline.
-            No data leaves your device, no backdoors, completely verifiable.
-          </p>
-          
-          <Tabs 
-            defaultValue="encrypt" 
-            value={currentView} 
-            onValueChange={(v) => setCurrentView(v as ViewType)}
-            className="w-full max-w-2xl mt-2 md:mt-6"
-          >
-            <TabsList className={cn(
-              "grid w-full rounded-full p-1 bg-gray-100",
-              "grid-cols-3"
-            )}>
-              {isMobile ? (
-                // Mobile Layout: Show all tabs with smaller text and icons
-                <>
-                  <TabsTrigger 
-                    value="encrypt" 
-                    className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm text-xs py-1.5"
-                  >
-                    <Shield className="h-3 w-3" />
-                    <span>Encrypt</span>
-                  </TabsTrigger>
-                  
-                  <TabsTrigger 
-                    value="verify" 
-                    className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm text-xs py-1.5"
-                  >
-                    <FileText className="h-3 w-3" />
-                    <span>Verify</span>
-                  </TabsTrigger>
-                  
-                  <TabsTrigger 
-                    value="faq" 
-                    className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm text-xs py-1.5"
-                  >
-                    <HelpCircle className="h-3 w-3" />
-                    <span>FAQ</span>
-                  </TabsTrigger>
-                </>
-              ) : (
-                // Desktop Layout: Show all tabs with normal size
-                <>
-                  <TabsTrigger 
-                    value="encrypt" 
-                    className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
-                  >
-                    <Shield className="h-4 w-4" />
-                    <span>Encrypt & Decrypt</span>
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="verify" 
-                    className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
-                  >
-                    <FileText className="h-4 w-4" />
-                    <span>Verify Code</span>
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="faq" 
-                    className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
-                  >
-                    <HelpCircle className="h-4 w-4" />
-                    <span>FAQ & Best Practices</span>
-                  </TabsTrigger>
-                </>
-              )}
-            </TabsList>
-          </Tabs>
+    <header className="bg-background border-b border-gray-100 p-2 md:p-4">
+      <div className="satoshi-container flex flex-col md:flex-row items-center justify-between gap-2 md:gap-0">
+        <div className="flex items-center gap-2">
+          <img src="/lovable-uploads/a0b9a6e5-ef5a-4c95-929d-cb6a257495eb.png" alt="Crypto Seed Logo" className="h-6 w-6 md:h-8 md:w-8 text-secure-500" />
+          <h1 className="text-base md:text-lg font-bold text-secure-800">Crypto Seed</h1>
         </div>
+        
+        <nav className="flex flex-wrap items-center gap-1 md:gap-2">
+          <Button
+            variant={currentView === "encrypt" ? "secure" : "ghost"}
+            size="sm"
+            onClick={() => setCurrentView("encrypt")}
+            className="text-xs md:text-sm h-8 md:h-9"
+          >
+            <Lock className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
+            Encryption
+          </Button>
+          
+          <Button
+            variant={currentView === "stego" ? "secure" : "ghost"}
+            size="sm"
+            onClick={() => setCurrentView("stego")}
+            className="text-xs md:text-sm h-8 md:h-9"
+          >
+            <Image className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
+            Steganography
+          </Button>
+          
+          <Button
+            variant={currentView === "verify" ? "secure" : "ghost"}
+            size="sm"
+            onClick={() => setCurrentView("verify")}
+            className="text-xs md:text-sm h-8 md:h-9"
+          >
+            <FileCheck className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
+            Verify Code
+          </Button>
+          
+          <Button
+            variant={currentView === "faq" ? "secure" : "ghost"}
+            size="sm"
+            onClick={() => setCurrentView("faq")}
+            className="text-xs md:text-sm h-8 md:h-9"
+          >
+            <Book className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
+            FAQ
+          </Button>
+        </nav>
       </div>
     </header>
   );
