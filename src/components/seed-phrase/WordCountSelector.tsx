@@ -1,15 +1,7 @@
-
 import React from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { MinusCircle, PlusCircle, ChevronDown } from "lucide-react";
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -61,52 +53,52 @@ export const WordCountSelector: React.FC<WordCountSelectorProps> = ({
             >
               <PlusCircle className="h-4 w-4" />
             </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="ml-2 w-auto">
+                  <span className="mr-1">Length</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem onClick={() => {
+                  setIsCustomCount(false); 
+                  setWordCount(12);
+                }}>
+                  12 words
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {
+                  setIsCustomCount(false);
+                  setWordCount(15);
+                }}>
+                  15 words
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {
+                  setIsCustomCount(false);
+                  setWordCount(18);
+                }}>
+                  18 words
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {
+                  setIsCustomCount(false);
+                  setWordCount(21);
+                }}>
+                  21 words
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {
+                  setIsCustomCount(false);
+                  setWordCount(24);
+                }}>
+                  24 words
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {
+                  setIsCustomCount(true);
+                }}>
+                  Custom
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="w-full">
-                <span className="mr-1">Options</span>
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
-              <DropdownMenuItem onClick={() => {
-                setIsCustomCount(false); 
-                setWordCount(12);
-              }}>
-                12 words
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {
-                setIsCustomCount(false);
-                setWordCount(15);
-              }}>
-                15 words
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {
-                setIsCustomCount(false);
-                setWordCount(18);
-              }}>
-                18 words
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {
-                setIsCustomCount(false);
-                setWordCount(21);
-              }}>
-                21 words
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {
-                setIsCustomCount(false);
-                setWordCount(24);
-              }}>
-                24 words
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {
-                setIsCustomCount(true);
-              }}>
-                Custom
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       ) : (
         <Select onValueChange={onWordCountChange} defaultValue="12">
