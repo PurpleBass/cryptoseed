@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Key, Lock, FileText, Book, FileCheck } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
@@ -14,10 +15,13 @@ const Index = () => {
   const isMobile = useIsMobile();
   const location = useLocation();
 
+  // Handle URL params for direct navigation to sections
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    if (searchParams.has('faq')) {
-      setCurrentView("faq");
+    if (location && location.search) {
+      const searchParams = new URLSearchParams(location.search);
+      if (searchParams.has('faq')) {
+        setCurrentView("faq");
+      }
     }
   }, [location]);
 
