@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { MinusCircle, PlusCircle, ChevronDown, Eraser } from "lucide-react";
+import { useBreakpoint } from "@/hooks/use-mobile";
 
 interface SeedPhraseInputProps {
   onSeedPhraseChange: (seedPhrase: string) => void;
@@ -25,6 +27,8 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
   const [wordCount, setWordCount] = useState(12);
   const [words, setWords] = useState<string[]>(Array(12).fill(""));
   const [isCustomCount, setIsCustomCount] = useState(false);
+  const breakpoint = useBreakpoint();
+  const isMobile = breakpoint === 'mobile';
 
   useEffect(() => {
     const newWords = [...words];
@@ -70,20 +74,18 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
     }
   };
 
-  const returnToDropdown = () => {
-    setIsCustomCount(false);
-  };
-
   const clearAllWords = () => {
     const emptyWords = Array(wordCount).fill("");
     setWords(emptyWords);
   };
 
   const renderWordInputs = () => {
-    const wordsPerColumn = Math.ceil(wordCount / 3);
+    // Adjust column layout based on screen size
+    const columnsCount = isMobile ? 1 : 3;
+    const wordsPerColumn = Math.ceil(wordCount / columnsCount);
     const columns = [];
 
-    for (let col = 0; col < 3; col++) {
+    for (let col = 0; col < columnsCount; col++) {
       const columnWords = [];
       for (let row = 0; row < wordsPerColumn; row++) {
         const index = col * wordsPerColumn + row;
@@ -102,7 +104,7 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
         }
       }
       columns.push(
-        <div key={col} className="flex flex-col">
+        <div key={col} className="flex flex-col w-full">
           {columnWords}
         </div>
       );
@@ -113,7 +115,7 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-2">
           <Label htmlFor="wordCount" className="text-gray-700 whitespace-nowrap">Number of Words</Label>
           {isCustomCount ? (
@@ -211,7 +213,7 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full overflow-x-hidden">
         {renderWordInputs()}
       </div>
     </div>
