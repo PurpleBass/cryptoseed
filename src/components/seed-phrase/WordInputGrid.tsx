@@ -38,14 +38,14 @@ export const WordInputGrid: React.FC<WordInputGridProps> = ({
       }
     }
     columns.push(
-      <div key={col} className="flex flex-col w-full">
+      <div key={col} className="flex flex-col w-full px-1">
         {columnWords}
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full overflow-x-hidden">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-1 md:gap-2 w-full overflow-hidden">
       {columns}
     </div>
   );

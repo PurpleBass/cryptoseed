@@ -24,7 +24,7 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
   } = useSeedPhrase({ onSeedPhraseChange });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full overflow-hidden">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <WordCountSelector 
           wordCount={wordCount}
@@ -39,11 +39,13 @@ const SeedPhraseInput: React.FC<SeedPhraseInputProps> = ({ onSeedPhraseChange })
         <ClearButton onClear={clearAllWords} />
       </div>
 
-      <WordInputGrid 
-        wordCount={wordCount}
-        words={words}
-        onWordChange={handleWordChange}
-      />
+      <div className="w-full overflow-hidden">
+        <WordInputGrid 
+          wordCount={wordCount}
+          words={words}
+          onWordChange={handleWordChange}
+        />
+      </div>
     </div>
   );
 };
