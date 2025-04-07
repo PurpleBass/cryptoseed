@@ -275,7 +275,7 @@ const EncryptionComponent = () => {
                   </span>
                   <Badge variant="outline" className="ml-2 text-xs flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200">
                     <Shield className="h-3 w-3" />
-                    <span>AES-256</span>
+                    <span>ChaCha20-Poly1305</span>
                   </Badge>
                 </div>
               </div>

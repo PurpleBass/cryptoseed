@@ -1,25 +1,22 @@
 
 /**
- * AES-256 encryption functions for the Secure Nomad Encryptor
+ * ChaCha20-Poly1305 encryption functions for the Secure Nomad Encryptor
  * 
- * This module uses the Web Crypto API (SubtleCrypto) to perform
+ * This module uses libsodium-wrappers to perform
  * secure client-side encryption and decryption. No data is sent
  * to any server at any point.
  */
 
-// Convert string to ArrayBuffer for encryption
-function str2ab(str: string): ArrayBuffer {
-  const buf = new ArrayBuffer(str.length);
-  const bufView = new Uint8Array(buf);
-  for (let i = 0, strLen = str.length; i < strLen; i++) {
-    bufView[i] = str.charCodeAt(i);
-  }
-  return buf;
+import sodium from 'libsodium-wrappers';
+
+// Convert string to Uint8Array
+function strToUint8Array(str: string): Uint8Array {
+  return new TextEncoder().encode(str);
 }
 
-// Convert ArrayBuffer to string after decryption
-function ab2str(buf: ArrayBuffer): string {
-  return String.fromCharCode.apply(null, Array.from(new Uint8Array(buf)));
+// Convert Uint8Array to string
+function uint8ArrayToStr(array: Uint8Array): string {
+  return new TextDecoder().decode(array);
 }
 
 // Convert ArrayBuffer to Base64 string for storage/transmission
@@ -44,98 +41,85 @@ function base64ToArrayBuffer(base64: string): ArrayBuffer {
   return bytes.buffer;
 }
 
-// Generate a cryptographically secure key from a password
-async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey> {
-  // Convert password to ArrayBuffer
-  const passwordBuffer = str2ab(password);
+// Generate a secure key from a password using Argon2id (via libsodium)
+async function deriveKey(password: string, salt: Uint8Array): Promise<Uint8Array> {
+  await sodium.ready;
   
-  // Import the password as a key
-  const baseKey = await window.crypto.subtle.importKey(
-    "raw",
-    passwordBuffer,
-    { name: "PBKDF2" },
-    false,
-    ["deriveKey"]
-  );
+  // Convert password string to Uint8Array
+  const passwordBytes = strToUint8Array(password);
   
-  // Derive a key using PBKDF2
-  return window.crypto.subtle.deriveKey(
-    {
-      name: "PBKDF2",
-      salt: salt,
-      iterations: 100000,
-      hash: "SHA-256"
-    },
-    baseKey,
-    { name: "AES-GCM", length: 256 },
-    false,
-    ["encrypt", "decrypt"]
+  // Derive a key using Argon2id (more secure than PBKDF2 for post-quantum)
+  return sodium.crypto_pwhash(
+    sodium.crypto_secretbox_KEYBYTES,
+    passwordBytes,
+    salt,
+    sodium.crypto_pwhash_OPSLIMIT_INTERACTIVE,
+    sodium.crypto_pwhash_MEMLIMIT_INTERACTIVE,
+    sodium.crypto_pwhash_ALG_ARGON2ID13
   );
 }
 
-// Encrypt a message using AES-GCM
+// Encrypt a message using ChaCha20-Poly1305
 export async function encryptMessage(message: string, password: string): Promise<string> {
   try {
-    // Generate a random salt
-    const salt = window.crypto.getRandomValues(new Uint8Array(16));
+    await sodium.ready;
     
-    // Generate a random IV (Initialization Vector)
-    const iv = window.crypto.getRandomValues(new Uint8Array(12));
+    // Generate a random salt for key derivation
+    const salt = sodium.randombytes_buf(sodium.crypto_pwhash_SALTBYTES);
+    
+    // Generate a random nonce for ChaCha20-Poly1305
+    const nonce = sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES);
     
     // Derive encryption key from password
     const key = await deriveKey(password, salt);
     
-    // Encrypt the message
-    const messageBuffer = str2ab(message);
-    const encryptedBuffer = await window.crypto.subtle.encrypt(
-      {
-        name: "AES-GCM",
-        iv: iv
-      },
-      key,
-      messageBuffer
-    );
+    // Convert message to Uint8Array
+    const messageBytes = strToUint8Array(message);
     
-    // Combine salt + iv + encrypted data into a single buffer for ease of storage
-    const resultBuffer = new Uint8Array(salt.length + iv.length + encryptedBuffer.byteLength);
-    resultBuffer.set(salt, 0);
-    resultBuffer.set(iv, salt.length);
-    resultBuffer.set(new Uint8Array(encryptedBuffer), salt.length + iv.length);
+    // Encrypt the message with ChaCha20-Poly1305
+    const ciphertext = sodium.crypto_secretbox_easy(messageBytes, nonce, key);
+    
+    // Combine salt + nonce + encrypted data into a single array for storage
+    const resultArray = new Uint8Array(salt.length + nonce.length + ciphertext.length);
+    resultArray.set(salt, 0);
+    resultArray.set(nonce, salt.length);
+    resultArray.set(ciphertext, salt.length + nonce.length);
     
     // Convert to Base64 for easy storage/transmission
-    return arrayBufferToBase64(resultBuffer);
+    return arrayBufferToBase64(resultArray);
   } catch (error) {
     console.error("Encryption error:", error);
     throw new Error("Failed to encrypt message");
   }
 }
 
-// Decrypt a message using AES-GCM
+// Decrypt a message using ChaCha20-Poly1305
 export async function decryptMessage(encryptedMessage: string, password: string): Promise<string> {
   try {
+    await sodium.ready;
+    
     // Convert the Base64 encrypted message back to ArrayBuffer
     const encryptedBuffer = base64ToArrayBuffer(encryptedMessage);
+    const encryptedArray = new Uint8Array(encryptedBuffer);
     
-    // Extract salt, iv, and encrypted data
-    const salt = encryptedBuffer.slice(0, 16);
-    const iv = encryptedBuffer.slice(16, 28);
-    const data = encryptedBuffer.slice(28);
-    
-    // Derive the key from the password and salt
-    const key = await deriveKey(password, new Uint8Array(salt));
-    
-    // Decrypt the message
-    const decryptedBuffer = await window.crypto.subtle.decrypt(
-      {
-        name: "AES-GCM",
-        iv: new Uint8Array(iv)
-      },
-      key,
-      data
+    // Extract salt, nonce, and encrypted data
+    const salt = encryptedArray.slice(0, sodium.crypto_pwhash_SALTBYTES);
+    const nonce = encryptedArray.slice(
+      sodium.crypto_pwhash_SALTBYTES, 
+      sodium.crypto_pwhash_SALTBYTES + sodium.crypto_secretbox_NONCEBYTES
+    );
+    const ciphertext = encryptedArray.slice(
+      sodium.crypto_pwhash_SALTBYTES + sodium.crypto_secretbox_NONCEBYTES
     );
     
+    // Derive the key from the password and salt
+    const key = await deriveKey(password, salt);
+    
+    // Decrypt the message
+    const messageBytes = sodium.crypto_secretbox_open_easy(ciphertext, nonce, key);
+    
     // Convert back to string and return
-    return ab2str(decryptedBuffer);
+    return uint8ArrayToStr(messageBytes);
   } catch (error) {
     console.error("Decryption error:", error);
     throw new Error("Failed to decrypt message. The password may be incorrect or the data corrupted.");
@@ -145,11 +129,13 @@ export async function decryptMessage(encryptedMessage: string, password: string)
 // Encrypt a file
 export async function encryptFile(file: File, password: string): Promise<{ encryptedData: Blob, fileName: string }> {
   try {
-    // Generate a random salt
-    const salt = window.crypto.getRandomValues(new Uint8Array(16));
+    await sodium.ready;
     
-    // Generate a random IV
-    const iv = window.crypto.getRandomValues(new Uint8Array(12));
+    // Generate a random salt for key derivation
+    const salt = sodium.randombytes_buf(sodium.crypto_pwhash_SALTBYTES);
+    
+    // Generate a random nonce for ChaCha20-Poly1305
+    const nonce = sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES);
     
     // Derive encryption key from password
     const key = await deriveKey(password, salt);
@@ -157,24 +143,17 @@ export async function encryptFile(file: File, password: string): Promise<{ encry
     // Read file as ArrayBuffer
     const fileBuffer = await file.arrayBuffer();
     
-    // Encrypt the file data
-    const encryptedBuffer = await window.crypto.subtle.encrypt(
-      {
-        name: "AES-GCM",
-        iv: iv
-      },
-      key,
-      fileBuffer
-    );
+    // Encrypt the file data with ChaCha20-Poly1305
+    const ciphertext = sodium.crypto_secretbox_easy(new Uint8Array(fileBuffer), nonce, key);
     
-    // Combine salt + iv + encrypted data
-    const resultBuffer = new Uint8Array(salt.length + iv.length + encryptedBuffer.byteLength);
-    resultBuffer.set(salt, 0);
-    resultBuffer.set(iv, salt.length);
-    resultBuffer.set(new Uint8Array(encryptedBuffer), salt.length + iv.length);
+    // Combine salt + nonce + encrypted data
+    const resultArray = new Uint8Array(salt.length + nonce.length + ciphertext.length);
+    resultArray.set(salt, 0);
+    resultArray.set(nonce, salt.length);
+    resultArray.set(ciphertext, salt.length + nonce.length);
     
     // Create a Blob from the encrypted data
-    const encryptedBlob = new Blob([resultBuffer], { type: 'application/octet-stream' });
+    const encryptedBlob = new Blob([resultArray], { type: 'application/octet-stream' });
     
     // Return the encrypted blob and original filename (so it can be restored later)
     return {
@@ -190,29 +169,30 @@ export async function encryptFile(file: File, password: string): Promise<{ encry
 // Decrypt a file
 export async function decryptFile(encryptedFile: File, password: string): Promise<{ decryptedData: Blob, fileName: string }> {
   try {
+    await sodium.ready;
+    
     // Read the encrypted file
     const encryptedBuffer = await encryptedFile.arrayBuffer();
+    const encryptedArray = new Uint8Array(encryptedBuffer);
     
-    // Extract salt, iv, and encrypted data
-    const salt = encryptedBuffer.slice(0, 16);
-    const iv = encryptedBuffer.slice(16, 28);
-    const data = encryptedBuffer.slice(28);
-    
-    // Derive the key from the password and salt
-    const key = await deriveKey(password, new Uint8Array(salt));
-    
-    // Decrypt the file data
-    const decryptedBuffer = await window.crypto.subtle.decrypt(
-      {
-        name: "AES-GCM",
-        iv: new Uint8Array(iv)
-      },
-      key,
-      data
+    // Extract salt, nonce, and encrypted data
+    const salt = encryptedArray.slice(0, sodium.crypto_pwhash_SALTBYTES);
+    const nonce = encryptedArray.slice(
+      sodium.crypto_pwhash_SALTBYTES, 
+      sodium.crypto_pwhash_SALTBYTES + sodium.crypto_secretbox_NONCEBYTES
+    );
+    const ciphertext = encryptedArray.slice(
+      sodium.crypto_pwhash_SALTBYTES + sodium.crypto_secretbox_NONCEBYTES
     );
     
+    // Derive the key from the password and salt
+    const key = await deriveKey(password, salt);
+    
+    // Decrypt the file data
+    const decryptedBytes = sodium.crypto_secretbox_open_easy(ciphertext, nonce, key);
+    
     // Create a Blob from the decrypted data
-    const decryptedBlob = new Blob([decryptedBuffer]);
+    const decryptedBlob = new Blob([decryptedBytes]);
     
     // Remove .encrypted extension if present
     let fileName = encryptedFile.name;
@@ -230,7 +210,7 @@ export async function decryptFile(encryptedFile: File, password: string): Promis
   }
 }
 
-// Check if the Web Crypto API is available
+// Check if the necessary cryptographic libraries are available
 export function isWebCryptoSupported(): boolean {
-  return window.crypto && typeof window.crypto.subtle !== 'undefined';
+  return typeof sodium !== 'undefined' && sodium.ready;
 }
