@@ -263,19 +263,21 @@ const EncryptionComponent = () => {
 
   return <div className="satoshi-container px-4 md:px-0 py-10 bg-white">
       <div className="mb-8 flex flex-col sm:flex-row items-center justify-center bg-gray-50 p-3 rounded-lg space-x-0 sm:space-x-4 space-y-2 sm:space-y-0">
-        <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
-          <div className="flex items-center gap-2 w-full sm:w-auto">
+        <div className="flex items-center justify-center w-full">
+          <div className="flex flex-col sm:flex-row items-center gap-2 w-auto">
             <div className="flex items-center space-x-2 w-full sm:w-auto">
-              <Switch id="encrypt-mode" checked={isEncrypting} onCheckedChange={setIsEncrypting} className="data-[state=checked]:bg-secure-500" />
-              <div className="flex items-center">
-                {isEncrypting ? <Lock className="h-4 w-4 mr-2 text-secure-500" /> : <LockOpen className="h-4 w-4 mr-2 text-gray-500" />}
-                <span className="text-lg font-heading font-bold text-gray-900">
-                  {isEncrypting ? "Encrypt" : "Decrypt"}
-                </span>
-                <Badge variant="outline" className="ml-2 text-xs flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200">
-                  <Shield className="h-3 w-3" />
-                  <span>AES-256</span>
-                </Badge>
+              <div className="flex items-center space-x-2 w-full sm:w-auto">
+                <Switch id="encrypt-mode" checked={isEncrypting} onCheckedChange={setIsEncrypting} className="data-[state=checked]:bg-secure-500" />
+                <div className="flex items-center">
+                  {isEncrypting ? <Lock className="h-4 w-4 mr-2 text-secure-500" /> : <LockOpen className="h-4 w-4 mr-2 text-gray-500" />}
+                  <span className="text-lg font-heading font-bold text-gray-900">
+                    {isEncrypting ? "Encrypt" : "Decrypt"}
+                  </span>
+                  <Badge variant="outline" className="ml-2 text-xs flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200">
+                    <Shield className="h-3 w-3" />
+                    <span>AES-256</span>
+                  </Badge>
+                </div>
               </div>
             </div>
           </div>
