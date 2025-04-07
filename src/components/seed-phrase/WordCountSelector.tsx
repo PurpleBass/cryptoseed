@@ -37,36 +37,39 @@ export const WordCountSelector: React.FC<WordCountSelectorProps> = ({
   setWordCount
 }) => {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
       <Label htmlFor="wordCount" className="text-gray-700 whitespace-nowrap">Number of Words</Label>
       {isCustomCount ? (
-        <div className="flex items-center gap-2">
-          <Button 
-            type="button" 
-            variant="outline" 
-            size="icon" 
-            onClick={onDecrease}
-            disabled={wordCount <= 3}
-          >
-            <MinusCircle className="h-4 w-4" />
-          </Button>
-          <span className="w-8 text-center font-medium">{wordCount}</span>
-          <Button 
-            type="button" 
-            variant="outline" 
-            size="icon" 
-            onClick={onIncrease}
-            disabled={wordCount >= 24}
-          >
-            <PlusCircle className="h-4 w-4" />
-          </Button>
+        <div className="flex flex-col items-start gap-2 w-full sm:w-auto">
+          <div className="flex items-center gap-2">
+            <Button 
+              type="button" 
+              variant="outline" 
+              size="icon" 
+              onClick={onDecrease}
+              disabled={wordCount <= 3}
+            >
+              <MinusCircle className="h-4 w-4" />
+            </Button>
+            <span className="w-8 text-center font-medium">{wordCount}</span>
+            <Button 
+              type="button" 
+              variant="outline" 
+              size="icon" 
+              onClick={onIncrease}
+              disabled={wordCount >= 24}
+            >
+              <PlusCircle className="h-4 w-4" />
+            </Button>
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="ml-2">
+              <Button variant="outline" size="sm" className="w-full">
+                <span className="mr-1">Options</span>
                 <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="start">
               <DropdownMenuItem onClick={() => {
                 setIsCustomCount(false); 
                 setWordCount(12);
