@@ -62,7 +62,17 @@ async function deriveKey(password: string, salt: Uint8Array): Promise<Uint8Array
 // Encrypt a message using ChaCha20-Poly1305
 export async function encryptMessage(message: string, password: string): Promise<string> {
   try {
+    // Ensure sodium is ready before proceeding
     await sodium.ready;
+    
+    // Check for null or empty inputs to prevent the length error
+    if (!message || message.length === 0) {
+      throw new Error("Message cannot be empty");
+    }
+    
+    if (!password || password.length === 0) {
+      throw new Error("Password cannot be empty");
+    }
     
     // Generate a random salt for key derivation
     const salt = sodium.randombytes_buf(sodium.crypto_pwhash_SALTBYTES);
@@ -96,11 +106,26 @@ export async function encryptMessage(message: string, password: string): Promise
 // Decrypt a message using ChaCha20-Poly1305
 export async function decryptMessage(encryptedMessage: string, password: string): Promise<string> {
   try {
+    // Ensure sodium is ready before proceeding
     await sodium.ready;
+    
+    // Check for null or empty inputs
+    if (!encryptedMessage || encryptedMessage.length === 0) {
+      throw new Error("Encrypted message cannot be empty");
+    }
+    
+    if (!password || password.length === 0) {
+      throw new Error("Password cannot be empty");
+    }
     
     // Convert the Base64 encrypted message back to ArrayBuffer
     const encryptedBuffer = base64ToArrayBuffer(encryptedMessage);
     const encryptedArray = new Uint8Array(encryptedBuffer);
+    
+    // Ensure the encrypted data is long enough to contain all required components
+    if (encryptedArray.length < sodium.crypto_pwhash_SALTBYTES + sodium.crypto_secretbox_NONCEBYTES) {
+      throw new Error("Invalid encrypted data format");
+    }
     
     // Extract salt, nonce, and encrypted data
     const salt = encryptedArray.slice(0, sodium.crypto_pwhash_SALTBYTES);
@@ -129,7 +154,17 @@ export async function decryptMessage(encryptedMessage: string, password: string)
 // Encrypt a file
 export async function encryptFile(file: File, password: string): Promise<{ encryptedData: Blob, fileName: string }> {
   try {
+    // Ensure sodium is ready before proceeding
     await sodium.ready;
+    
+    // Check for null inputs
+    if (!file) {
+      throw new Error("File cannot be null or undefined");
+    }
+    
+    if (!password || password.length === 0) {
+      throw new Error("Password cannot be empty");
+    }
     
     // Generate a random salt for key derivation
     const salt = sodium.randombytes_buf(sodium.crypto_pwhash_SALTBYTES);
@@ -169,11 +204,26 @@ export async function encryptFile(file: File, password: string): Promise<{ encry
 // Decrypt a file
 export async function decryptFile(encryptedFile: File, password: string): Promise<{ decryptedData: Blob, fileName: string }> {
   try {
+    // Ensure sodium is ready before proceeding
     await sodium.ready;
+    
+    // Check for null inputs
+    if (!encryptedFile) {
+      throw new Error("Encrypted file cannot be null or undefined");
+    }
+    
+    if (!password || password.length === 0) {
+      throw new Error("Password cannot be empty");
+    }
     
     // Read the encrypted file
     const encryptedBuffer = await encryptedFile.arrayBuffer();
     const encryptedArray = new Uint8Array(encryptedBuffer);
+    
+    // Ensure the encrypted data is long enough to contain all required components
+    if (encryptedArray.length < sodium.crypto_pwhash_SALTBYTES + sodium.crypto_secretbox_NONCEBYTES) {
+      throw new Error("Invalid encrypted file format");
+    }
     
     // Extract salt, nonce, and encrypted data
     const salt = encryptedArray.slice(0, sodium.crypto_pwhash_SALTBYTES);
