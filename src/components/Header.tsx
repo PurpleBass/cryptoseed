@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
             </h1>
           </div>
           <p className="text-center text-sm md:text-base text-gray-600 max-w-2xl mx-auto px-2">
-            A zero-knowledge, open-source ChaCha20-Poly1305 encryption tool that works offline. 
+            A zero-knowledge, open-source AES-256 encryption tool that works offline.
             No data leaves your device, no backdoors, completely verifiable.
           </p>
           

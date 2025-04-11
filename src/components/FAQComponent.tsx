@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -71,8 +70,8 @@ const FAQComponent = () => {
                   <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">How does this app work?</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
-                      Our app uses a very strong encryption method called <strong>ChaCha20-Poly1305</strong> (a modern, quantum-resistant 
-                      technology used by governments and security-focused organizations) to protect your data.
+                      Our app uses a very strong encryption method called <strong>AES-256</strong> (the same technology used by
+                      governments and banks) to protect your data.
                     </p>
                     <p className="mt-1 sm:mt-2">
                       Here's how it works in simple terms:
@@ -95,53 +94,16 @@ const FAQComponent = () => {
                   <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">How secure is this encryption?</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
-                      <strong>ChaCha20-Poly1305 encryption is extremely secure</strong>. If implemented correctly (as it is in this app):
+                      <strong>AES-256 encryption is extremely secure</strong>. If implemented correctly (as it is in this app):
                     </p>
                     <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
                       <li>It would take <strong>billions of years</strong> for all the world's computers to crack it</li>
                       <li>Even <strong>governments and intelligence agencies</strong> use it for their top-secret information</li>
                       <li>There are <strong>no known practical attacks</strong> against it</li>
-                      <li>It's <strong>resistant to quantum computing attacks</strong>, providing future-proof security</li>
                     </ul>
                     <p className="mt-1 sm:mt-2">
                       The most vulnerable part is your <strong>password</strong>. If someone can guess your password, they 
                       can decrypt your data. That's why using a <strong>strong, unique password</strong> is essential.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="chacha-vs-aes">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">Why ChaCha20-Poly1305 instead of AES-256?</AccordionTrigger>
-                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
-                    <p>
-                      We chose <strong>ChaCha20-Poly1305</strong> over AES-256 for several important reasons:
-                    </p>
-                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
-                      <li>
-                        <strong>Quantum Resistance:</strong> ChaCha20-Poly1305 is more resistant to attacks from quantum 
-                        computers than AES, giving your data better future-proof protection
-                      </li>
-                      <li>
-                        <strong>Performance:</strong> It's significantly faster on devices without specialized hardware 
-                        acceleration, providing better performance on most mobile devices and older computers
-                      </li>
-                      <li>
-                        <strong>Side-Channel Protection:</strong> ChaCha20 is more resistant to timing attacks and 
-                        other side-channel vulnerabilities than AES
-                      </li>
-                      <li>
-                        <strong>Security Margin:</strong> ChaCha20 has a larger security margin than AES, giving it 
-                        extra protection against future cryptographic breakthroughs
-                      </li>
-                      <li>
-                        <strong>Simplicity:</strong> The algorithm is simpler to implement correctly, reducing the risk 
-                        of security-compromising bugs
-                      </li>
-                    </ul>
-                    <p className="mt-1 sm:mt-2">
-                      While both algorithms are considered secure by experts, ChaCha20-Poly1305 offers practical advantages
-                      that make it the better choice for our application. It's the same encryption used by modern secure
-                      systems like WireGuard VPN, Signal, and parts of TLS 1.3.
                     </p>
                   </AccordionContent>
                 </AccordionItem>
@@ -243,9 +205,9 @@ const FAQComponent = () => {
                         </ul>
                       </li>
                       <li>
-                        <strong>Industry-Standard Encryption</strong>: Using ChaCha20-Poly1305, a modern, quantum-resistant technology trusted by security-focused organizations
+                        <strong>Industry-Standard Encryption</strong>: Using AES-256, the same technology used by governments and financial institutions
                         <ul className="list-disc pl-4 sm:pl-6 mt-1">
-                          <li>Considered unbreakable with current and future technology</li>
+                          <li>Considered unbreakable with current technology</li>
                           <li>Recommended by cybersecurity experts</li>
                         </ul>
                       </li>
@@ -285,12 +247,11 @@ const FAQComponent = () => {
                     </p>
                     <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
                       <li>
-                        <strong>Encryption Algorithm:</strong> ChaCha20-Poly1305
+                        <strong>Encryption Algorithm:</strong> AES-256-GCM (Galois/Counter Mode)
                         <ul className="list-disc pl-4 sm:pl-6 mt-1">
-                          <li><strong>256-bit key length</strong> (maximum security level)</li>
-                          <li>Poly1305 provides both <strong>confidentiality and authenticity</strong></li>
+                          <li><strong>256-bit key length</strong> (maximum security level for AES)</li>
+                          <li>GCM provides both <strong>confidentiality and authenticity</strong></li>
                           <li><strong>Detects tampering</strong> with the encrypted data</li>
-                          <li><strong>Quantum-resistant</strong> design for future-proof security</li>
                         </ul>
                       </li>
                       <li>
@@ -337,8 +298,7 @@ const FAQComponent = () => {
                       </li>
                       <li>
                         <strong>Side-Channel Attacks:</strong> Web browsers can be vulnerable to certain side-channel attacks. 
-                        Our use of ChaCha20-Poly1305 provides better protection against timing attacks than AES.
-                        To further mitigate, use a <strong>modern, security-focused browser</strong> and keep it updated.
+                        To mitigate, use a <strong>modern, security-focused browser</strong> and keep it updated.
                       </li>
                       <li>
                         <strong>Password Strength:</strong> A weak password is the most likely point of failure. 
@@ -360,11 +320,11 @@ const FAQComponent = () => {
                     </p>
                     <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
                       <li>
-                        <strong>Confidentiality:</strong> ChaCha20-Poly1305 ensures that without the correct key, 
-                        recovering the plaintext is <strong>computationally infeasible</strong> with current and future technology.
+                        <strong>Confidentiality:</strong> AES-256 ensures that without the correct key, 
+                        recovering the plaintext is <strong>computationally infeasible</strong> with current technology.
                       </li>
                       <li>
-                        <strong>Authentication:</strong> Poly1305 provides built-in authentication, ensuring 
+                        <strong>Authentication:</strong> GCM mode provides built-in authentication, ensuring 
                         that any <strong>tampering with the ciphertext will be detected</strong> during decryption.
                       </li>
                       <li>
@@ -378,10 +338,6 @@ const FAQComponent = () => {
                       <li>
                         <strong>No Key Escrow:</strong> There is <strong>no mechanism to recover keys</strong> or decrypt 
                         data without the original password, ensuring that only the password holder can access the data.
-                      </li>
-                      <li>
-                        <strong>Quantum Resistance:</strong> ChaCha20-Poly1305 is <strong>resistant to attacks from quantum computers</strong>,
-                        providing better future-proofing than traditional algorithms like AES.
                       </li>
                     </ul>
                   </AccordionContent>
@@ -412,8 +368,8 @@ const FAQComponent = () => {
                         Lost passwords mean permanently lost data.
                       </li>
                       <li>
-                        <strong>Quantum Computing:</strong> ChaCha20-Poly1305 is <strong>resistant to quantum attacks</strong>, 
-                        giving it an advantage over AES for long-term security.
+                        <strong>Quantum Computing:</strong> AES-256 is believed to be <strong>resistant to quantum attacks</strong>, 
+                        but as quantum computing advances, this assessment may change over time.
                       </li>
                     </ul>
                   </AccordionContent>
@@ -472,10 +428,7 @@ const FAQComponent = () => {
               
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="offline-usage">
-                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
-                    <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
-                    <span>Offline Usage</span>
-                  </AccordionTrigger>
+                  
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       <strong>Always use this application offline</strong> when dealing with sensitive information:

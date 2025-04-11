@@ -41,12 +41,12 @@ const CodeVerification = () => {
           <CollapsibleContent>
             <div className="p-4 border-t">
               <div className="text-xs sm:text-sm text-muted-foreground mb-3 text-left">
-                This is the exact implementation of our ChaCha20-Poly1305 encryption using the Web Crypto API.
+                This is the exact implementation of our AES-256 encryption using the Web Crypto API.
               </div>
               <div className="p-4 bg-muted rounded-md overflow-auto max-h-[600px]">
                 <pre className="text-xs md:text-sm whitespace-pre text-left ml-0 text-gray-700">
 {`/**
- * ChaCha20-Poly1305 encryption functions for the Secure Nomad Encryptor
+ * AES-256 encryption functions for the Secure Nomad Encryptor
  * 
  * This module uses the Web Crypto API (SubtleCrypto) to perform
  * secure client-side encryption and decryption. No data is sent
@@ -76,13 +76,13 @@ async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey>
       hash: "SHA-256"
     },
     baseKey,
-    { name: "ChaCha20-Poly1305", length: 256 },
+    { name: "AES-GCM", length: 256 },
     false,
     ["encrypt", "decrypt"]
   );
 }
 
-// Encrypt a message using ChaCha20-Poly1305
+// Encrypt a message using AES-GCM
 export async function encryptMessage(message: string, password: string): Promise<string> {
   try {
     // Generate a random salt
@@ -98,7 +98,7 @@ export async function encryptMessage(message: string, password: string): Promise
     const messageBuffer = str2ab(message);
     const encryptedBuffer = await window.crypto.subtle.encrypt(
       {
-        name: "ChaCha20-Poly1305",
+        name: "AES-GCM",
         iv: iv
       },
       key,
@@ -119,7 +119,7 @@ export async function encryptMessage(message: string, password: string): Promise
   }
 }
 
-// Decrypt a message using ChaCha20-Poly1305
+// Decrypt a message using AES-GCM
 export async function decryptMessage(encryptedMessage: string, password: string): Promise<string> {
   try {
     // Convert the Base64 encrypted message back to ArrayBuffer
@@ -136,7 +136,7 @@ export async function decryptMessage(encryptedMessage: string, password: string)
     // Decrypt the message
     const decryptedBuffer = await window.crypto.subtle.decrypt(
       {
-        name: "ChaCha20-Poly1305",
+        name: "AES-GCM",
         iv: new Uint8Array(iv)
       },
       key,
@@ -180,7 +180,7 @@ export async function decryptMessage(encryptedMessage: string, password: string)
                         implementation, which provides hardware-accelerated encryption operations.
                       </li>
                       <li>
-                        <strong>ChaCha20-Poly1305:</strong> We use ChaCha20-Poly1305 with a 256-bit 
+                        <strong>AES-256-GCM:</strong> We use AES in Galois/Counter Mode with a 256-bit 
                         key for encryption, which is currently considered unbreakable with proper 
                         implementation.
                       </li>

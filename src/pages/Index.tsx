@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Key, Lock, FileText, Book, FileCheck } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
@@ -15,13 +14,10 @@ const Index = () => {
   const isMobile = useIsMobile();
   const location = useLocation();
 
-  // Handle URL params for direct navigation to sections
   useEffect(() => {
-    if (location && location.search) {
-      const searchParams = new URLSearchParams(location.search);
-      if (searchParams.has('faq')) {
-        setCurrentView("faq");
-      }
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.has('faq')) {
+      setCurrentView("faq");
     }
   }, [location]);
 
@@ -39,7 +35,7 @@ const Index = () => {
             <div className="max-w-3xl mx-auto px-2 md:px-0">
               <p className="text-sm md:text-base text-gray-700 mb-4 md:mb-6">
                 Protect your critical seed phrases with advanced zero-knowledge encryption. 
-                Safeguard the keys to your crypto wallets with quantum-resistant security.
+                Safeguard the keys to your crypto wallets with military-grade security.
               </p>
               
               <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-6 text-left">
@@ -49,7 +45,7 @@ const Index = () => {
                     <h3 className="font-medium text-sm md:text-base text-gray-900">Seed Phrase Protection</h3>
                   </div>
                   <p className="text-xs md:text-sm text-gray-600 min-h-[3rem]">
-                    Securely encrypt and store your wallet recovery phrases using ChaCha20-Poly1305 encryption. 
+                    Securely encrypt and store your wallet recovery phrases using AES-256 encryption. 
                     Prevent unauthorized access to your crypto assets.
                   </p>
                 </div>
@@ -60,7 +56,7 @@ const Index = () => {
                     <h3 className="font-medium text-sm md:text-base text-gray-900">Text Encryption</h3>
                   </div>
                   <p className="text-xs md:text-sm text-gray-600 min-h-[3rem]">
-                    Encrypt sensitive text messages, passwords, or confidential notes with robust ChaCha20-Poly1305 encryption.
+                    Encrypt sensitive text messages, passwords, or confidential notes with robust encryption.
                   </p>
                 </div>
                 
@@ -70,7 +66,7 @@ const Index = () => {
                     <h3 className="font-medium text-sm md:text-base text-gray-900">File Encryption</h3>
                   </div>
                   <p className="text-xs md:text-sm text-gray-600 min-h-[3rem]">
-                    Encrypt any file with a password. Secure your documents, images, and other sensitive files using ChaCha20-Poly1305.
+                    Encrypt any file with a password. Secure your documents, images, and other sensitive files.
                   </p>
                 </div>
               </div>
