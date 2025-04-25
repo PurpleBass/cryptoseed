@@ -10,17 +10,20 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     headers: {
-      // Content Security Policy with CSP reporting
+      // Content Security Policy with nonces and strict-dynamic
       'Content-Security-Policy': `
         default-src 'self';
-        script-src 'self' https://cdn.gpteng.co;
-        style-src 'self' 'unsafe-inline';
-        img-src 'self' data: blob: https:;
+        script-src 'self' 'strict-dynamic' 'nonce-${generateNonce()}' https://cdn.gpteng.co;
+        style-src 'self' 'nonce-${generateNonce()}';
+        img-src 'self' data: https:;
         connect-src 'self' ws://localhost:* wss://localhost:*;
         frame-ancestors 'self';
         form-action 'self';
         base-uri 'self';
-        report-uri /csp-report;
+        object-src 'none';
+        require-trusted-types-for 'script';
+        report-uri /api/csp-report;
+        report-to csp-endpoint;
       `.replace(/\s+/g, ' ').trim(),
       
       // HSTS with gradual rollout (1 day initially)
@@ -39,10 +42,13 @@ export default defineConfig(({ mode }) => ({
       'Access-Control-Allow-Origin': 'https://cdn.gpteng.co',
       'Access-Control-Allow-Methods': 'GET',
       
+      // Report-To header for CSP reporting
+      'Report-To': '{"group":"csp-endpoint","max_age":10886400,"endpoints":[{"url":"/api/csp-report"}]}',
+      
       // Additional security headers
       'X-Frame-Options': 'SAMEORIGIN',
       'X-XSS-Protection': '1; mode=block',
-      'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+      'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
     }
   },
   plugins: [
@@ -56,3 +62,4 @@ export default defineConfig(({ mode }) => ({
     },
   },
 }));
+
