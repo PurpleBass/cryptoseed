@@ -34,8 +34,20 @@ export function handleCSPViolation(report: CSPViolationReport) {
 
 // Generate a cryptographically secure nonce
 export function generateNonce(): string {
+  // Use Node crypto in Node.js environment (for Vite config)
+  if (typeof window === 'undefined') {
+    try {
+      const crypto = require('crypto');
+      return crypto.randomBytes(16).toString('hex');
+    } catch (err) {
+      // Fallback for environments where crypto isn't available
+      return Math.random().toString(36).substring(2, 15) + 
+             Math.random().toString(36).substring(2, 15);
+    }
+  }
+  
+  // Use Web Crypto API in browser environment
   const array = new Uint8Array(16);
   crypto.getRandomValues(array);
   return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
 }
-
