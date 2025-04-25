@@ -1,4 +1,6 @@
 
+import type { CSPViolationReport } from './cspReport';
+
 interface CSPViolationReport {
   'csp-report': {
     'document-uri': string;
@@ -35,7 +37,7 @@ export function handleCSPViolation(report: CSPViolationReport) {
 // Generate a cryptographically secure nonce
 export function generateNonce(): string {
   // Use Node crypto in Node.js environment (for Vite config)
-  if (typeof globalThis !== 'undefined' && typeof globalThis.window === 'undefined') {
+  if (typeof globalThis !== 'undefined' && typeof globalThis.window === 'undefined' && 'crypto' in globalThis) {
     try {
       const crypto = require('crypto');
       return crypto.randomBytes(16).toString('hex');
