@@ -15,21 +15,44 @@ import { TextEncryption } from "./encryption/TextEncryption";
 import { FileEncryption } from "./encryption/FileEncryption";
 
 const EncryptionComponent = () => {
+  // State management for the entire encryption component
+  // Tracks the current mode (seed phrase, text, or file encryption)
   const [mode, setMode] = useState<"seedphrase" | "text" | "file">("seedphrase");
+  
+  // State for text input during text encryption/decryption
   const [textInput, setTextInput] = useState("");
+  
+  // Password state for securing the encryption/decryption process
   const [password, setPassword] = useState("");
+  
+  // Toggle to show/hide password input
   const [showPassword, setShowPassword] = useState(false);
+  
+  // Stores the output of encryption/decryption process
   const [output, setOutput] = useState("");
+  
+  // Determines whether the component is in encryption (true) or decryption (false) mode
   const [isEncrypting, setIsEncrypting] = useState(true);
+  
+  // Indicates whether an encryption/decryption process is currently running
   const [isProcessing, setIsProcessing] = useState(false);
+  
+  // Stores the selected file for file encryption/decryption
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  
+  // State for seed phrase input
   const [seedPhrase, setSeedPhrase] = useState("");
+  
+  // Reference to the file input element for file selection
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const {
-    toast
-  } = useToast();
+  
+  // Toast notification hook for displaying user feedback
+  const { toast } = useToast();
+  
+  // Navigation hook for routing
   const navigate = useNavigate();
 
+  // Effect to reset output and file selection when switching between encryption/decryption modes
   React.useEffect(() => {
     setOutput("");
     setSelectedFile(null);
@@ -38,18 +61,22 @@ const EncryptionComponent = () => {
     }
   }, [isEncrypting]);
 
+  // Handler for file selection from file input
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
     }
   };
 
+  // Utility function to format seed phrases (currently just trims whitespace)
   const formatSeedPhrase = (phrase: string): string => {
     // Simple function to format seed phrases nicely
     return phrase.trim();
   };
 
+  // Process seed phrase encryption or decryption
   const processSeedPhrase = async () => {
+    // Validate input before processing
     if (!seedPhrase.trim() || !password.trim()) {
       toast({
         title: "Missing information",
@@ -58,9 +85,12 @@ const EncryptionComponent = () => {
       });
       return;
     }
+    
+    // Set processing state and handle encryption/decryption
     setIsProcessing(true);
     try {
       if (isEncrypting) {
+        // Encrypt seed phrase
         const encrypted = await encryptMessage(seedPhrase, password);
         setOutput(encrypted);
         toast({
@@ -68,6 +98,7 @@ const EncryptionComponent = () => {
           description: "Your seed phrase has been encrypted"
         });
       } else {
+        // Decrypt seed phrase
         const decrypted = await decryptMessage(seedPhrase, password);
         setOutput(formatSeedPhrase(decrypted));
         toast({
@@ -76,17 +107,21 @@ const EncryptionComponent = () => {
         });
       }
     } catch (error) {
+      // Handle any errors during encryption/decryption
       toast({
         title: "Process failed",
         description: error instanceof Error ? error.message : "An unknown error occurred",
         variant: "destructive"
       });
     } finally {
+      // Reset processing state
       setIsProcessing(false);
     }
   };
 
+  // Process text encryption or decryption
   const processText = async () => {
+    // Validate input before processing
     if (!textInput.trim() || !password.trim()) {
       toast({
         title: "Missing information",
@@ -95,9 +130,12 @@ const EncryptionComponent = () => {
       });
       return;
     }
+    
+    // Set processing state and handle encryption/decryption
     setIsProcessing(true);
     try {
       if (isEncrypting) {
+        // Encrypt text
         const encrypted = await encryptMessage(textInput, password);
         setOutput(encrypted);
         toast({
@@ -105,6 +143,7 @@ const EncryptionComponent = () => {
           description: "Your text has been encrypted"
         });
       } else {
+        // Decrypt text
         const decrypted = await decryptMessage(textInput, password);
         setOutput(formatSeedPhrase(decrypted));
         toast({
@@ -113,17 +152,21 @@ const EncryptionComponent = () => {
         });
       }
     } catch (error) {
+      // Handle any errors during encryption/decryption
       toast({
         title: "Process failed",
         description: error instanceof Error ? error.message : "An unknown error occurred",
         variant: "destructive"
       });
     } finally {
+      // Reset processing state
       setIsProcessing(false);
     }
   };
 
+  // Process file encryption or decryption
   const processFile = async () => {
+    // Validate input before processing
     if (!selectedFile || !password.trim()) {
       toast({
         title: "Missing information",
@@ -132,13 +175,14 @@ const EncryptionComponent = () => {
       });
       return;
     }
+    
+    // Set processing state and handle encryption/decryption
     setIsProcessing(true);
     try {
       if (isEncrypting) {
-        const {
-          encryptedData,
-          fileName
-        } = await encryptFile(selectedFile, password);
+        // Encrypt file
+        const { encryptedData, fileName } = await encryptFile(selectedFile, password);
+        // Create a download link for the encrypted file
         const url = URL.createObjectURL(encryptedData);
         const a = document.createElement('a');
         a.href = url;
@@ -152,10 +196,9 @@ const EncryptionComponent = () => {
           description: "File has been encrypted and downloaded"
         });
       } else {
-        const {
-          decryptedData,
-          fileName
-        } = await decryptFile(selectedFile, password);
+        // Decrypt file
+        const { decryptedData, fileName } = await decryptFile(selectedFile, password);
+        // Create a download link for the decrypted file
         const url = URL.createObjectURL(decryptedData);
         const a = document.createElement('a');
         a.href = url;
@@ -169,21 +212,26 @@ const EncryptionComponent = () => {
           description: "File has been decrypted and downloaded"
         });
       }
+      
+      // Reset file input
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
       setSelectedFile(null);
     } catch (error) {
+      // Handle any errors during encryption/decryption
       toast({
         title: "Process failed",
         description: error instanceof Error ? error.message : "An unknown error occurred",
         variant: "destructive"
       });
     } finally {
+      // Reset processing state
       setIsProcessing(false);
     }
   };
 
+  // Clear file selection
   const clearFileSelection = () => {
     setSelectedFile(null);
     if (fileInputRef.current) {
@@ -191,11 +239,15 @@ const EncryptionComponent = () => {
     }
   };
 
+  // Navigate to FAQ page
   const goToFAQ = () => {
     navigate('/?faq=true');
   };
 
+  // Check if Web Crypto API is supported by the browser
   const cryptoSupported = isWebCryptoSupported();
+  
+  // If Web Crypto API is not supported, show an error message
   if (!cryptoSupported) {
     return (
       <div className="satoshi-container my-8">
@@ -210,18 +262,28 @@ const EncryptionComponent = () => {
     );
   }
 
+  // Main render method for the Encryption Component
   return (
     <div className="satoshi-container px-4 md:px-0 py-10 bg-white">
+      {/* Header section with encryption/decryption mode toggle */}
       <div className="mb-8 flex flex-col sm:flex-row items-center justify-center bg-gray-50 p-3 rounded-lg space-x-0 sm:space-x-4 space-y-2 sm:space-y-0">
+        {/* Switch between encryption and decryption modes */}
         <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <div className="flex items-center space-x-2 w-full sm:w-auto">
-              <Switch id="encrypt-mode" checked={isEncrypting} onCheckedChange={setIsEncrypting} className="data-[state=checked]:bg-secure-500" />
+              <Switch 
+                id="encrypt-mode" 
+                checked={isEncrypting} 
+                onCheckedChange={setIsEncrypting} 
+                className="data-[state=checked]:bg-secure-500" 
+              />
               <div className="flex items-center">
+                {/* Show lock icon based on current mode */}
                 {isEncrypting ? <Lock className="h-4 w-4 mr-2 text-secure-500" /> : <LockOpen className="h-4 w-4 mr-2 text-gray-500" />}
                 <span className="text-lg font-heading font-bold text-gray-900">
                   {isEncrypting ? "Encrypt" : "Decrypt"}
                 </span>
+                {/* Badge showing encryption method */}
                 <Badge variant="outline" className="ml-2 text-xs flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200">
                   <Shield className="h-3 w-3" />
                   <span>AES-256</span>
@@ -231,11 +293,13 @@ const EncryptionComponent = () => {
           </div>
         </div>
         
+        {/* Additional information and offline recommendation */}
         <div className="flex gap-2 items-center">
           <Badge variant="outline" className="text-xs flex items-center gap-1 bg-gray-200 text-gray-800 border-gray-300">
             <WifiOff className="h-3 w-3" />
             <span>Offline recommended</span>
           </Badge>
+          {/* Popover with additional information */}
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full hover:bg-gray-300/50 p-0">
@@ -260,22 +324,39 @@ const EncryptionComponent = () => {
         </div>
       </div>
 
-      <Tabs defaultValue="seedphrase" value={mode} onValueChange={v => setMode(v as "seedphrase" | "text" | "file")} className="mt-2">
+      {/* Tabs for different encryption modes */}
+      <Tabs 
+        defaultValue="seedphrase" 
+        value={mode} 
+        onValueChange={v => setMode(v as "seedphrase" | "text" | "file")} 
+        className="mt-2"
+      >
+        {/* Tab selection list */}
         <TabsList className="mb-4 bg-secure-50 p-1 border border-secure-100 shadow-sm rounded-full">
-          <TabsTrigger value="seedphrase" className="flex items-center gap-1.5 rounded-full data-[state=active]:bg-secure-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">
+          <TabsTrigger 
+            value="seedphrase" 
+            className="flex items-center gap-1.5 rounded-full data-[state=active]:bg-secure-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
+          >
             <Sprout className="h-3.5 w-3.5" />
             <span>Seed Phrase</span>
           </TabsTrigger>
-          <TabsTrigger value="text" className="flex items-center gap-1.5 rounded-full data-[state=active]:bg-secure-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">
+          <TabsTrigger 
+            value="text" 
+            className="flex items-center gap-1.5 rounded-full data-[state=active]:bg-secure-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
+          >
             <FileText className="h-3.5 w-3.5" />
             <span>Text</span>
           </TabsTrigger>
-          <TabsTrigger value="file" className="flex items-center gap-1.5 rounded-full data-[state=active]:bg-secure-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm">
+          <TabsTrigger 
+            value="file" 
+            className="flex items-center gap-1.5 rounded-full data-[state=active]:bg-secure-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
+          >
             <File className="h-3.5 w-3.5" />
             <span>File</span>
           </TabsTrigger>
         </TabsList>
 
+        {/* Tab content for Seed Phrase encryption/decryption */}
         <TabsContent value="seedphrase">
           <SeedPhraseEncryption
             isEncrypting={isEncrypting}
@@ -300,6 +381,7 @@ const EncryptionComponent = () => {
           />
         </TabsContent>
 
+        {/* Tab content for Text encryption/decryption */}
         <TabsContent value="text">
           <TextEncryption
             isEncrypting={isEncrypting}
@@ -324,6 +406,7 @@ const EncryptionComponent = () => {
           />
         </TabsContent>
 
+        {/* Tab content for File encryption/decryption */}
         <TabsContent value="file">
           <FileEncryption
             isEncrypting={isEncrypting}
