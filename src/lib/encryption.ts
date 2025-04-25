@@ -1,4 +1,3 @@
-
 /**
  * AES-256 encryption functions for CryptoSeed
  * 
@@ -46,47 +45,49 @@ function base64ToArrayBuffer(base64: string): ArrayBuffer {
 
 // Generate a cryptographically secure key from a password
 async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey> {
-  // Convert password to ArrayBuffer
-  const passwordBuffer = str2ab(password);
-  
-  // Import the password as a key
-  const baseKey = await window.crypto.subtle.importKey(
-    "raw",
-    passwordBuffer,
-    { name: "PBKDF2" },
-    false,
-    ["deriveKey"]
-  );
-  
-  // Derive a key using PBKDF2
-  return window.crypto.subtle.deriveKey(
-    {
-      name: "PBKDF2",
-      salt: salt,
-      iterations: 100000,
-      hash: "SHA-256"
-    },
-    baseKey,
-    { name: "AES-GCM", length: 256 },
-    false,
-    ["encrypt", "decrypt"]
-  );
+  try {
+    const passwordBuffer = str2ab(password);
+    
+    const baseKey = await window.crypto.subtle.importKey(
+      "raw",
+      passwordBuffer,
+      { name: "PBKDF2" },
+      false,
+      ["deriveKey"]
+    );
+    
+    const derivedKey = await window.crypto.subtle.deriveKey(
+      {
+        name: "PBKDF2",
+        salt: salt,
+        iterations: 100000,
+        hash: "SHA-256"
+      },
+      baseKey,
+      { name: "AES-GCM", length: 256 },
+      false,
+      ["encrypt", "decrypt"]
+    );
+
+    wipeArrayBuffer(passwordBuffer);
+    return derivedKey;
+  } catch (error) {
+    throw error;
+  }
 }
 
 // Encrypt a message using AES-GCM
 export async function encryptMessage(message: string, password: string): Promise<string> {
+  let key: CryptoKey | null = null;
+  let messageBuffer: ArrayBuffer | null = null;
+  
   try {
-    // Generate a random salt
     const salt = window.crypto.getRandomValues(new Uint8Array(16));
-    
-    // Generate a random IV (Initialization Vector)
     const iv = window.crypto.getRandomValues(new Uint8Array(12));
     
-    // Derive encryption key from password
-    const key = await deriveKey(password, salt);
+    key = await deriveKey(password, salt);
+    messageBuffer = str2ab(message);
     
-    // Encrypt the message
-    const messageBuffer = str2ab(message);
     const encryptedBuffer = await window.crypto.subtle.encrypt(
       {
         name: "AES-GCM",
@@ -96,36 +97,37 @@ export async function encryptMessage(message: string, password: string): Promise
       messageBuffer
     );
     
-    // Combine salt + iv + encrypted data into a single buffer for ease of storage
     const resultBuffer = new Uint8Array(salt.length + iv.length + encryptedBuffer.byteLength);
     resultBuffer.set(salt, 0);
     resultBuffer.set(iv, salt.length);
     resultBuffer.set(new Uint8Array(encryptedBuffer), salt.length + iv.length);
     
-    // Convert to Base64 for easy storage/transmission
-    return arrayBufferToBase64(resultBuffer);
-  } catch (error) {
-    console.error("Encryption error:", error);
-    throw new Error("Failed to encrypt message");
+    const result = arrayBufferToBase64(resultBuffer);
+    
+    wipeTypedArray(salt);
+    wipeTypedArray(iv);
+    return result;
+  } finally {
+    if (messageBuffer) wipeArrayBuffer(messageBuffer);
+    wipeEncryptionData(key, null, password);
   }
 }
 
 // Decrypt a message using AES-GCM
 export async function decryptMessage(encryptedMessage: string, password: string): Promise<string> {
+  let key: CryptoKey | null = null;
+  let decryptedBuffer: ArrayBuffer | null = null;
+  
   try {
-    // Convert the Base64 encrypted message back to ArrayBuffer
     const encryptedBuffer = base64ToArrayBuffer(encryptedMessage);
     
-    // Extract salt, iv, and encrypted data
     const salt = encryptedBuffer.slice(0, 16);
     const iv = encryptedBuffer.slice(16, 28);
     const data = encryptedBuffer.slice(28);
     
-    // Derive the key from the password and salt
-    const key = await deriveKey(password, new Uint8Array(salt));
+    key = await deriveKey(password, new Uint8Array(salt));
     
-    // Decrypt the message
-    const decryptedBuffer = await window.crypto.subtle.decrypt(
+    decryptedBuffer = await window.crypto.subtle.decrypt(
       {
         name: "AES-GCM",
         iv: new Uint8Array(iv)
@@ -134,30 +136,26 @@ export async function decryptMessage(encryptedMessage: string, password: string)
       data
     );
     
-    // Convert back to string and return
-    return ab2str(decryptedBuffer);
-  } catch (error) {
-    console.error("Decryption error:", error);
-    throw new Error("Failed to decrypt message. The password may be incorrect or the data corrupted.");
+    const result = ab2str(decryptedBuffer);
+    return result;
+  } finally {
+    if (decryptedBuffer) wipeArrayBuffer(decryptedBuffer);
+    wipeEncryptionData(key, null, password);
   }
 }
 
 // Encrypt a file
 export async function encryptFile(file: File, password: string): Promise<{ encryptedData: Blob, fileName: string }> {
+  let key: CryptoKey | null = null;
+  let fileBuffer: ArrayBuffer | null = null;
+  
   try {
-    // Generate a random salt
     const salt = window.crypto.getRandomValues(new Uint8Array(16));
-    
-    // Generate a random IV
     const iv = window.crypto.getRandomValues(new Uint8Array(12));
     
-    // Derive encryption key from password
-    const key = await deriveKey(password, salt);
+    key = await deriveKey(password, salt);
+    fileBuffer = await file.arrayBuffer();
     
-    // Read file as ArrayBuffer
-    const fileBuffer = await file.arrayBuffer();
-    
-    // Encrypt the file data
     const encryptedBuffer = await window.crypto.subtle.encrypt(
       {
         name: "AES-GCM",
@@ -167,42 +165,41 @@ export async function encryptFile(file: File, password: string): Promise<{ encry
       fileBuffer
     );
     
-    // Combine salt + iv + encrypted data
     const resultBuffer = new Uint8Array(salt.length + iv.length + encryptedBuffer.byteLength);
     resultBuffer.set(salt, 0);
     resultBuffer.set(iv, salt.length);
     resultBuffer.set(new Uint8Array(encryptedBuffer), salt.length + iv.length);
     
-    // Create a Blob from the encrypted data
     const encryptedBlob = new Blob([resultBuffer], { type: 'application/octet-stream' });
     
-    // Return the encrypted blob and original filename (so it can be restored later)
+    wipeTypedArray(salt);
+    wipeTypedArray(iv);
+    
     return {
       encryptedData: encryptedBlob,
       fileName: `${file.name}.encrypted`
     };
-  } catch (error) {
-    console.error("File encryption error:", error);
-    throw new Error("Failed to encrypt file");
+  } finally {
+    if (fileBuffer) wipeArrayBuffer(fileBuffer);
+    wipeEncryptionData(key, null, password);
   }
 }
 
 // Decrypt a file
 export async function decryptFile(encryptedFile: File, password: string): Promise<{ decryptedData: Blob, fileName: string }> {
+  let key: CryptoKey | null = null;
+  let decryptedBuffer: ArrayBuffer | null = null;
+  
   try {
-    // Read the encrypted file
     const encryptedBuffer = await encryptedFile.arrayBuffer();
     
-    // Extract salt, iv, and encrypted data
     const salt = encryptedBuffer.slice(0, 16);
     const iv = encryptedBuffer.slice(16, 28);
     const data = encryptedBuffer.slice(28);
     
-    // Derive the key from the password and salt
-    const key = await deriveKey(password, new Uint8Array(salt));
+    key = await deriveKey(password, new Uint8Array(salt));
     
-    // Decrypt the file data
-    const decryptedBuffer = await window.crypto.subtle.decrypt(
+    decryptedBuffer = await window.crypto.subtle.decrypt(
       {
         name: "AES-GCM",
         iv: new Uint8Array(iv)
@@ -211,10 +208,8 @@ export async function decryptFile(encryptedFile: File, password: string): Promis
       data
     );
     
-    // Create a Blob from the decrypted data
     const decryptedBlob = new Blob([decryptedBuffer]);
     
-    // Remove .encrypted extension if present
     let fileName = encryptedFile.name;
     if (fileName.endsWith('.encrypted')) {
       fileName = fileName.substring(0, fileName.length - 10);
@@ -224,9 +219,9 @@ export async function decryptFile(encryptedFile: File, password: string): Promis
       decryptedData: decryptedBlob,
       fileName
     };
-  } catch (error) {
-    console.error("File decryption error:", error);
-    throw new Error("Failed to decrypt file. The password may be incorrect or the file corrupted.");
+  } finally {
+    if (decryptedBuffer) wipeArrayBuffer(decryptedBuffer);
+    wipeEncryptionData(key, null, password);
   }
 }
 
