@@ -10,20 +10,21 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     headers: {
-      // Content Security Policy
+      // Content Security Policy with CSP reporting
       'Content-Security-Policy': `
         default-src 'self';
-        script-src 'self' 'unsafe-inline' https://cdn.gpteng.co;
+        script-src 'self' https://cdn.gpteng.co;
         style-src 'self' 'unsafe-inline';
         img-src 'self' data: blob: https:;
-        connect-src 'self' ws: wss:;
+        connect-src 'self' ws://localhost:* wss://localhost:*;
         frame-ancestors 'self';
         form-action 'self';
         base-uri 'self';
+        report-uri /csp-report;
       `.replace(/\s+/g, ' ').trim(),
       
-      // HSTS
-      'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+      // HSTS with gradual rollout (1 day initially)
+      'Strict-Transport-Security': 'max-age=86400; includeSubDomains',
       
       // Referrer Policy
       'Referrer-Policy': 'strict-origin-when-cross-origin',
@@ -34,9 +35,14 @@ export default defineConfig(({ mode }) => ({
       // CORP
       'Cross-Origin-Resource-Policy': 'same-origin',
       
-      // CORS
-      'Access-Control-Allow-Origin': '*',
+      // More restrictive CORS
+      'Access-Control-Allow-Origin': 'https://cdn.gpteng.co',
       'Access-Control-Allow-Methods': 'GET',
+      
+      // Additional security headers
+      'X-Frame-Options': 'SAMEORIGIN',
+      'X-XSS-Protection': '1; mode=block',
+      'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
     }
   },
   plugins: [
