@@ -1,6 +1,6 @@
 
 /**
- * AES-256 encryption functions for the Secure Nomad Encryptor
+ * AES-256 encryption functions for CryptoSeed
  * 
  * This module uses the Web Crypto API (SubtleCrypto) to perform
  * secure client-side encryption and decryption. No data is sent
