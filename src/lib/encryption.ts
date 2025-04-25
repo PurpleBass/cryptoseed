@@ -1,3 +1,4 @@
+
 /**
  * AES-256 encryption functions for CryptoSeed
  * 
@@ -5,6 +6,8 @@
  * secure client-side encryption and decryption. No data is sent
  * to any server at any point.
  */
+
+import { wipeTypedArray, wipeString, wipeArrayBuffer, wipeEncryptionData } from "./secureWipe";
 
 // Convert string to ArrayBuffer for encryption
 function str2ab(str: string): ArrayBuffer {
