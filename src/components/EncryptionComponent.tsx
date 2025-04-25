@@ -1,9 +1,14 @@
+
 import React, { useState, useRef } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AlertCircle, File, FileText, Sprout } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/components/ui/use-toast";
 import { encryptMessage, decryptMessage, encryptFile, decryptFile, isWebCryptoSupported } from "@/lib/encryption";
+import { File, FileText, Sprout, AlertCircle, Lock, LockOpen, Shield, WifiOff, HelpCircle } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { SeedPhraseEncryption } from "./encryption/SeedPhraseEncryption";
 import { TextEncryption } from "./encryption/TextEncryption";
@@ -37,6 +42,11 @@ const EncryptionComponent = () => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
     }
+  };
+
+  const formatSeedPhrase = (phrase: string): string => {
+    // Simple function to format seed phrases nicely
+    return phrase.trim();
   };
 
   const processSeedPhrase = async () => {
@@ -172,6 +182,17 @@ const EncryptionComponent = () => {
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const clearFileSelection = () => {
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const goToFAQ = () => {
+    navigate('/?faq=true');
   };
 
   const cryptoSupported = isWebCryptoSupported();
