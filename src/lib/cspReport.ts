@@ -1,5 +1,6 @@
 
-interface CSPViolationReport {
+// Define the CSP violation report interface
+export interface CSPViolationReport {
   'csp-report': {
     'document-uri': string;
     'violated-directive': string;

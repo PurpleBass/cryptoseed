@@ -36,8 +36,8 @@ export default defineConfig(({ mode }) => ({
       // Report-To header for modern browsers
       'Report-To': '{"group":"default","max_age":31536000,"endpoints":[{"url":"/api/csp-report"}]}',
       
-      // HSTS with gradual rollout (1 day initially)
-      'Strict-Transport-Security': 'max-age=86400; includeSubDomains',
+      // HSTS with preload for Chrome HSTS preload list inclusion
+      'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
       
       // Referrer Policy
       'Referrer-Policy': 'strict-origin-when-cross-origin',
