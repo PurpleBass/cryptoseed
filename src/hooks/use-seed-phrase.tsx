@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 
 interface UseSeedPhraseProps {
@@ -48,7 +49,9 @@ export function useSeedPhrase({ initialWordCount = 12, onSeedPhraseChange }: Use
 
   // Increment word count (for custom mode)
   const increaseWordCount = () => {
-    setWordCount(wordCount + 1);
+    if (wordCount < 24) {
+      setWordCount(wordCount + 1);
+    }
   };
 
   // Decrement word count (for custom mode)

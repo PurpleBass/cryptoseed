@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -56,6 +57,7 @@ export const WordCountSelector: React.FC<WordCountSelectorProps> = ({
               variant="outline" 
               size="icon" 
               onClick={onIncrease}
+              disabled={wordCount >= 24}
             >
               <PlusCircle className="h-4 w-4" />
             </Button>
