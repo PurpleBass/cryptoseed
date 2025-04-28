@@ -20,11 +20,12 @@ export default defineConfig(({ mode }) => ({
         frame-ancestors 'self';
         form-action 'self';
         base-uri 'self';
-        report-uri /csp-report;
+        object-src 'none';
+        report-to /csp-report;
       `.replace(/\s+/g, ' ').trim(),
       
-      // HSTS with gradual rollout (1 day initially)
-      'Strict-Transport-Security': 'max-age=86400; includeSubDomains',
+      // HSTS with 2 year duration (63072000 seconds)
+      'Strict-Transport-Security': 'max-age=63072000; includeSubDomains',
       
       // Referrer Policy
       'Referrer-Policy': 'strict-origin-when-cross-origin',
