@@ -78,6 +78,18 @@ export default defineConfig(({ mode }) => ({
         start_url: '/',
         icons: [
           {
+            src: '/favicon.ico',
+            sizes: '48x48',
+            type: 'image/x-icon',
+            purpose: 'any'
+          },
+          {
+            src: '/apple-touch-icon.png',
+            sizes: '180x180',
+            type: 'image/png',
+            purpose: 'apple-touch-icon'
+          },
+          {
             src: '/pwa-192x192.png',
             sizes: '192x192',
             type: 'image/png',
