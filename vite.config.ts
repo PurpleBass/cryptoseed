@@ -1,4 +1,3 @@
-
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -87,7 +86,7 @@ export default defineConfig(({ mode }) => ({
             src: '/apple-touch-icon.png',
             sizes: '180x180',
             type: 'image/png',
-            purpose: 'apple-touch-icon'
+            purpose: 'any'
           },
           {
             src: '/pwa-192x192.png',
