@@ -1,3 +1,4 @@
+
 import React from "react";
 import { FileText, HelpCircle, Shield } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
