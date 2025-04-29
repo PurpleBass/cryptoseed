@@ -6,6 +6,7 @@ import { AlertCircle, HelpCircle, Shield, FileText } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+
 const FAQComponent = () => {
   const openDialog = (dialogType: string) => {
     setTimeout(() => {
@@ -224,6 +225,87 @@ const FAQComponent = () => {
                     </p>
                   </AccordionContent>
                 </AccordionItem>
+                
+                <AccordionItem value="pwa-features">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">What is a "Progressive Web App" and why should I install it?</AccordionTrigger>
+                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
+                    <p>
+                      Our app is a Progressive Web App (PWA), which is a special type of website that can:
+                    </p>
+                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
+                      <li>
+                        <strong>Work offline</strong> without an internet connection
+                      </li>
+                      <li>
+                        <strong>Install on your device</strong> like a regular app
+                      </li>
+                      <li>
+                        <strong>Load quickly</strong>, even on slow connections
+                      </li>
+                      <li>
+                        Provide <strong>enhanced security</strong> by isolating from other browser tabs
+                      </li>
+                    </ul>
+                    <p className="mt-1 sm:mt-2">
+                      <strong>Installing this app on your device offers several security benefits:</strong>
+                    </p>
+                    <ul className="list-disc pl-4 sm:pl-6 mt-1 space-y-1">
+                      <li>
+                        <strong>Guaranteed offline access:</strong> The app will work without an internet connection
+                      </li>
+                      <li>
+                        <strong>Enhanced privacy:</strong> The installed app operates in its own sandbox, separate from your browser
+                      </li>
+                      <li>
+                        <strong>Easier offline mode:</strong> You don't need to manually save the page for offline use
+                      </li>
+                      <li>
+                        <strong>Convenient access:</strong> Launch directly from your home screen or app drawer
+                      </li>
+                    </ul>
+                  </AccordionContent>
+                </AccordionItem>
+                
+                <AccordionItem value="how-to-install">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">How do I install this app on my device?</AccordionTrigger>
+                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
+                    <p>
+                      You can easily install this app on your device to use it offline. The installation process is slightly different depending on your device:
+                    </p>
+                    <div className="mt-1 sm:mt-2 space-y-3">
+                      <div>
+                        <strong className="text-gray-800">On Desktop (Chrome, Edge, or other Chromium browsers):</strong>
+                        <ol className="list-decimal pl-6 mt-1 space-y-1">
+                          <li>Look for the install icon (↓) in the address bar</li>
+                          <li>Click on "Install" or "Install Crypto Seed"</li>
+                          <li>Follow any additional prompts to complete installation</li>
+                        </ol>
+                      </div>
+                      
+                      <div>
+                        <strong className="text-gray-800">On Android:</strong>
+                        <ol className="list-decimal pl-6 mt-1 space-y-1">
+                          <li>Tap the menu button (⋮) in your browser</li>
+                          <li>Select "Add to Home screen" or "Install app"</li>
+                          <li>Confirm by tapping "Add" or "Install"</li>
+                        </ol>
+                      </div>
+                      
+                      <div>
+                        <strong className="text-gray-800">On iOS/iPadOS (Safari):</strong>
+                        <ol className="list-decimal pl-6 mt-1 space-y-1">
+                          <li>Tap the share button (box with arrow) at the bottom of the screen</li>
+                          <li>Scroll down and tap "Add to Home Screen"</li>
+                          <li>Tap "Add" in the top-right corner</li>
+                        </ol>
+                      </div>
+                    </div>
+                    <p className="mt-1 sm:mt-2">
+                      After installation, you can launch the app from your device's home screen or app drawer, 
+                      just like any other app. The app will function entirely offline after the first load.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
               </Accordion>
             </CardContent>
           </Card>
@@ -405,6 +487,53 @@ const FAQComponent = () => {
                     </ol>
                   </AccordionContent>
                 </AccordionItem>
+                
+                <AccordionItem value="pwa-implementation">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">PWA & Offline Functionality</AccordionTrigger>
+                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
+                    <p>
+                      Our Progressive Web App implementation includes:
+                    </p>
+                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
+                      <li>
+                        <strong>Service Worker Architecture:</strong>
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>Utilizes the <strong>Workbox library</strong> for service worker management</li>
+                          <li>Implements a <strong>cache-first strategy</strong> for application resources</li>
+                          <li>Provides <strong>complete offline functionality</strong> after initial load</li>
+                        </ul>
+                      </li>
+                      <li>
+                        <strong>Static Asset Caching:</strong>
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>All application assets are <strong>precached during installation</strong></li>
+                          <li>Uses <strong>content hashing</strong> to ensure cache validity</li>
+                          <li>Implements <strong>automatic cache invalidation</strong> when app is updated</li>
+                        </ul>
+                      </li>
+                      <li>
+                        <strong>Offline Detection:</strong>
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>Real-time monitoring of network connectivity</li>
+                          <li>Visual indicator when device is operating offline</li>
+                          <li>Graceful handling of network transitions</li>
+                        </ul>
+                      </li>
+                      <li>
+                        <strong>Security Considerations:</strong>
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>Service worker scope is <strong>limited to application origin</strong></li>
+                          <li>Implements <strong>strict Content Security Policy</strong> for PWA context</li>
+                          <li>Application maintains <strong>cryptographic integrity</strong> in offline mode</li>
+                        </ul>
+                      </li>
+                    </ul>
+                    <p className="mt-1 sm:mt-2">
+                      The PWA functionality works seamlessly with our zero-knowledge architecture, ensuring that all cryptographic operations remain 
+                      entirely client-side even when the application is running offline.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
               </Accordion>
             </CardContent>
           </Card>
@@ -428,12 +557,24 @@ const FAQComponent = () => {
               
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="offline-usage">
-                  
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
+                    <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
+                    <span>Offline Usage</span>
+                  </AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       <strong>Always use this application offline</strong> when dealing with sensitive information:
                     </p>
                     <ol className="list-decimal pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
+                      <li>
+                        <strong>Install as a Progressive Web App (recommended):</strong>
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>Look for the install icon in your browser's address bar</li>
+                          <li>Once installed, you can <strong>use the app completely offline</strong></li>
+                          <li>The app will show an offline indicator when disconnected</li>
+                          <li>This provides the highest level of isolation from online threats</li>
+                        </ul>
+                      </li>
                       <li>
                         <strong>Disconnect from the internet:</strong>
                         <ul className="list-disc pl-4 sm:pl-6 mt-1">
@@ -456,6 +597,52 @@ const FAQComponent = () => {
                         a <strong>dedicated device that never connects to the internet</strong>.
                       </li>
                     </ol>
+                  </AccordionContent>
+                </AccordionItem>
+                
+                <AccordionItem value="mobile-security">
+                  <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start flex items-center gap-2">
+                    <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-secure-600 flex-shrink-0" />
+                    <span>Mobile Device Security</span>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
+                    <p>
+                      When using this app on mobile devices, take these additional precautions:
+                    </p>
+                    <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
+                      <li>
+                        <strong>Install as a PWA:</strong> 
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>Installing as a PWA creates a <strong>separate, isolated instance</strong> of the app</li>
+                          <li>This provides <strong>protection from browser-based threats</strong> and tracking</li>
+                          <li>PWAs have more restricted access to device APIs than browser tabs</li>
+                        </ul>
+                      </li>
+                      <li>
+                        <strong>Use biometric protection:</strong>
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>Enable <strong>fingerprint or face recognition</strong> to lock your device</li>
+                          <li>Consider using a <strong>secure folder</strong> feature if your device supports it</li>
+                          <li>Some password managers allow you to <strong>lock specific apps</strong> with biometrics</li>
+                        </ul>
+                      </li>
+                      <li>
+                        <strong>Clear sensitive data:</strong>
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>Mobile browsers often <strong>cache more aggressively</strong> than desktop browsers</li>
+                          <li>Regularly clear your browser cache and history</li>
+                          <li>Use private/incognito browsing when possible</li>
+                        </ul>
+                      </li>
+                      <li>
+                        <strong>Beware of screenshots:</strong>
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>Be aware that <strong>automatic screenshots</strong> might be taken when switching apps</li>
+                          <li>Check your device's <strong>screenshot gallery</strong> after working with sensitive data</li>
+                          <li>Disable screenshot features during sensitive operations if possible</li>
+                        </ul>
+                      </li>
+                    </ul>
                   </AccordionContent>
                 </AccordionItem>
                 
