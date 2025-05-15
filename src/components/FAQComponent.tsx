@@ -339,7 +339,7 @@ const FAQComponent = () => {
                       <li>
                         <strong>Key Derivation:</strong> PBKDF2 (Password-Based Key Derivation Function 2)
                         <ul className="list-disc pl-4 sm:pl-6 mt-1">
-                          <li><strong>100,000 iterations</strong> of SHA-256 hashing</li>
+                          <li><strong>600,000 iterations</strong> of SHA-256 hashing</li>
                           <li><strong>Unique random salt</strong> for each encryption operation</li>
                           <li>Protects against <strong>rainbow table and brute-force attacks</strong></li>
                         </ul>
@@ -355,8 +355,17 @@ const FAQComponent = () => {
                       <li>
                         <strong>Output Format:</strong> 
                         <ul className="list-disc pl-4 sm:pl-6 mt-1">
-                          <li><strong>Salt (16 bytes) + IV (12 bytes) + Encrypted data</strong></li>
+                          <li><strong>Version byte + Salt (16 bytes) + IV (12 bytes) + Encrypted data</strong></li>
                           <li>Encoded as <strong>Base64</strong> for text compatibility</li>
+                          <li><strong>Versioned format</strong> ensures backward compatibility with future security improvements</li>
+                        </ul>
+                      </li>
+                      <li>
+                        <strong>Memory Protection:</strong>
+                        <ul className="list-disc pl-4 sm:pl-6 mt-1">
+                          <li>Implementation of <strong>secure memory wiping</strong> after cryptographic operations</li>
+                          <li>Sensitive data is <strong>overwritten in memory</strong> when no longer needed</li>
+                          <li>Reduces the risk of <strong>memory-based attacks</strong></li>
                         </ul>
                       </li>
                     </ul>
@@ -420,6 +429,10 @@ const FAQComponent = () => {
                       <li>
                         <strong>No Key Escrow:</strong> There is <strong>no mechanism to recover keys</strong> or decrypt 
                         data without the original password, ensuring that only the password holder can access the data.
+                      </li>
+                      <li>
+                        <strong>Versioned Format:</strong> The encryption format includes a <strong>version identifier</strong>,
+                        allowing for future cryptographic improvements while maintaining backward compatibility.
                       </li>
                     </ul>
                   </AccordionContent>

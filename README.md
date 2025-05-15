@@ -1,4 +1,5 @@
 
+
 # CryptoSeed
 
 CryptoSeed.org – A secure, local browser-based AES-256 encryptor. Protect your sensitive data with military-grade encryption, all without sending anything online. Fast, private, and easy to use.
@@ -96,3 +97,4 @@ Please make sure to follow the [code of conduct](CODE_OF_CONDUCT.md) and adhere 
 ## License
 
 This project is licensed under the GNU General Public License v3. See the [LICENSE](LICENSE) file for details.
+
