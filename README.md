@@ -1,5 +1,4 @@
 
-
 # CryptoSeed
 
 CryptoSeed.org – A secure, local browser-based AES-256 encryptor. Protect your sensitive data with military-grade encryption, all without sending anything online. Fast, private, and easy to use.
@@ -11,6 +10,7 @@ CryptoSeed.org – A secure, local browser-based AES-256 encryptor. Protect your
 - [Installation](#installation)
 - [Usage](#usage)
 - [Progressive Web App](#progressive-web-app)
+- [Offline Usage Guide](#offline-usage-guide)
 - [Security Features](#security-features)
 - [Contributing](#contributing)
 - [License](#license)
@@ -29,6 +29,7 @@ CryptoSeed is a secure, browser-based AES-256 encryptor. This tool helps you pro
 - **User-Friendly Interface**: Simple and intuitive interface for easy encryption and decryption of files and text.
 - **Cross-Platform**: Works on any device with a modern web browser.
 - **Progressive Web App**: Can be installed as a standalone application and works offline.
+- **Visual Encryption Guides**: Interactive visualizations of the encryption process.
 
 ## Installation
 
@@ -81,6 +82,38 @@ CryptoSeed can be installed as a Progressive Web App (PWA) for offline use:
 - **Easy Access**: Launch directly from your device's home screen
 - **Reduced Attack Surface**: No network activity means no network-based attacks
 
+## Offline Usage Guide
+
+For maximum security, we recommend using CryptoSeed in offline mode, especially when handling sensitive information:
+
+### Installing for Offline Use
+
+#### On Desktop:
+1. Open CryptoSeed in Chrome, Edge, or another compatible browser
+2. Look for the install icon (⬇️) in the address bar or menu
+3. Click "Install" and confirm the installation
+4. The app will be added to your desktop or start menu
+
+#### On iOS:
+1. Open CryptoSeed in Safari
+2. Tap the share icon (square with arrow) at the bottom of the screen
+3. Scroll down and tap "Add to Home Screen"
+4. Confirm by tapping "Add" in the top right corner
+
+#### On Android:
+1. Open CryptoSeed in Chrome or another compatible browser
+2. Tap the menu icon (⋮) in the top right
+3. Tap "Add to Home screen" or "Install app"
+4. Follow the prompts to complete installation
+
+### Best Practices for Offline Security
+
+1. **Disconnect from the Internet**: After loading the app, enable airplane mode or disconnect from Wi-Fi and cellular data
+2. **Use Private/Incognito Mode**: For maximum security, install the PWA from a private browsing session
+3. **Clear Browser Data**: After using CryptoSeed, clear your browser history, cookies, and cache
+4. **Secure Physical Environment**: Be aware of your surroundings, including security cameras
+5. **Check for Updates**: Periodically go online to check for security updates, then return to offline mode
+
 ## Security Features
 
 - **AES-256-GCM**: Industry-standard authenticated encryption with 256-bit keys
@@ -89,6 +122,15 @@ CryptoSeed can be installed as a Progressive Web App (PWA) for offline use:
 - **Memory Protection**: Sensitive data is wiped from memory after use
 - **Versioned Format**: Future-proof encryption with format version tracking
 - **Open Source**: All code is available for security review
+
+### Secure Memory Handling
+
+CryptoSeed implements active memory protection techniques:
+
+- **Array Wiping**: TypedArrays are filled with zeros after use
+- **Reference Removal**: References to sensitive objects are nullified
+- **Garbage Collection Hints**: When available, GC is encouraged to run
+- **Comprehensive Protection**: All sensitive data types (keys, buffers, passwords) are systematically wiped
 
 ## Contributing
 
@@ -105,4 +147,3 @@ Please make sure to follow the [code of conduct](CODE_OF_CONDUCT.md) and adhere 
 ## License
 
 This project is licensed under the GNU General Public License v3. See the [LICENSE](LICENSE) file for details.
-
