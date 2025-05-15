@@ -73,6 +73,14 @@ CryptoSeed can be installed as a Progressive Web App (PWA) for offline use:
 3. Click "Install" to add CryptoSeed to your device
 4. Once installed, CryptoSeed will work completely offline
 
+### Benefits of Using as a PWA
+
+- **Complete Offline Operation**: Works without an internet connection
+- **Enhanced Security**: Runs in an isolated environment, separate from browser tabs
+- **Faster Loading**: Loads instantly after installation
+- **Easy Access**: Launch directly from your device's home screen
+- **Reduced Attack Surface**: No network activity means no network-based attacks
+
 ## Security Features
 
 - **AES-256-GCM**: Industry-standard authenticated encryption with 256-bit keys
