@@ -146,16 +146,16 @@ const EncryptionContainer = () => {
       {/* Header section with encryption/decryption mode toggle */}
       <div className="mb-8 flex flex-col sm:flex-row items-center justify-center bg-gray-50 p-3 rounded-lg space-x-0 sm:space-x-4 space-y-2 sm:space-y-0">
         {/* Switch between encryption and decryption modes */}
-        <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <div className="flex items-center space-x-2 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto justify-center">
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-center">
+            <div className="flex items-center space-x-2 w-full sm:w-auto justify-center">
               <Switch 
                 id="encrypt-mode" 
                 checked={isEncrypting} 
                 onCheckedChange={setIsEncrypting} 
                 className="data-[state=checked]:bg-secure-500" 
               />
-              <div className="flex items-center">
+              <div className="flex items-center justify-center">
                 {/* Show lock icon based on current mode */}
                 {isEncrypting ? <Lock className="h-4 w-4 mr-2 text-secure-500" /> : <LockOpen className="h-4 w-4 mr-2 text-gray-500" />}
                 <span className="text-lg font-heading font-bold text-gray-900">
@@ -172,7 +172,7 @@ const EncryptionContainer = () => {
         </div>
         
         {/* Additional information and offline recommendation */}
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center justify-center sm:justify-start">
           <Badge variant="outline" className="text-xs flex items-center gap-1 bg-gray-200 text-gray-800 border-gray-300">
             <WifiOff className="h-3 w-3" />
             <span>Offline recommended</span>
