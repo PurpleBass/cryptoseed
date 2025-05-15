@@ -6,10 +6,14 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 
 export const OfflineIndicator = () => {
-  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  // Default to online if navigator.onLine is undefined (SSR case)
+  const [isOffline, setIsOffline] = useState(typeof navigator !== 'undefined' ? !navigator.onLine : false);
   const [isAlertVisible, setIsAlertVisible] = useState(true);
 
   useEffect(() => {
+    // Skip effect if running in SSR environment
+    if (typeof window === 'undefined') return;
+    
     const handleOnline = () => {
       setIsOffline(false);
       setIsAlertVisible(true); // Reset visibility when coming back online
@@ -33,8 +37,8 @@ export const OfflineIndicator = () => {
     window.addEventListener('offline', handleOffline);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.addEventListener('online', handleOnline);
+      window.addEventListener('offline', handleOffline);
     };
   }, []);
 
