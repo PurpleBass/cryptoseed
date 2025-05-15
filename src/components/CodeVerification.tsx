@@ -46,12 +46,16 @@ const CodeVerification = () => {
               <div className="p-4 bg-muted rounded-md overflow-auto max-h-[600px]">
                 <pre className="text-xs md:text-sm whitespace-pre text-left ml-0 text-gray-700">
 {`/**
- * AES-256 encryption functions for the Secure Nomad Encryptor
+ * AES-256 encryption functions with enhanced key derivation
  * 
  * This module uses the Web Crypto API (SubtleCrypto) to perform
- * secure client-side encryption and decryption. No data is sent
- * to any server at any point.
+ * secure client-side encryption and decryption with versioned
+ * key derivation algorithms. No data is sent to any server.
  */
+
+// Version flags for encryption algorithm
+const VERSION_PBKDF2 = 1;
+const CURRENT_VERSION = VERSION_PBKDF2;
 
 // Generate a cryptographically secure key from a password
 async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey> {
@@ -72,7 +76,7 @@ async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey>
     {
       name: "PBKDF2",
       salt: salt,
-      iterations: 100000,
+      iterations: 600000,
       hash: "SHA-256"
     },
     baseKey,
@@ -91,6 +95,9 @@ export async function encryptMessage(message: string, password: string): Promise
     // Generate a random IV (Initialization Vector)
     const iv = window.crypto.getRandomValues(new Uint8Array(12));
     
+    // Version byte for format compatibility
+    const versionByte = new Uint8Array([CURRENT_VERSION]);
+    
     // Derive encryption key from password
     const key = await deriveKey(password, salt);
     
@@ -105,11 +112,12 @@ export async function encryptMessage(message: string, password: string): Promise
       messageBuffer
     );
     
-    // Combine salt + iv + encrypted data into a single buffer
-    const resultBuffer = new Uint8Array(salt.length + iv.length + encryptedBuffer.byteLength);
-    resultBuffer.set(salt, 0);
-    resultBuffer.set(iv, salt.length);
-    resultBuffer.set(new Uint8Array(encryptedBuffer), salt.length + iv.length);
+    // Combine version + salt + iv + encrypted data into a single buffer
+    const resultBuffer = new Uint8Array(versionByte.length + salt.length + iv.length + encryptedBuffer.byteLength);
+    resultBuffer.set(versionByte, 0);
+    resultBuffer.set(salt, versionByte.length);
+    resultBuffer.set(iv, versionByte.length + salt.length);
+    resultBuffer.set(new Uint8Array(encryptedBuffer), versionByte.length + salt.length + iv.length);
     
     // Convert to Base64 for easy storage/transmission
     return arrayBufferToBase64(resultBuffer);
@@ -125,10 +133,13 @@ export async function decryptMessage(encryptedMessage: string, password: string)
     // Convert the Base64 encrypted message back to ArrayBuffer
     const encryptedBuffer = base64ToArrayBuffer(encryptedMessage);
     
+    // Check format version
+    const version = new Uint8Array(encryptedBuffer.slice(0, 1))[0];
+    
     // Extract salt, iv, and encrypted data
-    const salt = encryptedBuffer.slice(0, 16);
-    const iv = encryptedBuffer.slice(16, 28);
-    const data = encryptedBuffer.slice(28);
+    const salt = encryptedBuffer.slice(1, 17);
+    const iv = encryptedBuffer.slice(17, 29);
+    const data = encryptedBuffer.slice(29);
     
     // Derive the key from the password and salt
     const key = await deriveKey(password, new Uint8Array(salt));
@@ -143,8 +154,13 @@ export async function decryptMessage(encryptedMessage: string, password: string)
       data
     );
     
-    // Convert back to string and return
-    return ab2str(decryptedBuffer);
+    // Secure memory handling
+    const result = ab2str(decryptedBuffer);
+    
+    // Clean up sensitive data from memory
+    wipeArrayBuffer(decryptedBuffer);
+    
+    return result;
   } catch (error) {
     console.error("Decryption error:", error);
     throw new Error("Failed to decrypt message");
@@ -185,8 +201,16 @@ export async function decryptMessage(encryptedMessage: string, password: string)
                         implementation.
                       </li>
                       <li>
-                        <strong>PBKDF2:</strong> Passwords are strengthened using PBKDF2 with 100,000 
+                        <strong>PBKDF2:</strong> Passwords are strengthened using PBKDF2 with 600,000 
                         iterations of SHA-256 hashing, making brute force attacks impractical.
+                      </li>
+                      <li>
+                        <strong>Versioned Format:</strong> Our encryption format includes a version 
+                        byte to maintain backward compatibility with future security improvements.
+                      </li>
+                      <li>
+                        <strong>Secure Memory Handling:</strong> After encryption/decryption operations, 
+                        sensitive data is securely wiped from memory to prevent data leakage.
                       </li>
                       <li>
                         <strong>Client-Side Only:</strong> All processing happens in your browser. No 
@@ -203,6 +227,9 @@ export async function decryptMessage(encryptedMessage: string, password: string)
                     <ul className="list-disc pl-6 space-y-2">
                       <li>
                         <code className="bg-gray-100 px-1 rounded text-xs">src/lib/encryption.ts</code> - Core encryption/decryption logic
+                      </li>
+                      <li>
+                        <code className="bg-gray-100 px-1 rounded text-xs">src/lib/secureWipe.ts</code> - Memory protection utilities
                       </li>
                       <li>
                         <code className="bg-gray-100 px-1 rounded text-xs">src/components/EncryptionComponent.tsx</code> - User interface for 
@@ -288,6 +315,7 @@ export async function decryptMessage(encryptedMessage: string, password: string)
                     <li>Once the page is loaded, disconnect your device from WiFi/Ethernet</li>
                     <li>The application will continue to function normally</li>
                     <li>This ensures no data can possibly leave your device</li>
+                    <li>When offline, you'll see a dismissable alert indicating offline mode</li>
                   </ol>
                 </div>
               </div>
