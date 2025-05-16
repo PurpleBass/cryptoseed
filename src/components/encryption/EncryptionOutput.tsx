@@ -23,6 +23,12 @@ export const EncryptionOutput: React.FC<EncryptionOutputProps> = ({
     ? formatSeedPhraseWithNumbers(output)
     : output;
 
+  // Debug console log to verify the formatting
+  console.log('Mode:', mode);
+  console.log('IsEncrypting:', isEncrypting);
+  console.log('Original output:', output);
+  console.log('Formatted output:', displayOutput);
+
   return (
     <Card className="mt-6 satoshi-card">
       <CardHeader className="pb-3">
