@@ -24,6 +24,14 @@ export async function processSeedPhrase(seedPhrase: string, password: string, is
   }
 }
 
+// Format seed phrase with numbers
+export function formatSeedPhraseWithNumbers(seedPhrase: string): string {
+  if (!seedPhrase) return '';
+  
+  const words = seedPhrase.trim().split(/\s+/);
+  return words.map((word, index) => `${index + 1}. ${word}`).join(' ');
+}
+
 // Process text encryption or decryption
 export async function processText(text: string, password: string, isEncrypting: boolean) {
   if (!text.trim() || !password.trim()) {

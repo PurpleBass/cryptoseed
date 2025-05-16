@@ -98,7 +98,14 @@ export const SeedPhraseEncryption: React.FC<SeedPhraseEncryptionProps> = ({
         </CardFooter>
       </Card>
 
-      {output && <EncryptionOutput output={output} isEncrypting={isEncrypting} onCopy={onCopyOutput} />}
+      {output && (
+        <EncryptionOutput 
+          output={output} 
+          isEncrypting={isEncrypting} 
+          onCopy={onCopyOutput} 
+          mode="seedphrase"
+        />
+      )}
     </>
   );
 };
