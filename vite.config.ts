@@ -1,8 +1,10 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
+import { csp } from "vite-plugin-csp";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -54,6 +56,17 @@ export default defineConfig(({ mode }) => ({
     react({
       // Basic configuration without @emotion references
       // Just using the default React SWC configuration
+    }),
+    csp({
+      policies: {
+        'default-src': ["'self'"],
+        'script-src': ["'self'", "https://cdn.gpteng.co"],
+        'style-src': ["'self'", "'unsafe-inline'"],
+        'img-src': ["'self'", "data:", "blob:", "https:"],
+        'connect-src': ["'self'", "ws://localhost:*", "wss://localhost:*"],
+        'object-src': ["'none'"]
+      },
+      hashEnabled: { 'script-src': false }
     }),
     mode === 'development' &&
     componentTagger(),
