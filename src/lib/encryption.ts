@@ -75,8 +75,8 @@ export async function encryptMessage(
   
   if (onProgress) onProgress(100);
   
-  // Convert to base64 using Buffer (Node compatibility)
-  return Buffer.from(result.encryptedData).toString('base64');
+  // Convert to base64 using browser-safe helper
+  return uint8ToBase64(result.encryptedData);
 }
 
 /**
@@ -89,8 +89,8 @@ export async function decryptMessage(
 ): Promise<string> {
   if (onProgress) onProgress(0);
   
-  // Convert from base64 using Buffer
-  const encryptedData = Uint8Array.from(Buffer.from(encryptedMessage, 'base64'));
+  // Convert from base64 using browser-safe helper
+  const encryptedData = base64ToUint8(encryptedMessage);
   
   if (onProgress) onProgress(50);
   
@@ -275,4 +275,22 @@ export async function decryptData(encryptedData: Uint8Array, password: string): 
     wipeBytes(key);
     throw error;
   }
+}
+
+// --- Base64 helpers for browser compatibility ---
+function uint8ToBase64(bytes: Uint8Array): string {
+  let binary = '';
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
+function base64ToUint8(base64: string): Uint8Array {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
 }
