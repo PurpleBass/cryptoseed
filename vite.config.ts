@@ -1,4 +1,5 @@
 
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -59,12 +60,12 @@ export default defineConfig(({ mode }) => ({
     }),
     csp({
       policy: {
-        'default-src': ["'self'"],
-        'script-src': ["'self'", "https://cdn.gpteng.co"],
-        'style-src': ["'self'", "'unsafe-inline'"],
-        'img-src': ["'self'", "data:", "blob:", "https:"],
-        'connect-src': ["'self'", "ws://localhost:*", "wss://localhost:*"],
-        'object-src': ["'none'"]
+        'default-src': "'self'",
+        'script-src': "'self' https://cdn.gpteng.co",
+        'style-src': "'self' 'unsafe-inline'",
+        'img-src': "'self' data: blob: https:",
+        'connect-src': "'self' ws://localhost:* wss://localhost:*",
+        'object-src': "'none'"
       },
       hashEnabled: { 
         'script-src': false,
@@ -140,3 +141,4 @@ export default defineConfig(({ mode }) => ({
     },
   },
 }));
+
