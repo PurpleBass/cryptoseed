@@ -4,16 +4,25 @@
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
   ],
+
   "compilerOptions": {
+    /* Path aliases (kept) */
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
-    "noImplicitAny": false,
-    "noUnusedParameters": false,
-    "skipLibCheck": true,
-    "allowJs": true,
-    "noUnusedLocals": false,
-    "strictNullChecks": false
+
+    /* 🔒 Global strictness—do NOT relax these here */
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "exactOptionalPropertyTypes": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strictNullChecks": true,
+
+    /* Misc */
+    "allowJs": false,      // keep JS out of the strict TS build
+    "skipLibCheck": true   // still skip .d.ts lib checks for speed
   }
 }
