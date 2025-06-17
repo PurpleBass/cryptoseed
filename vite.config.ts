@@ -59,13 +59,13 @@ export default defineConfig(({ mode }) => ({
     }),
     csp({
       policy: {
-        'default-src': ["'self'"],
-        'script-src': ["'self'", "https://cdn.gpteng.co"],
-        'style-src': ["'self'", "'unsafe-inline'"],
-        'img-src': ["'self'", "data:", "blob:", "https:"],
-        'connect-src': ["'self'", "ws://localhost:*", "wss://localhost:*"],
-        'object-src': ["'none'"]
-      },
+        'default-src': ['self'],
+        'script-src': ['self', 'https://cdn.gpteng.co'],
+        'style-src': ['self', 'unsafe-inline'],
+        'img-src': ['self', 'https:', 'data:', 'blob:'],
+        'connect-src': ['self', 'wss://localhost:*'],
+        'object-src': ['none']
+      } as const,
       hashEnabled: { 
         'script-src': false,
         'style-src': false,

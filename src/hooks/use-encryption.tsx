@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+
+import { useState, useRef, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 type EncryptionMode = "seedphrase" | "text" | "file";
@@ -25,7 +26,7 @@ export function useEncryption() {
   const { toast } = useToast();
 
   // Reset output and file selection when switching between encryption/decryption modes
-  React.useEffect(() => {
+  useEffect(() => {
     setOutput("");
     setSelectedFile(null);
     setProgress(0);
