@@ -65,7 +65,12 @@ export default defineConfig(({ mode }) => ({
         'connect-src': ["'self'", "ws://localhost:*", "wss://localhost:*"],
         'object-src': ["'none'"]
       },
-      hashEnabled: { 'script-src': false }
+      hashEnabled: { 
+        'script-src': false,
+        'style-src': false,
+        'script-src-attr': false,
+        'style-src-attr': false
+      }
     }),
     mode === 'development' &&
     componentTagger(),
