@@ -1,9 +1,9 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eraser, Eye, EyeOff } from "lucide-react";
+import { PasswordStrengthMeter } from "./PasswordStrengthMeter";
 
 interface PasswordInputProps {
   password: string;
@@ -48,6 +48,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
           {showPassword ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
         </Button>
       </div>
+      <PasswordStrengthMeter password={password} />
     </div>
   );
 };

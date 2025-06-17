@@ -91,6 +91,57 @@ export function useEncryption() {
   const clearTextInput = () => setTextInput("");
   const clearSeedPhrase = () => setSeedPhrase("");
 
+  // Helper to securely wipe a string by overwriting with random data
+  const wipeString = (strSetter: (v: string) => void, length: number) => {
+    if (length > 0) {
+      const arr = new Uint8Array(length);
+      window.crypto.getRandomValues(arr);
+      strSetter(String.fromCharCode(...arr));
+    }
+    strSetter("");
+  };
+
+  // Session timeout for auto-wipe (2 minutes of inactivity)
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    const resetTimer = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(async () => {
+        // Overwrite sensitive state with random data before clearing
+        wipeString(setOutput, output.length);
+        wipeString(setPassword, password.length);
+        wipeString(setTextInput, textInput.length);
+        wipeString(setSeedPhrase, seedPhrase.length);
+        setSelectedFile(null);
+        // Wipe clipboard if it contains our output
+        try {
+          const current = await navigator.clipboard.readText();
+          if (current === output && output.length > 0) {
+            await navigator.clipboard.writeText("");
+          }
+        } catch (e) {}
+        toast({
+          title: "Session expired",
+          description: "Sensitive data was cleared after inactivity.",
+          variant: "default"
+        });
+      }, 2 * 60 * 1000); // 2 minutes
+    };
+    // Listen for user activity
+    window.addEventListener("keydown", resetTimer);
+    window.addEventListener("mousedown", resetTimer);
+    window.addEventListener("touchstart", resetTimer);
+    window.addEventListener("focus", resetTimer);
+    resetTimer();
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener("keydown", resetTimer);
+      window.removeEventListener("mousedown", resetTimer);
+      window.removeEventListener("touchstart", resetTimer);
+      window.removeEventListener("focus", resetTimer);
+    };
+  }, [toast, output, password, textInput, seedPhrase]);
+
   return {
     // States
     mode,
