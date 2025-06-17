@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Shield, Lock, Key } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';

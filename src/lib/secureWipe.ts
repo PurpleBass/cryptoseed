@@ -1,99 +1,65 @@
 
 /**
- * Secure data wiping utilities
+ * Secure memory wiping utilities
  * 
- * This module provides functions to securely wipe sensitive data from memory
- * after use, reducing the risk of sensitive information being exposed in memory dumps
- * or through other memory-based attacks.
- * 
- * Note: Due to JavaScript's garbage collection and memory management, these are
- * best-effort approaches to ensure sensitive data is overwritten in memory.
- * 
- * @module secureWipe
- * @version 1.0.1
+ * These functions attempt to securely wipe sensitive data from memory.
+ * While JavaScript doesn't provide guaranteed memory wiping due to garbage collection,
+ * these utilities make a best effort to overwrite sensitive data.
  */
 
 /**
- * Wipes a TypedArray by overwriting it with zeros
- * 
- * This helps ensure that sensitive data doesn't remain in memory after it's no longer needed.
- * While JavaScript doesn't provide direct memory access, overwriting values helps
- * ensure the original data is not accessible in memory.
- * 
- * @param {TypedArray} array - The array to be wiped
+ * Wipes a Uint8Array by overwriting it with random data
  */
-export function wipeTypedArray(array: Uint8Array | Int8Array | Uint16Array | Int16Array | Uint32Array | Int32Array): void {
-  if (array.fill) {
-    // Use the built-in fill method if available (modern browsers)
-    array.fill(0);
-  } else {
-    // Fallback for older browsers without fill support
-    for (let i = 0; i < array.length; i++) {
-      array[i] = 0;
-    }
+export function wipeBytes(data: Uint8Array): void {
+  if (data && data.length > 0) {
+    // Overwrite with random data
+    crypto.getRandomValues(data);
+    // Then overwrite with zeros
+    data.fill(0);
   }
 }
 
 /**
- * Best-effort string wiping by replacing the reference
- * 
- * String values in JavaScript are immutable, so we can't truly "wipe" them.
- * This function is a best-effort approach to encourage garbage collection
- * of the original string by removing references to it.
- * 
- * @param {string} str - The string to be wiped
+ * Wipes an ArrayBuffer by creating a view and wiping it
  */
-export function wipeString(str: string): void {
-  // In JavaScript, we cannot truly wipe strings as they are immutable
-  // This is a best-effort approach to encourage garbage collection
-  str = '';
-  
-  // Force immediate garbage collection hint
-  // Note: This will only work if global.gc is available, which typically requires
-  // Node.js to be started with the --expose-gc flag, and won't work in browsers
-  if (typeof global !== 'undefined' && global.gc) {
-    global.gc();
+export function wipeBuffer(buffer: ArrayBuffer): void {
+  if (buffer && buffer.byteLength > 0) {
+    const view = new Uint8Array(buffer);
+    wipeBytes(view);
   }
 }
 
 /**
- * Wipe an ArrayBuffer by overwriting its contents with zeros
- * 
- * @param {ArrayBuffer} buffer - The buffer to be wiped
+ * Wipes a string by attempting to overwrite the underlying data
+ * Note: This is not guaranteed to work due to string immutability in JS
  */
-export function wipeArrayBuffer(buffer: ArrayBuffer): void {
-  wipeTypedArray(new Uint8Array(buffer));
+export function wipeString(_str: string): void {
+  // In JavaScript, strings are immutable, so we can't actually wipe them
+  // This function exists for API completeness but cannot guarantee wiping
+  // The parameter is prefixed with underscore to indicate it's intentionally unused
 }
 
 /**
- * Combined wipe function for encryption operations
- * 
- * This function handles wiping multiple types of sensitive data commonly used
- * during encryption and decryption operations.
- * 
- * @param {CryptoKey | null} key - The cryptographic key to remove references to
- * @param {ArrayBuffer | null} data - The data buffer to wipe
- * @param {string | null} password - The password to wipe
+ * Creates a new Uint8Array filled with random data of the specified length
  */
-export function wipeEncryptionData(
-  key: CryptoKey | null,
-  data: ArrayBuffer | null,
-  password: string | null
-): void {
-  // Wipe the data buffer if provided
-  if (data) {
-    wipeArrayBuffer(data);
+export function createRandomBytes(length: number): Uint8Array {
+  const bytes = new Uint8Array(length);
+  crypto.getRandomValues(bytes);
+  return bytes;
+}
+
+/**
+ * Securely compares two byte arrays in constant time
+ */
+export function constantTimeEquals(a: Uint8Array, b: Uint8Array): boolean {
+  if (a.length !== b.length) {
+    return false;
   }
   
-  // Wipe the password string if provided
-  if (password) {
-    wipeString(password);
+  let result = 0;
+  for (let i = 0; i < a.length; i++) {
+    result |= a[i] ^ b[i];
   }
   
-  // CryptoKey cannot be directly wiped, but we can remove the reference
-  // This allows the garbage collector to reclaim the memory
-  if (key) {
-    // @ts-ignore - Intentionally setting to null to remove reference
-    key = null;
-  }
+  return result === 0;
 }
