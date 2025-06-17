@@ -1,4 +1,3 @@
-
 /**
  * AES-256 encryption functions with enhanced key derivation
  * 
@@ -11,6 +10,7 @@
  */
 
 import { wipeTypedArray, wipeString, wipeArrayBuffer, wipeEncryptionData } from "./secureWipe";
+import { deriveKey as deriveKeyWorker } from "../utils/useKdf";
 
 // Version flags for encryption algorithm
 const VERSION_PBKDF2 = 1;
@@ -74,7 +74,7 @@ function base64ToArrayBuffer(base64: string): ArrayBuffer {
 }
 
 /**
- * Generates a cryptographically secure key from a password using PBKDF2
+ * Generates a cryptographically secure key from a password using PBKDF2 in a Web Worker
  * Uses 600,000 iterations of SHA-256 for enhanced security against brute force attacks
  * 
  * @param {string} password - User-provided password
@@ -83,34 +83,13 @@ function base64ToArrayBuffer(base64: string): ArrayBuffer {
  */
 async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey> {
   try {
-    const passwordBuffer = str2ab(password);
-    
-    // Import the password as a raw key for use with PBKDF2
-    const baseKey = await window.crypto.subtle.importKey(
-      "raw",
-      passwordBuffer,
-      { name: "PBKDF2" },
-      false,
-      ["deriveKey"]
-    );
-    
-    // Using 600,000 iterations of SHA-256 for strong security
-    // Higher iteration count increases security at the cost of performance
-    const derivedKey = await window.crypto.subtle.deriveKey(
-      {
-        name: "PBKDF2",
-        salt: salt,
-        iterations: 600000, // 600k iterations provides substantial protection against brute force
-        hash: "SHA-256"
-      },
-      baseKey,
-      { name: "AES-GCM", length: 256 }, // AES-256-GCM provides authenticated encryption
-      false,
-      ["encrypt", "decrypt"]
-    );
+    // Use Web Worker for PBKDF2 to keep UI responsive
+    const derivedKey = await deriveKeyWorker({
+      password,
+      salt,
+      iterations: 600000 // 600k iterations provides substantial protection against brute force
+    });
 
-    // Clean up sensitive data from memory
-    wipeArrayBuffer(passwordBuffer);
     return derivedKey;
   } catch (error) {
     throw error;
@@ -125,9 +104,14 @@ async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey>
  * 
  * @param {string} message - Plaintext message to encrypt
  * @param {string} password - Password for encryption
+ * @param {(progress: number) => void} onProgress - Optional progress callback
  * @returns {Promise<string>} - Base64 encoded encrypted message with version, salt, and IV
  */
-export async function encryptMessage(message: string, password: string): Promise<string> {
+export async function encryptMessage(
+  message: string, 
+  password: string,
+  onProgress?: (progress: number) => void
+): Promise<string> {
   let key: CryptoKey | null = null;
   let messageBuffer: ArrayBuffer | null = null;
   
@@ -137,8 +121,12 @@ export async function encryptMessage(message: string, password: string): Promise
     const iv = window.crypto.getRandomValues(new Uint8Array(12));
     const versionByte = new Uint8Array([CURRENT_VERSION]);
     
-    // Derive encryption key from password and salt
+    onProgress?.(20);
+    
+    // Derive encryption key from password and salt (using Web Worker)
     key = await deriveKey(password, salt);
+    onProgress?.(70);
+    
     messageBuffer = str2ab(message);
     
     // Perform encryption using AES-GCM
@@ -151,6 +139,8 @@ export async function encryptMessage(message: string, password: string): Promise
       messageBuffer
     );
     
+    onProgress?.(90);
+    
     // Format: [version (1 byte)][salt (16 bytes)][iv (12 bytes)][encrypted data]
     const resultBuffer = new Uint8Array(versionByte.length + salt.length + iv.length + encryptedBuffer.byteLength);
     resultBuffer.set(versionByte, 0);
@@ -159,6 +149,8 @@ export async function encryptMessage(message: string, password: string): Promise
     resultBuffer.set(new Uint8Array(encryptedBuffer), versionByte.length + salt.length + iv.length);
     
     const result = arrayBufferToBase64(resultBuffer);
+    
+    onProgress?.(100);
     
     // Clean up sensitive data
     wipeTypedArray(salt);
@@ -177,15 +169,22 @@ export async function encryptMessage(message: string, password: string): Promise
  * 
  * @param {string} encryptedMessage - Base64 encoded encrypted message
  * @param {string} password - Password for decryption
+ * @param {(progress: number) => void} onProgress - Optional progress callback
  * @returns {Promise<string>} - Decrypted plaintext message
  */
-export async function decryptMessage(encryptedMessage: string, password: string): Promise<string> {
+export async function decryptMessage(
+  encryptedMessage: string, 
+  password: string,
+  onProgress?: (progress: number) => void
+): Promise<string> {
   let key: CryptoKey | null = null;
   let decryptedBuffer: ArrayBuffer | null = null;
   
   try {
     const encryptedBuffer = base64ToArrayBuffer(encryptedMessage);
     const dataView = new DataView(encryptedBuffer);
+    
+    onProgress?.(10);
     
     // Check for versioned format or legacy format
     // Version byte is the first byte in the newer format
@@ -205,8 +204,12 @@ export async function decryptMessage(encryptedMessage: string, password: string)
     const iv = encryptedBuffer.slice(dataOffset + 16, dataOffset + 16 + 12);
     const data = encryptedBuffer.slice(dataOffset + 16 + 12);
     
-    // Derive decryption key using the extracted salt
+    onProgress?.(30);
+    
+    // Derive decryption key using the extracted salt (using Web Worker)
     key = await deriveKey(password, new Uint8Array(salt));
+    
+    onProgress?.(80);
     
     // Perform decryption with AES-GCM
     decryptedBuffer = await window.crypto.subtle.decrypt(
@@ -218,7 +221,10 @@ export async function decryptMessage(encryptedMessage: string, password: string)
       data
     );
     
+    onProgress?.(95);
+    
     const result = ab2str(decryptedBuffer);
+    onProgress?.(100);
     return result;
   } finally {
     // Ensure sensitive data is wiped from memory even if an error occurs
@@ -232,9 +238,14 @@ export async function decryptMessage(encryptedMessage: string, password: string)
  * 
  * @param {File} file - File to encrypt
  * @param {string} password - Password for encryption
+ * @param {(progress: number) => void} onProgress - Optional progress callback
  * @returns {Promise<{ encryptedData: Blob, fileName: string }>} - Encrypted file data and suggested filename
  */
-export async function encryptFile(file: File, password: string): Promise<{ encryptedData: Blob, fileName: string }> {
+export async function encryptFile(
+  file: File, 
+  password: string,
+  onProgress?: (progress: number) => void
+): Promise<{ encryptedData: Blob, fileName: string }> {
   let key: CryptoKey | null = null;
   let fileBuffer: ArrayBuffer | null = null;
   
@@ -244,9 +255,14 @@ export async function encryptFile(file: File, password: string): Promise<{ encry
     const iv = window.crypto.getRandomValues(new Uint8Array(12));
     const versionByte = new Uint8Array([CURRENT_VERSION]);
     
-    // Derive encryption key from password and salt
+    onProgress?.(15);
+    
+    // Derive encryption key from password and salt (using Web Worker)
     key = await deriveKey(password, salt);
+    onProgress?.(60);
+    
     fileBuffer = await file.arrayBuffer();
+    onProgress?.(70);
     
     // Perform encryption using AES-GCM
     const encryptedBuffer = await window.crypto.subtle.encrypt(
@@ -258,6 +274,8 @@ export async function encryptFile(file: File, password: string): Promise<{ encry
       fileBuffer
     );
     
+    onProgress?.(90);
+    
     // Format: [version (1 byte)][salt (16 bytes)][iv (12 bytes)][encrypted data]
     const resultBuffer = new Uint8Array(versionByte.length + salt.length + iv.length + encryptedBuffer.byteLength);
     resultBuffer.set(versionByte, 0);
@@ -266,6 +284,8 @@ export async function encryptFile(file: File, password: string): Promise<{ encry
     resultBuffer.set(new Uint8Array(encryptedBuffer), versionByte.length + salt.length + iv.length);
     
     const encryptedBlob = new Blob([resultBuffer], { type: 'application/octet-stream' });
+    
+    onProgress?.(100);
     
     // Clean up sensitive data
     wipeTypedArray(salt);
@@ -288,15 +308,22 @@ export async function encryptFile(file: File, password: string): Promise<{ encry
  * 
  * @param {File} encryptedFile - Encrypted file
  * @param {string} password - Password for decryption
+ * @param {(progress: number) => void} onProgress - Optional progress callback
  * @returns {Promise<{ decryptedData: Blob, fileName: string }>} - Decrypted file data and suggested filename
  */
-export async function decryptFile(encryptedFile: File, password: string): Promise<{ decryptedData: Blob, fileName: string }> {
+export async function decryptFile(
+  encryptedFile: File, 
+  password: string,
+  onProgress?: (progress: number) => void
+): Promise<{ decryptedData: Blob, fileName: string }> {
   let key: CryptoKey | null = null;
   let decryptedBuffer: ArrayBuffer | null = null;
   
   try {
     const encryptedBuffer = await encryptedFile.arrayBuffer();
     const dataView = new DataView(encryptedBuffer);
+    
+    onProgress?.(10);
     
     // Check for versioned format or legacy format
     let version = dataView.getUint8(0);
@@ -315,8 +342,12 @@ export async function decryptFile(encryptedFile: File, password: string): Promis
     const iv = encryptedBuffer.slice(dataOffset + 16, dataOffset + 16 + 12);
     const data = encryptedBuffer.slice(dataOffset + 16 + 12);
     
-    // Derive decryption key using the extracted salt
+    onProgress?.(25);
+    
+    // Derive decryption key using the extracted salt (using Web Worker)
     key = await deriveKey(password, new Uint8Array(salt));
+    
+    onProgress?.(75);
     
     // Perform decryption with AES-GCM
     decryptedBuffer = await window.crypto.subtle.decrypt(
@@ -328,6 +359,8 @@ export async function decryptFile(encryptedFile: File, password: string): Promis
       data
     );
     
+    onProgress?.(95);
+    
     const decryptedBlob = new Blob([decryptedBuffer]);
     
     // Remove ".encrypted" extension if present
@@ -335,6 +368,8 @@ export async function decryptFile(encryptedFile: File, password: string): Promis
     if (fileName.endsWith('.encrypted')) {
       fileName = fileName.substring(0, fileName.length - 10);
     }
+    
+    onProgress?.(100);
     
     return {
       decryptedData: decryptedBlob,

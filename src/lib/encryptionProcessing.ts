@@ -1,21 +1,27 @@
+
 import { encryptMessage, decryptMessage, encryptFile, decryptFile } from "@/lib/encryption";
 
 // Process seed phrase encryption or decryption
-export async function processSeedPhrase(seedPhrase: string, password: string, isEncrypting: boolean) {
+export async function processSeedPhrase(
+  seedPhrase: string, 
+  password: string, 
+  isEncrypting: boolean,
+  onProgress?: (progress: number) => void
+) {
   if (!seedPhrase.trim() || !password.trim()) {
     throw new Error("Please provide both a seed phrase and a password");
   }
   
   if (isEncrypting) {
     // Encrypt seed phrase
-    const encrypted = await encryptMessage(seedPhrase, password);
+    const encrypted = await encryptMessage(seedPhrase, password, onProgress);
     return {
       result: encrypted,
       successMessage: "Your seed phrase has been encrypted"
     };
   } else {
     // Decrypt seed phrase
-    const decrypted = await decryptMessage(seedPhrase, password);
+    const decrypted = await decryptMessage(seedPhrase, password, onProgress);
     return {
       result: decrypted.trim(),
       successMessage: "Your seed phrase has been decrypted"
@@ -40,21 +46,26 @@ export function formatSeedPhraseWithNumbers(seedPhrase: string): string {
 }
 
 // Process text encryption or decryption
-export async function processText(text: string, password: string, isEncrypting: boolean) {
+export async function processText(
+  text: string, 
+  password: string, 
+  isEncrypting: boolean,
+  onProgress?: (progress: number) => void
+) {
   if (!text.trim() || !password.trim()) {
     throw new Error("Please provide both text and a password");
   }
   
   if (isEncrypting) {
     // Encrypt text
-    const encrypted = await encryptMessage(text, password);
+    const encrypted = await encryptMessage(text, password, onProgress);
     return {
       result: encrypted,
       successMessage: "Your text has been encrypted"
     };
   } else {
     // Decrypt text
-    const decrypted = await decryptMessage(text, password);
+    const decrypted = await decryptMessage(text, password, onProgress);
     return {
       result: decrypted.trim(),
       successMessage: "Your text has been decrypted"
@@ -63,14 +74,19 @@ export async function processText(text: string, password: string, isEncrypting: 
 }
 
 // Process file encryption or decryption
-export async function processFile(file: File, password: string, isEncrypting: boolean) {
+export async function processFile(
+  file: File, 
+  password: string, 
+  isEncrypting: boolean,
+  onProgress?: (progress: number) => void
+) {
   if (!file || !password.trim()) {
     throw new Error("Please select a file and provide a password");
   }
   
   if (isEncrypting) {
     // Encrypt file
-    const { encryptedData, fileName } = await encryptFile(file, password);
+    const { encryptedData, fileName } = await encryptFile(file, password, onProgress);
     return {
       data: encryptedData,
       fileName,
@@ -78,7 +94,7 @@ export async function processFile(file: File, password: string, isEncrypting: bo
     };
   } else {
     // Decrypt file
-    const { decryptedData, fileName } = await decryptFile(file, password);
+    const { decryptedData, fileName } = await decryptFile(file, password, onProgress);
     return {
       data: decryptedData,
       fileName,

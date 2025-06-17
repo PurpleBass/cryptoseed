@@ -12,6 +12,7 @@ export function useEncryption() {
   // Core encryption states
   const [isEncrypting, setIsEncrypting] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [output, setOutput] = useState("");
@@ -29,10 +30,16 @@ export function useEncryption() {
   React.useEffect(() => {
     setOutput("");
     setSelectedFile(null);
+    setProgress(0);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   }, [isEncrypting]);
+
+  // Progress callback for encryption operations
+  const handleProgress = (progressValue: number) => {
+    setProgress(progressValue);
+  };
 
   const formatSeedPhrase = (phrase: string): string => {
     return phrase.trim();
@@ -74,6 +81,7 @@ export function useEncryption() {
     mode,
     isEncrypting,
     isProcessing,
+    progress,
     password,
     showPassword,
     output,
@@ -86,6 +94,7 @@ export function useEncryption() {
     setMode,
     setIsEncrypting,
     setIsProcessing,
+    setProgress,
     setPassword,
     setOutput,
     setTextInput,
@@ -100,6 +109,7 @@ export function useEncryption() {
     clearTextInput,
     clearSeedPhrase,
     formatSeedPhrase,
+    handleProgress,
     toast
   };
 }
