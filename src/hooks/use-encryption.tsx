@@ -1,7 +1,5 @@
-
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { encryptMessage, decryptMessage, encryptFile, decryptFile } from "@/lib/encryption";
 
 type EncryptionMode = "seedphrase" | "text" | "file";
 
