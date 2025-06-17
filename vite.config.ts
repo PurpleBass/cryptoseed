@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
 import csp from "vite-plugin-csp";
 
@@ -40,7 +39,6 @@ export default defineConfig(({ mode }) => ({
         } as const
       }),
 
-    mode === "development" && componentTagger(),   // 3️⃣ Dev-only tagger
 
     VitePWA({                                      // 4️⃣ PWA
       registerType: "autoUpdate",

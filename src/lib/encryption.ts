@@ -1,4 +1,3 @@
-
 import { wipeBytes } from './secureWipe';
 
 export interface EncryptionResult {
@@ -76,8 +75,8 @@ export async function encryptMessage(
   
   if (onProgress) onProgress(100);
   
-  // Convert to base64 for text output
-  return btoa(String.fromCharCode(...result.encryptedData));
+  // Convert to base64 using Buffer (Node compatibility)
+  return Buffer.from(result.encryptedData).toString('base64');
 }
 
 /**
@@ -90,10 +89,8 @@ export async function decryptMessage(
 ): Promise<string> {
   if (onProgress) onProgress(0);
   
-  // Convert from base64
-  const encryptedData = new Uint8Array(
-    atob(encryptedMessage).split('').map(char => char.charCodeAt(0))
-  );
+  // Convert from base64 using Buffer
+  const encryptedData = Uint8Array.from(Buffer.from(encryptedMessage, 'base64'));
   
   if (onProgress) onProgress(50);
   
@@ -166,6 +163,7 @@ export async function decryptFile(
 
 /**
  * Encrypts data using AES-256-GCM.
+ * This revised version uses a simple AAD structure: 8 bytes (4 bytes timestamp, 4 bytes version).
  */
 export async function encryptData(data: Uint8Array, password: string, timestamp: number = Date.now()): Promise<EncryptionResult> {
   const version = 1;
@@ -176,6 +174,12 @@ export async function encryptData(data: Uint8Array, password: string, timestamp:
   crypto.getRandomValues(iv);
 
   const key = await pbkdf2(password, salt, 600000, 32, 'SHA-256');
+
+  // Create AAD: 4 bytes for timestamp and 4 bytes for version.
+  const aad = new Uint8Array(8);
+  const aadView = new DataView(aad.buffer);
+  aadView.setUint32(0, timestamp, false);
+  aadView.setUint32(4, version, false);
 
   const alg = {
     name: 'AES-GCM',
@@ -190,31 +194,27 @@ export async function encryptData(data: Uint8Array, password: string, timestamp:
     ['encrypt']
   );
 
-  const aadLengthBuffer = new ArrayBuffer(4);
-  const aadLengthView = new DataView(aadLengthBuffer);
-  aadLengthView.setUint32(0, 8, false);
-
-  const aad = new Uint8Array(aadLengthBuffer.byteLength + 8);
-  const aadView = new DataView(aad.buffer);
-  aadView.setUint32(aadLengthBuffer.byteLength, timestamp, false);
-  aadView.setUint32(aadLengthBuffer.byteLength + 4, version, false);
-
   const options = {
     name: 'AES-GCM',
     iv: iv,
     additionalData: aad,
-    tagLength: 16,
+    tagLength: 128,
   };
 
   const encrypted: ArrayBuffer = await crypto.subtle.encrypt(options, cryptoKey, data);
   const encryptedData = new Uint8Array(encrypted);
 
-  const output = new Uint8Array(1 + salt.byteLength + iv.byteLength + aad.byteLength - aadLengthBuffer.byteLength + encryptedData.byteLength);
-  output[0] = version;
-  output.set(salt, 1);
-  output.set(iv, 1 + salt.byteLength);
-  output.set(new Uint8Array(aad.buffer).subarray(aadLengthBuffer.byteLength), 1 + salt.byteLength + iv.byteLength);
-  output.set(encryptedData, 1 + salt.byteLength + iv.byteLength + aad.byteLength - aadLengthBuffer.byteLength);
+  // Output structure: version (1 byte), salt (16 bytes), iv (12 bytes), aad (8 bytes), then ciphertext.
+  const output = new Uint8Array(1 + salt.byteLength + iv.byteLength + aad.byteLength + encryptedData.byteLength);
+  let offset = 0;
+  output[offset++] = version;
+  output.set(salt, offset);
+  offset += salt.byteLength;
+  output.set(iv, offset);
+  offset += iv.byteLength;
+  output.set(aad, offset);
+  offset += aad.byteLength;
+  output.set(encryptedData, offset);
 
   wipeBytes(key);
   return { encryptedData: output, timestamp: timestamp, version: version };
@@ -222,14 +222,23 @@ export async function encryptData(data: Uint8Array, password: string, timestamp:
 
 /**
  * Decrypts data using AES-256-GCM.
+ * Expects the output structure: version (1 byte), salt (16 bytes), iv (12 bytes), aad (8 bytes), then ciphertext.
  */
 export async function decryptData(encryptedData: Uint8Array, password: string): Promise<DecryptionResult> {
-  const version = encryptedData[0];
+  // Minimum length: 1 (version) + 16 (salt) + 12 (iv) + 8 (aad) + 16 (tag) = 53 bytes
+  if (encryptedData.length < 53) {
+    throw new Error("Ciphertext too short or corrupted");
+  }
+  let offset = 0;
+  const version = encryptedData[offset++];
 
-  const salt = encryptedData.slice(1, 17);
-  const iv = encryptedData.slice(17, 29);
-  const aad = encryptedData.slice(29, 37);
-  const encrypted = encryptedData.slice(37);
+  const salt = encryptedData.slice(offset, offset + 16);
+  offset += 16;
+  const iv = encryptedData.slice(offset, offset + 12);
+  offset += 12;
+  const aad = encryptedData.slice(offset, offset + 8);
+  offset += 8;
+  const ciphertext = encryptedData.slice(offset);
 
   const aadView = new DataView(aad.buffer);
   const timestamp = aadView.getUint32(0, false);
@@ -253,11 +262,11 @@ export async function decryptData(encryptedData: Uint8Array, password: string): 
     name: 'AES-GCM',
     iv: iv,
     additionalData: aad,
-    tagLength: 16,
+    tagLength: 128,
   };
 
   try {
-    const decrypted: ArrayBuffer = await crypto.subtle.decrypt(options, cryptoKey, encrypted);
+    const decrypted: ArrayBuffer = await crypto.subtle.decrypt(options, cryptoKey, ciphertext);
     const decryptedData = new Uint8Array(decrypted);
 
     wipeBytes(key);
