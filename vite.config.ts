@@ -3,13 +3,12 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
-import csp from "vite-plugin-csp";           // ✅ default import
+import csp from "vite-plugin-csp";
 
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
-    // Dev security headers (CSP omitted so inline/HMR scripts run)
     headers:
       mode === "development"
         ? {
@@ -27,28 +26,23 @@ export default defineConfig(({ mode }) => ({
   },
 
   plugins: [
-    // 1️⃣ React-SWC first so its preamble survives
-    react(),
+    react(),                                   // 1️⃣ React-SWC first
 
-    // 2️⃣ CSP plugin — *only in production builds*
-    mode !== "development" &&
+    mode !== "development" &&                  // 2️⃣ CSP only in prod
       csp({
-        policies: {
-          "default-src": ["'self'"],
-          "script-src": ["'self'", "https://cdn.gpteng.co"],
-          "style-src": ["'self'", "'unsafe-inline'"],
-          "img-src": ["'self'", "https:", "data:", "blob:"],
-          "connect-src": ["'self'"],
-          "object-src": ["'none'"]
-        } as const,
-        hashEnabled: { "script-src": false }
+        policy: {
+          "default-src": ["self"],
+          "script-src": ["self", "https://cdn.gpteng.co"],
+          "style-src": ["self", "unsafe-inline"],
+          "img-src": ["self", "https:", "data:", "blob:"],
+          "connect-src": ["self"],
+          "object-src": ["none"]
+        } as const
       }),
 
-    // 3️⃣ Dev-only component tagger
-    mode === "development" && componentTagger(),
+    mode === "development" && componentTagger(),   // 3️⃣ Dev-only tagger
 
-    // 4️⃣ PWA plugin
-    VitePWA({
+    VitePWA({                                      // 4️⃣ PWA
       registerType: "autoUpdate",
       injectRegister: "auto",
       workbox: {
@@ -79,8 +73,6 @@ export default defineConfig(({ mode }) => ({
   ].filter(Boolean),
 
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src")
-    }
+    alias: { "@": path.resolve(__dirname, "./src") }
   }
 }));
