@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -67,8 +66,25 @@ export function useEncryption() {
     navigator.clipboard.writeText(output);
     toast({
       title: "Copied to clipboard",
-      description: "The output has been copied to your clipboard"
+      description: "The output has been copied to your clipboard. It will be cleared in 30 seconds for your security."
     });
+    // Auto-wipe clipboard after 30 seconds
+    setTimeout(async () => {
+      // Only clear if clipboard still contains our output
+      try {
+        const current = await navigator.clipboard.readText();
+        if (current === output) {
+          await navigator.clipboard.writeText("");
+          toast({
+            title: "Clipboard cleared",
+            description: "Sensitive data was removed from your clipboard for your security.",
+            variant: "default"
+          });
+        }
+      } catch (e) {
+        // Ignore errors (e.g., permissions)
+      }
+    }, 30000); // 30 seconds
   };
 
   // Clear utilities
