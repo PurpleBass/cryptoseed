@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -44,45 +43,6 @@
     --sidebar-accent: 140 5% 96%;
     --sidebar-accent-foreground: 140 6% 10%;
     --sidebar-border: 140 13% 91%;
-    --sidebar-ring: 142 30% 40%;
-  }
-
-  .dark {
-    --background: 147 47% 11%;
-    --foreground: 140 40% 98%;
-
-    --card: 147 47% 11%;
-    --card-foreground: 140 40% 98%;
-
-    --popover: 147 47% 11%;
-    --popover-foreground: 140 40% 98%;
-
-    --primary: 142 40% 42%;
-    --primary-foreground: 140 40% 98%;
-
-    --secondary: 145 27% 17%;
-    --secondary-foreground: 140 40% 98%;
-
-    --muted: 145 27% 17%;
-    --muted-foreground: 142 20% 65%;
-
-    --accent: 145 27% 17%;
-    --accent-foreground: 140 40% 98%;
-
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 140 40% 98%;
-
-    --border: 145 27% 17%;
-    --input: 145 27% 17%;
-    --ring: 143 27% 84%;
-    
-    --sidebar-background: 140 6% 10%;
-    --sidebar-foreground: 140 5% 96%;
-    --sidebar-primary: 142 40% 42%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 140 4% 16%;
-    --sidebar-accent-foreground: 140 5% 96%;
-    --sidebar-border: 140 4% 16%;
     --sidebar-ring: 142 30% 40%;
   }
 }
