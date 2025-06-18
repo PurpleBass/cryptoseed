@@ -1,108 +1,83 @@
-
-
 # CryptoSeed
 
-CryptoSeed.org – A secure, local browser-based AES-256 encryptor. Protect your sensitive data with military-grade encryption, all without sending anything online. Fast, private, and easy to use.
+**CryptoSeed** is a modern, open-source, client-side encryption app for securely encrypting and decrypting text, seed phrases, and files. Built with React and Vite, CryptoSeed uses strong cryptography and best security practices to keep your secrets safe—entirely in your browser, with no server-side data or tracking.
 
-## Table of Contents
+---
 
-- [Introduction](#introduction)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Progressive Web App](#progressive-web-app)
-- [Security Features](#security-features)
-- [Contributing](#contributing)
-- [License](#license)
+## 🚀 Features
+- **AES-256-GCM encryption** for text, seed phrases, and files
+- **PBKDF2 password strengthening** (600,000 rounds, SHA-256)
+- **Password strength meter** and secure password input
+- **Clipboard auto-wipe** and session timeout for sensitive data
+- **Secure memory wiping** after cryptographic operations
+- **Offline-first PWA**: works fully offline after first load
+- **No server-side data**: all encryption/decryption is local
+- **Modern UI/UX** with accessibility and mobile support
+- **A+ Security Headers**: passes Mozilla Observatory with top score
 
-## Introduction
+---
 
-CryptoSeed is a secure, browser-based AES-256 encryptor. This tool helps you protect your sensitive data with military-grade encryption, ensuring that your data remains private and secure without the need to send anything online. CryptoSeed is designed to be fast, private, and easy to use.
+## 🖥️ Demo
+Live: [https://effortless-marigold-bb242d.netlify.app/](https://effortless-marigold-bb242d.netlify.app/)
 
-## Features
+![CryptoSeed Screenshot](public/lovable-uploads/bc3ade29-da10-4211-9a5f-3313306b6d39.png)
 
-- **AES-256 Encryption**: Uses Advanced Encryption Standard (AES) with a 256-bit key length for strong encryption.
-- **Enhanced Key Derivation**: Implements PBKDF2 with 600,000 iterations of SHA-256 for secure password-based key generation.
-- **Local Encryption**: Performs all encryption and decryption operations locally in your browser, ensuring that no data is ever sent online.
-- **Versioned Format**: Uses a versioned encryption format for backward compatibility with future security improvements.
-- **Secure Memory Handling**: Implements memory wiping to protect sensitive data after use.
-- **User-Friendly Interface**: Simple and intuitive interface for easy encryption and decryption of files and text.
-- **Cross-Platform**: Works on any device with a modern web browser.
-- **Progressive Web App**: Can be installed as a standalone application and works offline.
+---
 
-## Installation
+## ⚡ Quick Start
 
-To run CryptoSeed locally, follow these steps:
+```bash
+# Clone the repo
+git clone https://github.com/PurpleBass/cryptoseed.git
+cd cryptoseed
 
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/PurpleBass/cryptoseed.git
-    cd cryptoseed
-    ```
+# Install dependencies
+npm install
 
-2. Install dependencies:
-    ```bash
-    npm install
-    # or
-    bun install
-    ```
+# Start the development server
+npm run dev
 
-3. Start the development server:
-    ```bash
-    npm run dev
-    # or
-    bun dev
-    ```
+# Build for production
+npm run build
 
-4. Open your browser and navigate to `http://localhost:5173`.
+# Preview production build
+npm run preview
+```
 
-## Usage
+---
 
-1. Open CryptoSeed in your browser.
-2. Choose whether you want to encrypt text, a file, or a cryptocurrency seed phrase.
-3. Enter your password (create a strong one!) and the data you wish to encrypt.
-4. Click the encrypt button to generate encrypted output.
-5. For decryption, paste the encrypted text or select the encrypted file, enter your password, and click decrypt.
+## 🛡️ Security
+- **All encryption is client-side** using the Web Crypto API
+- **No data is ever sent to a server**
+- **Strict security headers** (HSTS, CSP, X-Frame-Options, etc.)
+- **frame-ancestors 'none'** in CSP and X-Frame-Options: DENY
+- **A+ on Mozilla Observatory** (after deployment)
 
-## Progressive Web App
+---
 
-CryptoSeed can be installed as a Progressive Web App (PWA) for offline use:
+## 📦 Deployment
+- Deploys easily to Netlify, Vercel, or any static host
+- Security headers are set via the `/public/_headers` file (for Netlify)
+- For other hosts, configure headers as per their documentation
 
-1. Visit the CryptoSeed website in a supported browser (Chrome, Edge, Safari, etc.)
-2. Look for the installation prompt in the address bar or menu
-3. Click "Install" to add CryptoSeed to your device
-4. Once installed, CryptoSeed will work completely offline
+---
 
-### Benefits of Using as a PWA
+## 🤝 Contributing
+Pull requests, issues, and suggestions are welcome! Please open an issue or PR on GitHub.
 
-- **Complete Offline Operation**: Works without an internet connection
-- **Enhanced Security**: Runs in an isolated environment, separate from browser tabs
-- **Faster Loading**: Loads instantly after installation
-- **Easy Access**: Launch directly from your device's home screen
-- **Reduced Attack Surface**: No network activity means no network-based attacks
+---
 
-## Security Features
+## 📄 License
+[GPL-3.0](LICENSE)
 
-- **AES-256-GCM**: Industry-standard authenticated encryption with 256-bit keys
-- **PBKDF2**: Password-Based Key Derivation Function with 600,000 iterations of SHA-256
-- **Zero Network Activity**: No API calls, analytics, or data collection
-- **Memory Protection**: Sensitive data is wiped from memory after use
-- **Versioned Format**: Future-proof encryption with format version tracking
-- **Open Source**: All code is available for security review
+---
 
-## Contributing
+## 🙏 Credits
+- Built with [React](https://react.dev/), [Vite](https://vitejs.dev/), and [Tailwind CSS](https://tailwindcss.com/)
+- Cryptography via the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API)
+- UI icons from [Lucide](https://lucide.dev/)
 
-We welcome contributions from the community! To contribute:
+---
 
-1. Fork the repository.
-2. Create a new branch for your feature or bugfix.
-3. Make your changes and commit them with descriptive messages.
-4. Push your changes to your forked repository.
-5. Open a pull request to the main repository.
-
-Please make sure to follow the [code of conduct](CODE_OF_CONDUCT.md) and adhere to the [contributing guidelines](CONTRIBUTING.md).
-
-## License
-
-This project is licensed under the GNU General Public License v3. See the [LICENSE](LICENSE) file for details.
+**CryptoSeed**: Secure your secrets. Own your privacy.
 
