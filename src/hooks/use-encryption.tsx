@@ -5,7 +5,7 @@ type EncryptionMode = "seedphrase" | "text" | "file";
 
 export function useEncryption() {
   // Encryption mode state (seed phrase, text, or file)
-  const [mode, setMode] = useState<EncryptionMode>("seedphrase");
+  const [mode, setMode] = useState<EncryptionMode>("text");
   
   // Core encryption states
   const [isEncrypting, setIsEncrypting] = useState(true);

@@ -202,20 +202,13 @@ const EncryptionContainer = () => {
 
       {/* Tabs for different encryption modes */}
       <Tabs 
-        defaultValue="seedphrase" 
+        defaultValue="text" 
         value={mode} 
         onValueChange={v => setMode(v as "seedphrase" | "text" | "file")} 
         className="mt-2"
       >
         {/* Tab selection list */}
         <TabsList className="mb-4 bg-secure-50 p-1 border border-secure-100 shadow-sm rounded-full">
-          <TabsTrigger 
-            value="seedphrase" 
-            className="flex items-center gap-1.5 rounded-full data-[state=active]:bg-secure-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
-          >
-            <Sprout className="h-3.5 w-3.5" />
-            <span>Seed Phrase</span>
-          </TabsTrigger>
           <TabsTrigger 
             value="text" 
             className="flex items-center gap-1.5 rounded-full data-[state=active]:bg-secure-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
@@ -229,6 +222,13 @@ const EncryptionContainer = () => {
           >
             <File className="h-3.5 w-3.5" />
             <span>File</span>
+          </TabsTrigger>
+          <TabsTrigger 
+            value="seedphrase" 
+            className="flex items-center gap-1.5 rounded-full data-[state=active]:bg-secure-100 data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
+          >
+            <Sprout className="h-3.5 w-3.5" />
+            <span>Seed Phrase</span>
           </TabsTrigger>
         </TabsList>
 
