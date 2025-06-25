@@ -38,130 +38,63 @@ const CodeVerification = () => {
           <CollapsibleContent>
             <div className="p-4 border-t">
               <div className="text-xs sm:text-sm text-muted-foreground mb-3 text-left">
-                This is the exact implementation of our AES-256 encryption using the Web Crypto API.
+                This is the actual implementation of our AES-256-GCM encryption using the Web Crypto API, PBKDF2 key derivation, and secure memory handling. The output format includes a version byte, salt, IV, AAD (timestamp + version), and ciphertext. All encryption and decryption is performed client-side, and sensitive key material is wiped from memory after use.
               </div>
               <div className="p-4 bg-muted rounded-md overflow-auto max-h-[600px]">
                 <pre className="text-xs md:text-sm whitespace-pre text-left ml-0 text-gray-700">
 {`/**
- * AES-256 encryption functions with enhanced key derivation
- * 
- * This module uses the Web Crypto API (SubtleCrypto) to perform
- * secure client-side encryption and decryption with versioned
- * key derivation algorithms. No data is sent to any server.
+ * AES-256-GCM encryption with PBKDF2 key derivation and secure memory wiping
+ *
+ * - PBKDF2 (SHA-256, 600,000 iterations) derives a 256-bit key from the password and random salt
+ * - AES-GCM encrypts data with a random IV and 8-byte AAD (timestamp + version)
+ * - Output: [version|salt|iv|aad|ciphertext]
+ * - All operations are client-side; no data is sent to any server
  */
 
-// Version flags for encryption algorithm
-const VERSION_PBKDF2 = 1;
-const CURRENT_VERSION = VERSION_PBKDF2;
-
-// Generate a cryptographically secure key from a password
-async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey> {
-  // Convert password to ArrayBuffer
-  const passwordBuffer = str2ab(password);
-  
-  // Import the password as a key
-  const baseKey = await window.crypto.subtle.importKey(
-    "raw",
-    passwordBuffer,
-    { name: "PBKDF2" },
-    false,
-    ["deriveKey"]
-  );
-  
-  // Derive a key using PBKDF2
-  return window.crypto.subtle.deriveKey(
-    {
-      name: "PBKDF2",
-      salt: salt,
-      iterations: 600000,
-      hash: "SHA-256"
-    },
-    baseKey,
-    { name: "AES-GCM", length: 256 },
-    false,
-    ["encrypt", "decrypt"]
-  );
-}
-
-// Encrypt a message using AES-GCM
 export async function encryptMessage(message: string, password: string): Promise<string> {
-  try {
-    // Generate a random salt
-    const salt = window.crypto.getRandomValues(new Uint8Array(16));
-    
-    // Generate a random IV (Initialization Vector)
-    const iv = window.crypto.getRandomValues(new Uint8Array(12));
-    
-    // Version byte for format compatibility
-    const versionByte = new Uint8Array([CURRENT_VERSION]);
-    
-    // Derive encryption key from password
-    const key = await deriveKey(password, salt);
-    
-    // Encrypt the message
-    const messageBuffer = str2ab(message);
-    const encryptedBuffer = await window.crypto.subtle.encrypt(
-      {
-        name: "AES-GCM",
-        iv: iv
-      },
-      key,
-      messageBuffer
-    );
-    
-    // Combine version + salt + iv + encrypted data into a single buffer
-    const resultBuffer = new Uint8Array(versionByte.length + salt.length + iv.length + encryptedBuffer.byteLength);
-    resultBuffer.set(versionByte, 0);
-    resultBuffer.set(salt, versionByte.length);
-    resultBuffer.set(iv, versionByte.length + salt.length);
-    resultBuffer.set(new Uint8Array(encryptedBuffer), versionByte.length + salt.length + iv.length);
-    
-    // Convert to Base64 for easy storage/transmission
-    return arrayBufferToBase64(resultBuffer);
-  } catch (error) {
-    console.error("Encryption error:", error);
-    throw new Error("Failed to encrypt message");
-  }
+  const encoder = new TextEncoder();
+  const data = encoder.encode(message);
+  const version = 1;
+  const salt = new Uint8Array(16);
+  crypto.getRandomValues(salt);
+  const iv = new Uint8Array(12);
+  crypto.getRandomValues(iv);
+  const key = await pbkdf2(password, salt, 600000, 32, 'SHA-256');
+  // AAD: 4 bytes timestamp, 4 bytes version
+  const timestamp = Date.now();
+  const aad = new Uint8Array(8);
+  const aadView = new DataView(aad.buffer);
+  aadView.setUint32(0, timestamp, false);
+  aadView.setUint32(4, version, false);
+  const cryptoKey = await crypto.subtle.importKey('raw', key, { name: 'AES-GCM' }, false, ['encrypt']);
+  const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv, additionalData: aad, tagLength: 128 }, cryptoKey, data);
+  const encryptedData = new Uint8Array(encrypted);
+  // Output: version|salt|iv|aad|ciphertext
+  const output = new Uint8Array(1 + salt.length + iv.length + aad.length + encryptedData.length);
+  let offset = 0;
+  output[offset++] = version;
+  output.set(salt, offset); offset += salt.length;
+  output.set(iv, offset); offset += iv.length;
+  output.set(aad, offset); offset += aad.length;
+  output.set(encryptedData, offset);
+  wipeBytes(key);
+  return uint8ToBase64(output);
 }
 
-// Decrypt a message using AES-GCM
 export async function decryptMessage(encryptedMessage: string, password: string): Promise<string> {
-  try {
-    // Convert the Base64 encrypted message back to ArrayBuffer
-    const encryptedBuffer = base64ToArrayBuffer(encryptedMessage);
-    
-    // Check format version
-    const version = new Uint8Array(encryptedBuffer.slice(0, 1))[0];
-    
-    // Extract salt, iv, and encrypted data
-    const salt = encryptedBuffer.slice(1, 17);
-    const iv = encryptedBuffer.slice(17, 29);
-    const data = encryptedBuffer.slice(29);
-    
-    // Derive the key from the password and salt
-    const key = await deriveKey(password, new Uint8Array(salt));
-    
-    // Decrypt the message
-    const decryptedBuffer = await window.crypto.subtle.decrypt(
-      {
-        name: "AES-GCM",
-        iv: new Uint8Array(iv)
-      },
-      key,
-      data
-    );
-    
-    // Secure memory handling
-    const result = ab2str(decryptedBuffer);
-    
-    // Clean up sensitive data from memory
-    wipeArrayBuffer(decryptedBuffer);
-    
-    return result;
-  } catch (error) {
-    console.error("Decryption error:", error);
-    throw new Error("Failed to decrypt message");
-  }
+  const encryptedData = base64ToUint8(encryptedMessage);
+  let offset = 0;
+  const version = encryptedData[offset++];
+  const salt = encryptedData.slice(offset, offset + 16); offset += 16;
+  const iv = encryptedData.slice(offset, offset + 12); offset += 12;
+  const aad = encryptedData.slice(offset, offset + 8); offset += 8;
+  const ciphertext = encryptedData.slice(offset);
+  const key = await pbkdf2(password, salt, 600000, 32, 'SHA-256');
+  const cryptoKey = await crypto.subtle.importKey('raw', key, { name: 'AES-GCM' }, false, ['decrypt']);
+  const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv, additionalData: aad, tagLength: 128 }, cryptoKey, ciphertext);
+  wipeBytes(key);
+  const decoder = new TextDecoder();
+  return decoder.decode(new Uint8Array(decrypted));
 }`}
                 </pre>
               </div>
