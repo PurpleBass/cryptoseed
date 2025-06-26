@@ -8,12 +8,12 @@
   "theme_color": "#4BC282",
   "icons": [
     {
-      "src": "/CryptoSeed.png",
+      "src": "/CryptoSeed Logo Lock.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/CryptoSeed.png",
+      "src": "/CryptoSeed Logo Lock.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
