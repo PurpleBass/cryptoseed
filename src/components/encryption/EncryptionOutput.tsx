@@ -69,7 +69,7 @@ export const EncryptionOutput: React.FC<EncryptionOutputProps> = ({
     navigator.clipboard.writeText(url);
     toast({
       title: "Link copied",
-      description: "The shareable decryption link has been copied to your clipboard.",
+      description: "The shareable decryption link has been copied to your clipboard. For security, the clipboard will be erased in 30 seconds.",
       variant: "default"
     });
   };
@@ -82,6 +82,15 @@ export const EncryptionOutput: React.FC<EncryptionOutputProps> = ({
             {isEncrypting ? "Encrypted Result" : "Decrypted Result"}
           </CardTitle>
           <div className="flex gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onCopy}
+              className="text-satoshi-500 hover:text-satoshi-600 hover:bg-satoshi-50"
+              aria-label="Copy Output"
+            >
+              <Copy className="h-4 w-4" />
+            </Button>
             <Button
               variant="ghost"
               size="icon"
@@ -99,15 +108,6 @@ export const EncryptionOutput: React.FC<EncryptionOutputProps> = ({
               aria-label="Show QR Code"
             >
               <QrCode className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onCopy}
-              className="text-satoshi-500 hover:text-satoshi-600 hover:bg-satoshi-50"
-              aria-label="Copy Output"
-            >
-              <Copy className="h-4 w-4" />
             </Button>
           </div>
         </div>

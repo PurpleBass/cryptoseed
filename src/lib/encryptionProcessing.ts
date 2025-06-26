@@ -1,4 +1,3 @@
-
 import { encryptMessage, decryptMessage, encryptFile, decryptFile } from "@/lib/encryption";
 
 // Process seed phrase encryption or decryption
@@ -32,17 +31,9 @@ export async function processSeedPhrase(
 // Format seed phrase with numbers
 export function formatSeedPhraseWithNumbers(seedPhrase: string): string {
   if (!seedPhrase) return '';
-  
-  // Log the input to debug
-  console.log('Formatting seed phrase:', seedPhrase);
-  
   const words = seedPhrase.trim().split(/\s+/);
-  console.log('Words array:', words);
-  
-  const formatted = words.map((word, index) => `${index + 1}. ${word}`).join(' ');
-  console.log('Formatted result:', formatted);
-  
-  return formatted;
+  // Return each word on a new line, numbered
+  return words.map((word, index) => `${index + 1}. ${word}`).join('\n');
 }
 
 // Process text encryption or decryption
