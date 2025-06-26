@@ -14,8 +14,14 @@ import EncryptionContainer from "./encryption/EncryptionContainer";
  * 
  * @returns {JSX.Element} The encryption interface
  */
-const EncryptionComponent = () => {
-  return <EncryptionContainer />;
+
+export interface EncryptionComponentProps {
+  initialEncrypting?: boolean;
+  initialCipher?: string | undefined;
+}
+
+const EncryptionComponent = ({ initialEncrypting = true, initialCipher }: EncryptionComponentProps) => {
+  return <EncryptionContainer initialEncrypting={initialEncrypting} initialCipher={initialCipher} />;
 };
 
 export default EncryptionComponent;

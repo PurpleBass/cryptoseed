@@ -3,12 +3,12 @@ import { useToast } from "@/hooks/use-toast";
 
 type EncryptionMode = "seedphrase" | "text" | "file";
 
-export function useEncryption() {
+export function useEncryption(initialEncrypting?: boolean) {
   // Encryption mode state (seed phrase, text, or file)
   const [mode, setMode] = useState<EncryptionMode>("text");
   
   // Core encryption states
-  const [isEncrypting, setIsEncrypting] = useState(true);
+  const [isEncrypting, setIsEncrypting] = useState(initialEncrypting ?? true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [password, setPassword] = useState("");

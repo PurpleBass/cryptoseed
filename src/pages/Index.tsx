@@ -1,23 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { Key, Lock, FileText, Book, FileCheck } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Key, Lock, FileText } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
 import EncryptionComponent from "@/components/EncryptionComponent";
 import CodeVerification from "@/components/CodeVerification";
 import FAQComponent from "@/components/FAQComponent";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useIsMobile } from "@/hooks/use-mobile";
+// import { useIsMobile } from "@/hooks/use-mobile";
 import { useLocation } from "react-router-dom";
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewType>("encrypt");
-  const isMobile = useIsMobile();
+  // const isMobile = useIsMobile();
   const location = useLocation();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     if (searchParams.has('faq')) {
       setCurrentView("faq");
+    }
+  }, [location]);
+
+  // Track if we should start in decrypt mode and prefill cipher
+  const [initialEncrypting, setInitialEncrypting] = useState(true);
+  const [initialCipher, setInitialCipher] = useState<string | undefined>(undefined);
+  // Remove unused prefillCipher state
+
+  useEffect(() => {
+    // Hash-based prefill for decryption
+    if (window.location.hash && window.location.hash.length > 1) {
+      setCurrentView("encrypt");
+      setInitialEncrypting(false); // Start in decrypt mode
+      setInitialCipher(decodeURIComponent(window.location.hash.slice(1)));
     }
   }, [location]);
 
@@ -75,7 +89,7 @@ const Index = () => {
         </div>}
       
       <main className="flex-1">
-        {currentView === "encrypt" && <EncryptionComponent />}
+        {currentView === "encrypt" && <EncryptionComponent initialEncrypting={initialEncrypting} initialCipher={initialCipher} />}
         {currentView === "verify" && <CodeVerification />}
         {currentView === "faq" && <FAQComponent />}
       </main>

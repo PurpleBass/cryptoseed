@@ -1,4 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useEffect } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,19 @@ import { TextEncryption } from "./TextEncryption";
 import { FileEncryption } from "./FileEncryption";
 import { File, FileText, Sprout, AlertCircle, Lock, LockOpen, Shield, WifiOff, HelpCircle } from "lucide-react";
 
-const EncryptionContainer = () => {
+export interface EncryptionContainerProps {
+  initialEncrypting?: boolean;
+  initialCipher?: string | undefined;
+}
+
+const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: EncryptionContainerProps) => {
+  useEffect(() => {
+    if (typeof initialCipher === 'string' && initialCipher.length > 0) {
+      setMode('text');
+      setTextInput(initialCipher);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialCipher]);
   const {
     mode, 
     isEncrypting, 
@@ -40,7 +53,21 @@ const EncryptionContainer = () => {
     clearTextInput,
     clearSeedPhrase,
     toast
-  } = useEncryption();
+  } = useEncryption(initialEncrypting);
+
+  // Sync isEncrypting state with initialEncrypting prop if it changes (e.g., after hash detected)
+  useEffect(() => {
+    setIsEncrypting(initialEncrypting ?? true);
+  }, [initialEncrypting, setIsEncrypting]);
+
+  // Prefill the cipher into the text input if provided (only on first mount)
+  useEffect(() => {
+    if (typeof initialCipher === 'string' && initialCipher.length > 0) {
+      setMode('text');
+      setTextInput(initialCipher);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialCipher, setMode, setTextInput]);
   
   const navigate = useNavigate();
 
