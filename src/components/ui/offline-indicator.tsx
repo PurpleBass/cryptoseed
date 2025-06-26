@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { AlertCircle, Wifi, WifiOff, X, Download, Shield } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -26,6 +25,7 @@ export const OfflineIndicator = () => {
   const [showOfflineDialog, setShowOfflineDialog] = useState(false);
 
   useEffect(() => {
+    console.log('[OfflineIndicator] Mounted. navigator.onLine:', navigator.onLine);
     // Skip effect if running in SSR environment
     if (typeof window === 'undefined') return;
     
@@ -34,11 +34,12 @@ export const OfflineIndicator = () => {
      * Updates state and shows a success toast
      */
     const handleOnline = () => {
+      console.log('[OfflineIndicator] Online event fired');
       setIsOffline(false);
       setIsAlertVisible(true); // Reset visibility when coming back online
       toast.success('You are back online', {
         description: 'All features are now available',
-        icon: <Wifi className="h-4 w-4" />,
+        icon: <Wifi className="h-4 w-4" />, 
       });
     };
 
@@ -47,6 +48,7 @@ export const OfflineIndicator = () => {
      * Updates state and shows a warning toast
      */
     const handleOffline = () => {
+      console.log('[OfflineIndicator] Offline event fired');
       setIsOffline(true);
       setIsAlertVisible(true); // Reset visibility when going offline
       toast.warning('You are offline', {
@@ -59,11 +61,13 @@ export const OfflineIndicator = () => {
     // Add event listeners for online/offline status changes
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
+    console.log('[OfflineIndicator] Event listeners added');
 
     // Clean up event listeners on component unmount
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+      console.log('[OfflineIndicator] Event listeners removed');
     };
   }, []);
 
