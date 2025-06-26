@@ -83,7 +83,7 @@ const Index = () => {
       <footer className="py-6 md:py-10 bg-gray-50 border-t border-gray-100">
         <div className="satoshi-container">
           <div className="mb-3 md:mb-4 text-center">
-            <img src="/lovable-uploads/bc3ade29-da10-4211-9a5f-3313306b6d39.png" alt="Crypto Seed Logo" className="h-6 w-6 md:h-8 md:w-8 inline-block" />
+            <img src="/CryptoSeed Logo No Background.png" alt="Crypto Seed Logo" className="h-6 w-6 md:h-8 md:w-8 inline-block" />
             <p className="text-base md:text-lg text-gray-800 mt-1 md:mt-2 font-bold">Crypto Seed</p>
           </div>
           <p className="text-xs md:text-sm text-gray-600 max-w-xl mx-auto text-center px-4 md:px-0">
