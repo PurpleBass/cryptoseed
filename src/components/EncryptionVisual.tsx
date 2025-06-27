@@ -51,7 +51,7 @@ const EncryptionVisual = () => {
                 <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mb-2">
                   <Lock className="h-6 w-6 text-secure-600" />
                 </div>
-                <span className="text-xs font-medium">AES-256 Encryption</span>
+                <span className="text-xs font-medium">AES-256-GCM Encryption</span>
               </div>
               
               {/* Arrow */}

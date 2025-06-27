@@ -341,7 +341,7 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
                 {/* Badge showing encryption method */}
                 <Badge variant="outline" className="ml-2 text-xs flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200">
                   <Shield className="h-3 w-3" />
-                  <span>AES-256</span>
+                  <span>AES-256-GCM</span>
                 </Badge>
               </div>
             </div>
