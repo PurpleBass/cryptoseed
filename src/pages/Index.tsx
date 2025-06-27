@@ -45,7 +45,6 @@ const Index = () => {
               <h1 className="text-2xl md:text-4xl font-bold text-gray-900">
                 Secure Your Crypto Seed Phrases
               </h1>
-              <span className="block text-secure-700 text-base md:text-lg font-semibold tracking-tight mt-1 md:mt-2">Plant privacy. Sprout Freedom.</span>
             </div>
             
             <div className="max-w-3xl mx-auto px-2 md:px-0">
