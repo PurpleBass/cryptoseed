@@ -101,6 +101,36 @@
   max-width: 100%;
 }
 
+/* Horizontal rule styling */
+.tiptap .tiptap-hr {
+  border: none;
+  border-top: 2px solid #e5e5e5;
+  margin: 2rem 0;
+}
+
+/* Text alignment classes */
+.tiptap [data-text-align="left"] {
+  text-align: left;
+}
+
+.tiptap [data-text-align="center"] {
+  text-align: center;
+}
+
+.tiptap [data-text-align="right"] {
+  text-align: right;
+}
+
+/* Underline styling */
+.tiptap u {
+  text-decoration: underline;
+}
+
+/* Strikethrough styling */
+.tiptap s {
+  text-decoration: line-through;
+}
+
 /* Add placeholder styling for empty editor */
 .tiptap .ProseMirror p.is-editor-empty:first-child::before {
   color: #9ca3af;
