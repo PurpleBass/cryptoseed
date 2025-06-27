@@ -108,17 +108,67 @@
   margin: 2rem 0;
 }
 
-/* Text alignment classes */
-.tiptap [data-text-align="left"] {
-  text-align: left;
+/* Text alignment - handle inline styles properly with high specificity */
+.tiptap .ProseMirror p[style*="text-align: left"],
+.tiptap .ProseMirror li[style*="text-align: left"] {
+  text-align: left !important;
 }
 
-.tiptap [data-text-align="center"] {
-  text-align: center;
+.tiptap .ProseMirror p[style*="text-align: center"],
+.tiptap .ProseMirror li[style*="text-align: center"] {
+  text-align: center !important;
 }
 
-.tiptap [data-text-align="right"] {
-  text-align: right;
+.tiptap .ProseMirror p[style*="text-align: right"],
+.tiptap .ProseMirror li[style*="text-align: right"] {
+  text-align: right !important;
+}
+
+.tiptap .ProseMirror p[style*="text-align: justify"],
+.tiptap .ProseMirror li[style*="text-align: justify"] {
+  text-align: justify !important;
+}
+
+/* Also handle data attributes in case they're used */
+.tiptap .ProseMirror [data-text-align="left"],
+.tiptap .ProseMirror [data-text-align="left"] p,
+.tiptap .ProseMirror [data-text-align="left"] li {
+  text-align: left !important;
+}
+
+.tiptap .ProseMirror [data-text-align="center"],
+.tiptap .ProseMirror [data-text-align="center"] p,
+.tiptap .ProseMirror [data-text-align="center"] li {
+  text-align: center !important;
+}
+
+.tiptap .ProseMirror [data-text-align="right"],
+.tiptap .ProseMirror [data-text-align="right"] p,
+.tiptap .ProseMirror [data-text-align="right"] li {
+  text-align: right !important;
+}
+
+/* Override the root text-align: center for the editor content */
+.tiptap .ProseMirror {
+  text-align: left; /* Default to left alignment for editor content */
+}
+
+/* Make sure that all text content respects the alignment */
+.tiptap .ProseMirror p, 
+.tiptap .ProseMirror li {
+  /* Don't override with any default alignment, let the extension handle it */
+}
+
+/* Ensure list items respect alignment from their parent */
+.tiptap .ProseMirror ul li,
+.tiptap .ProseMirror ol li {
+  text-align: inherit;
+}
+
+/* Override any default list alignment that might interfere */
+.tiptap .ProseMirror .tiptap-bullet-list,
+.tiptap .ProseMirror .tiptap-ordered-list {
+  text-align: inherit;
 }
 
 /* Underline styling */

@@ -61,7 +61,7 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
       }),
       // Add text alignment
       TextAlign.configure({
-        types: ['paragraph'],
+        types: ['paragraph', 'listItem'],
         alignments: ['left', 'center', 'right'],
         defaultAlignment: 'left',
       }),
@@ -92,6 +92,9 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
     autofocus: false, // Disable autofocus to prevent page scroll on load
     onUpdate: ({ editor }) => {
       onChange(editor.getJSON());
+    },
+    onSelectionUpdate: () => {
+      // Forces re-render when selection changes
     },
   });
 
@@ -240,13 +243,15 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
 
   // Helper function to toggle text alignment while preserving selection
   const toggleTextAlign = () => {
-    if (editor.isActive({ textAlign: 'left' }) || (!editor.isActive({ textAlign: 'center' }) && !editor.isActive({ textAlign: 'right' }))) {
-      editor.chain().focus().setTextAlign('center').run();
-    } else if (editor.isActive({ textAlign: 'center' })) {
-      editor.chain().focus().setTextAlign('right').run();
+    // Cycle through left -> center -> right -> left
+    if (editor.isActive({ textAlign: 'center' })) {
+      editor.commands.setTextAlign('right');
+    } else if (editor.isActive({ textAlign: 'right' })) {
+      editor.commands.setTextAlign('left');
     } else {
-      editor.chain().focus().setTextAlign('left').run();
+      editor.commands.setTextAlign('center');
     }
+    
     // Restore selection after a brief delay
     setTimeout(restoreSelection, 10);
   };
@@ -258,8 +263,11 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
     setTimeout(restoreSelection, 10);
   };
 
-  // Get current text alignment icon
+  // Get current text alignment icon (depends on updateTrigger for re-rendering)
   const getAlignmentIcon = () => {
+    if (!editor) return <AlignLeft className="h-3.5 w-3.5" />;
+    
+    // Use isActive method as recommended in Tiptap docs
     if (editor.isActive({ textAlign: 'center' })) return <AlignCenter className="h-3.5 w-3.5" />;
     if (editor.isActive({ textAlign: 'right' })) return <AlignRight className="h-3.5 w-3.5" />;
     return <AlignLeft className="h-3.5 w-3.5" />;
