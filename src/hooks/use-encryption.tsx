@@ -36,6 +36,7 @@ export function useEncryption(initialEncrypting?: boolean) {
   useEffect(() => {
     setOutput("");
     setSelectedFile(null);
+    setSeedPhrase(""); // Clear seed phrase when toggling modes
     setProgress(0);
     
     // Reset textInput based on the current mode

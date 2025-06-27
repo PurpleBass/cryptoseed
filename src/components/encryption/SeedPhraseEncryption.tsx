@@ -53,7 +53,10 @@ export const SeedPhraseEncryption: React.FC<SeedPhraseEncryptionProps> = ({
           <div className="grid gap-4">
             {isEncrypting ? (
               <div className="w-full overflow-hidden">
-                <SeedPhraseInput onSeedPhraseChange={onSeedPhraseChange} />
+                <SeedPhraseInput 
+                  key={`seed-input-${isEncrypting ? 'encrypt' : 'decrypt'}`}
+                  onSeedPhraseChange={onSeedPhraseChange} 
+                />
               </div>
             ) : (
               <div className="grid gap-2">
