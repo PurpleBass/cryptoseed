@@ -131,7 +131,7 @@ export const EncryptionOutput: React.FC<EncryptionOutputProps> = ({
       </CardHeader>
       <CardContent>
         <div className="p-4 bg-gray-50 rounded-md overflow-auto max-h-96 border border-gray-100">
-          <pre className="whitespace-pre-wrap break-all text-gray-800 text-left">{displayOutput}</pre>
+          <pre className="whitespace-pre-wrap break-all text-gray-800 text-left font-mono text-sm">{displayOutput}</pre>
         </div>
         {showQR && output && (
           <div className="flex flex-col items-center mt-4" ref={qrRef}>

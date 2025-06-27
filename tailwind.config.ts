@@ -22,6 +22,7 @@ export default {
       sans: ["system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "sans-serif"],
       heading: ["system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "sans-serif"],
       helvetica: ["Helvetica", "Arial", "sans-serif"],
+      mono: ["SF Mono", "Monaco", "Menlo", "Consolas", "Liberation Mono", "Courier New", "monospace"],
     },
       colors: {
         border: "hsl(var(--border))",
