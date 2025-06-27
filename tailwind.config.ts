@@ -18,12 +18,11 @@ export default {
         "2xl": "1400px",
       },
     },
-    extend: {
-      fontFamily: {
-        sans: ["Montserrat", "sans-serif"],
-        heading: ["Montserrat", "sans-serif"],
-        helvetica: ["Helvetica", "Arial", "sans-serif"],
-      },
+    extend: {    fontFamily: {
+      sans: ["system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "sans-serif"],
+      heading: ["system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "sans-serif"],
+      helvetica: ["Helvetica", "Arial", "sans-serif"],
+    },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

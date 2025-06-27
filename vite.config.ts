@@ -15,9 +15,7 @@ export default defineConfig(({ mode }) => ({
             "Referrer-Policy": "strict-origin-when-cross-origin",
             "X-Content-Type-Options": "nosniff",
             "Cross-Origin-Resource-Policy": "same-origin",
-            "Access-Control-Allow-Origin": "https://cdn.gpteng.co",
-            "Access-Control-Allow-Methods": "GET",
-            "X-Frame-Options": "SAMEORIGIN",
+            "X-Frame-Options": "DENY",
             "X-XSS-Protection": "1; mode=block",
             "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
           }
@@ -30,12 +28,16 @@ export default defineConfig(({ mode }) => ({
     mode !== "development" &&                  // 2️⃣ CSP only in prod
       csp({
         policy: {
-          "default-src": ["self"],
-          "script-src": ["self", "https://cdn.gpteng.co"],
-          "style-src": ["self", "unsafe-inline"],
-          "img-src": ["self", "https:", "data:", "blob:"],
+          "default-src": ["none"],
+          "script-src": ["self"],
+          "style-src": ["self"],
+          "img-src": ["self", "data:"],
+          "font-src": ["self"],
           "connect-src": ["self"],
-          "object-src": ["none"]
+          "object-src": ["none"],
+          "base-uri": ["self"],
+          "form-action": ["self"],
+          "frame-ancestors": ["none"]
         } as const
       }),
 
