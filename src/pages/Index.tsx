@@ -40,10 +40,12 @@ const Index = () => {
       
       {currentView === "encrypt" && <div className="bg-gradient-to-b from-secure-50 to-white pt-4 md:pt-8 pb-4 md:pb-6 border-b border-gray-100">
           <div className="satoshi-container text-center">
-            <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
+            <div className="flex flex-col items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
+              <img src="/CryptoSeed Logo No Background.png" alt="Crypto Seed Logo" className="h-12 w-12 md:h-16 md:w-16 mb-2" />
               <h1 className="text-2xl md:text-4xl font-bold text-gray-900">
                 Secure Your Crypto Seed Phrases
               </h1>
+              <span className="block text-secure-700 text-base md:text-lg font-semibold tracking-tight mt-1 md:mt-2">Plant privacy. Sprout Freedom.</span>
             </div>
             
             <div className="max-w-3xl mx-auto px-2 md:px-0">

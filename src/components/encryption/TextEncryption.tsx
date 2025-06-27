@@ -1,27 +1,29 @@
-
-import React from "react";
+import React, { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Eraser } from "lucide-react";
+import { Eraser, Copy, Upload } from "lucide-react";
 import { EncryptionOutput } from "./EncryptionOutput";
 import { PasswordInput } from "./PasswordInput";
+import { SecureRichTextEditor } from "./SecureRichTextEditor";
+import { readCryptoSeedFile } from "@/lib/encryptionProcessing";
 
 interface TextEncryptionProps {
   isEncrypting: boolean;
   isProcessing: boolean;
-  textInput: string;
+  textInput: any;
   password: string;
   showPassword: boolean;
   output: string;
-  onTextChange: (text: string) => void;
+  onTextChange: (text: any) => void;
   onPasswordChange: (password: string) => void;
   onTogglePassword: () => void;
   onProcess: () => void;
   onClearText: () => void;
   onClearPassword: () => void;
   onCopyOutput: () => void;
+  onCopyFormattedOutput?: (htmlContent: string, plainTextContent: string) => void;
+  onLoadCryptoSeedFile?: (content: string) => void;
 }
 
 export const TextEncryption: React.FC<TextEncryptionProps> = ({
@@ -38,12 +40,78 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
   onClearText,
   onClearPassword,
   onCopyOutput,
+  onCopyFormattedOutput,
+  onLoadCryptoSeedFile,
 }) => {
+  const decryptionEditorRef = useRef<any>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Helper function to copy decrypted content with formatting
+  const handleCopyDecryptedContent = () => {
+    if (decryptionEditorRef.current && onCopyFormattedOutput) {
+      const htmlContent = decryptionEditorRef.current.getHTML();
+      const plainTextContent = decryptionEditorRef.current.getText();
+      onCopyFormattedOutput(htmlContent, plainTextContent);
+    } else {
+      // Fallback to regular copy if formatted copy is not available
+      onCopyOutput();
+    }
+  };
+
+  // Helper function to handle .cryptoseed file loading
+  const handleFileLoad = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Check if it's a .cryptoseed file
+    if (!file.name.endsWith('.cryptoseed')) {
+      alert('Please select a .cryptoseed file');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const content = e.target?.result as string;
+      if (content && onLoadCryptoSeedFile) {
+        const result = readCryptoSeedFile(content);
+        if (result.isValid && result.content) {
+          onLoadCryptoSeedFile(result.content);
+        } else {
+          alert(result.error || 'Failed to load .cryptoseed file');
+        }
+      }
+    };
+    reader.readAsText(file);
+    
+    // Clear the file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  // Helper function to check if content has actual text
+  const hasTextContent = (content: any): boolean => {
+    if (!content) return false;
+    if (typeof content === 'string') return content.trim().length > 0;
+    if (typeof content === 'object' && content.content) {
+      // For Tiptap JSON, check if any content nodes have text
+      const checkNode = (node: any): boolean => {
+        if (node.text && node.text.trim().length > 0) return true;
+        if (node.content && Array.isArray(node.content)) {
+          return node.content.some(checkNode);
+        }
+        return false;
+      };
+      return Array.isArray(content.content) && content.content.some(checkNode);
+    }
+    return false;
+  };
+
   return (
     <>
-      <Card className="bg-white border border-gray-100 shadow-sm">
+      <Card className="satoshi-card">
         <CardHeader className="pb-3">
-          <CardTitle className="text-xl text-gray-900">
+          <CardTitle className="text-xl text-gray-900 font-heading">
             {isEncrypting ? "Text to Encrypt" : "Encrypted Text to Decrypt"}
           </CardTitle>
           <CardDescription className="text-gray-600">
@@ -57,20 +125,52 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
                 <Label htmlFor="textInput" className="text-gray-700">
                   {isEncrypting ? "Plain Text" : "Encrypted Text"}
                 </Label>
-                <Button onClick={onClearText} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
-                  <Eraser className="h-3.5 w-3.5 mr-1.5" />
-                  <span>Clear</span>
-                </Button>
+                <div className="flex items-center gap-2">
+                  {!isEncrypting && onLoadCryptoSeedFile && (
+                    <>
+                      <span className="text-sm text-gray-500">or</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="text-gray-600 hover:text-gray-700 hover:bg-gray-50 border-gray-200"
+                      >
+                        <Upload className="h-3.5 w-3.5 mr-1.5" />
+                        Load .cryptoseed file
+                      </Button>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept=".cryptoseed"
+                        onChange={handleFileLoad}
+                        style={{ display: 'none' }}
+                      />
+                    </>
+                  )}
+                  <Button onClick={onClearText} variant="outline" size="sm" className="text-gray-500 hover:text-gray-600 hover:bg-gray-50 border-gray-200">
+                    <Eraser className="h-3.5 w-3.5 mr-1.5" />
+                    <span>Clear</span>
+                  </Button>
+                </div>
               </div>
-              <Textarea
-                id="textInput"
-                value={textInput}
-                onChange={(e) => onTextChange(e.target.value)}
-                placeholder={isEncrypting ? "Enter the text you want to encrypt" : "Paste the encrypted text here"}
-                className="min-h-32 satoshi-input"
-              />
+              {isEncrypting ? (
+                <div className="w-full overflow-hidden">
+                  <SecureRichTextEditor
+                    value={textInput}
+                    onChange={onTextChange}
+                    editable={true}
+                  />
+                </div>
+              ) : (
+                <textarea
+                  id="encryptedTextInput"
+                  value={typeof textInput === 'string' ? textInput : ''}
+                  onChange={(e) => onTextChange(e.target.value)}
+                  placeholder="Paste your encrypted text here..."
+                  className="w-full h-32 p-3 border border-gray-200 rounded-md resize-none focus:ring-2 focus:ring-secure-500 focus:border-secure-500 font-mono text-sm placeholder:text-sm placeholder:text-gray-500 placeholder:font-helvetica"
+                />
+              )}
             </div>
-            
             <PasswordInput
               password={password}
               showPassword={showPassword}
@@ -82,7 +182,7 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
         </CardContent>
         <CardFooter>
           <Button
-            disabled={isProcessing || !textInput || !password}
+            disabled={isProcessing || !hasTextContent(textInput) || !password}
             onClick={onProcess}
             className="w-full bg-green-500 hover:bg-green-600 text-white"
           >
@@ -90,8 +190,37 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
           </Button>
         </CardFooter>
       </Card>
-
-      {output && <EncryptionOutput output={output} isEncrypting={isEncrypting} onCopy={onCopyOutput} />}
+      {output && isEncrypting && <EncryptionOutput output={output} isEncrypting={isEncrypting} onCopy={onCopyOutput} />}
+      {output && !isEncrypting && (
+        <Card className="mt-6 satoshi-card">
+          <CardHeader className="pb-3">
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-xl text-gray-900 font-heading">Decrypted Content</CardTitle>
+              <Button 
+                onClick={handleCopyDecryptedContent} 
+                variant="ghost"
+                size="icon"
+                className="text-secure-500 hover:text-secure-600 hover:bg-secure-50"
+                aria-label="Copy Decrypted Content"
+              >
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="p-4 bg-secure-50 rounded-md border border-secure-100">
+              <SecureRichTextEditor
+                value={textInput}
+                onChange={() => {}} // No-op since it's read-only
+                editable={false}
+                onEditorReady={(editor) => {
+                  decryptionEditorRef.current = editor;
+                }}
+              />
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </>
   );
 };

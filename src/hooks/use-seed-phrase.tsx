@@ -25,7 +25,7 @@ export function useSeedPhrase({ initialWordCount = 12, onSeedPhraseChange }: Use
 
   // Call the callback when words change
   useEffect(() => {
-    const seedPhrase = words.join(" ").trim();
+    const seedPhrase = words.filter(word => word.trim() !== '').join(' ');
     onSeedPhraseChange(seedPhrase);
   }, [words, onSeedPhraseChange]);
 

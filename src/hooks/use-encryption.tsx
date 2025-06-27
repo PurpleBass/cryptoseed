@@ -16,7 +16,15 @@ export function useEncryption(initialEncrypting?: boolean) {
   const [output, setOutput] = useState("");
   
   // Mode-specific states
-  const [textInput, setTextInput] = useState("");
+  const [textInput, setTextInput] = useState<any>({
+    type: 'doc',
+    content: [
+      {
+        type: 'paragraph',
+        content: []
+      }
+    ]
+  });
   const [seedPhrase, setSeedPhrase] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   
@@ -29,6 +37,24 @@ export function useEncryption(initialEncrypting?: boolean) {
     setOutput("");
     setSelectedFile(null);
     setProgress(0);
+    
+    // Reset textInput based on the current mode
+    if (isEncrypting) {
+      // For encryption mode: use Tiptap JSON structure
+      setTextInput({
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: []
+          }
+        ]
+      });
+    } else {
+      // For decryption mode: use empty string for encrypted text input
+      setTextInput("");
+    }
+    
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -87,9 +113,76 @@ export function useEncryption(initialEncrypting?: boolean) {
     }, 30000); // 30 seconds
   };
 
+  // Copy formatted content (for decryption mode - copies HTML with formatting)
+  const copyFormattedContent = (htmlContent: string, plainTextContent: string) => {
+    // Use the modern clipboard API to write both HTML and plain text
+    const clipboardItem = new ClipboardItem({
+      'text/html': new Blob([htmlContent], { type: 'text/html' }),
+      'text/plain': new Blob([plainTextContent], { type: 'text/plain' })
+    });
+    
+    navigator.clipboard.write([clipboardItem]).then(() => {
+      toast({
+        title: "Copied with formatting",
+        description: "The formatted content has been copied to your clipboard. It will be cleared in 30 seconds for your security."
+      });
+      
+      // Auto-wipe clipboard after 30 seconds
+      setTimeout(async () => {
+        try {
+          const current = await navigator.clipboard.readText();
+          if (current === plainTextContent) {
+            await navigator.clipboard.writeText("");
+            toast({
+              title: "Clipboard cleared",
+              description: "Sensitive data was removed from your clipboard for your security.",
+              variant: "default"
+            });
+          }
+        } catch (e) {
+          // Ignore errors (e.g., permissions)
+        }
+      }, 30000); // 30 seconds
+    }).catch(() => {
+      // Fallback to plain text if HTML copying fails
+      navigator.clipboard.writeText(plainTextContent);
+      toast({
+        title: "Copied as plain text",
+        description: "The content has been copied as plain text to your clipboard."
+      });
+    });
+  };
+
   // Clear utilities
-  const clearTextInput = () => setTextInput("");
+  const clearTextInput = () => {
+    if (isEncrypting) {
+      // For encryption mode: reset to empty Tiptap structure
+      setTextInput({
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: []
+          }
+        ]
+      });
+    } else {
+      // For decryption mode: reset to empty string
+      setTextInput("");
+    }
+  };
   const clearSeedPhrase = () => setSeedPhrase("");
+
+  // Load .cryptoseed file content for decryption
+  const loadCryptoSeedFile = (encryptedContent: string) => {
+    if (!isEncrypting) {
+      setTextInput(encryptedContent);
+      toast({
+        title: "File loaded",
+        description: "The .cryptoseed file has been loaded for decryption."
+      });
+    }
+  };
 
   // Helper to securely wipe a string by overwriting with random data
   const wipeString = (strSetter: (v: string) => void, length: number) => {
@@ -110,7 +203,8 @@ export function useEncryption(initialEncrypting?: boolean) {
         // Overwrite sensitive state with random data before clearing
         wipeString(setOutput, output.length);
         wipeString(setPassword, password.length);
-        wipeString(setTextInput, textInput.length);
+        // For textInput (now JSON), just clear it directly
+        clearTextInput();
         wipeString(setSeedPhrase, seedPhrase.length);
         setSelectedFile(null);
         // Wipe clipboard if it contains our output
@@ -172,8 +266,10 @@ export function useEncryption(initialEncrypting?: boolean) {
     togglePasswordVisibility,
     clearPassword,
     copyToClipboard,
+    copyFormattedContent,
     clearTextInput,
     clearSeedPhrase,
+    loadCryptoSeedFile,
     formatSeedPhrase,
     handleProgress,
     toast

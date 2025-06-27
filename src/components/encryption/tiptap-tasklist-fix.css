@@ -1,0 +1,169 @@
+/* Tiptap Task List/Checkboxes Inline Fix */
+.tiptap ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 1.5em;
+}
+.tiptap ul[data-type="taskList"] li {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  min-height: 1.5em;
+}
+.tiptap ul[data-type="taskList"] input[type="checkbox"] {
+  margin: 0 0.5em 0 0;
+  vertical-align: middle;
+}
+
+/* Bullet and Numbered List Styling */
+.tiptap .tiptap-bullet-list {
+  list-style-type: disc;
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+
+.tiptap .tiptap-ordered-list {
+  list-style-type: decimal;
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+
+.tiptap .tiptap-bullet-list li,
+.tiptap .tiptap-ordered-list li {
+  margin: 0.25em 0;
+  padding-left: 0.25em;
+}
+
+/* Ensure nested lists work properly */
+.tiptap .tiptap-bullet-list .tiptap-bullet-list {
+  list-style-type: circle;
+}
+
+.tiptap .tiptap-bullet-list .tiptap-bullet-list .tiptap-bullet-list {
+  list-style-type: square;
+}
+
+/* Editor Focus Styling - Highlight entire editor box */
+.tiptap {
+  outline: none;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* When editor is focused, highlight the entire container */
+.tiptap:focus-within {
+  border-color: #22c55e !important; /* Green border */
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1) !important; /* Green glow */
+}
+
+/* Remove default focus outline from individual elements inside editor */
+.tiptap .ProseMirror {
+  outline: none;
+  min-height: 100px;
+  padding: 0;
+  margin: 0;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+.tiptap .ProseMirror:focus {
+  outline: none;
+}
+
+/* Ensure the editor content area is always visible and has proper spacing */
+.tiptap .ProseMirror p {
+  margin: 0.5em 0;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.tiptap .ProseMirror p:first-child {
+  margin-top: 0;
+}
+
+.tiptap .ProseMirror p:last-child {
+  margin-bottom: 0;
+}
+
+/* Ensure empty paragraphs have proper height */
+.tiptap .ProseMirror p:empty {
+  height: 1.2em;
+}
+
+/* Ensure all text content wraps properly */
+.tiptap .ProseMirror * {
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+/* Add placeholder styling for empty editor */
+.tiptap .ProseMirror p.is-editor-empty:first-child::before {
+  color: #9ca3af;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 0.875rem;
+}
+
+/* Alternative placeholder styling */
+.tiptap .is-editor-empty::before {
+  color: #9ca3af;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 0.875rem;
+}
+
+/* Remove any default focus styles from paragraphs and other elements */
+.tiptap p:focus,
+.tiptap h1:focus,
+.tiptap h2:focus,
+.tiptap h3:focus,
+.tiptap li:focus {
+  outline: none;
+}
+
+/* Completely disable ProseMirror's default selection and focus styling */
+.tiptap .ProseMirror-focused {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove any selection highlighting on the editor content */
+.tiptap .ProseMirror-selectednode {
+  outline: none !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+/* Disable any default browser focus rings and highlights */
+.tiptap *:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Remove any default text selection styling that might interfere */
+.tiptap .ProseMirror p,
+.tiptap .ProseMirror div,
+.tiptap .ProseMirror span {
+  outline: none !important;
+}
+
+/* Ensure no background highlighting on focused elements */
+.tiptap .ProseMirror *:focus,
+.tiptap .ProseMirror *:focus-visible {
+  background-color: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+}

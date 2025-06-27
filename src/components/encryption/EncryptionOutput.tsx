@@ -2,9 +2,9 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Copy } from "lucide-react";
-import { formatSeedPhraseWithNumbers } from "@/lib/encryptionProcessing";
+import { formatSeedPhraseWithNumbers, downloadCryptoSeedFile } from "@/lib/encryptionProcessing";
 import QRCode from "react-qr-code";
-import { QrCode, Download, Link2 } from "lucide-react";
+import { QrCode, Download, Link2, FileDown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface EncryptionOutputProps {
@@ -24,12 +24,6 @@ export const EncryptionOutput: React.FC<EncryptionOutputProps> = ({
   const displayOutput = (!isEncrypting && mode === "seedphrase") 
     ? formatSeedPhraseWithNumbers(output)
     : output;
-
-  // Debug console log to verify the formatting
-  console.log('Mode:', mode);
-  console.log('IsEncrypting:', isEncrypting);
-  console.log('Original output:', output);
-  console.log('Formatted output:', displayOutput);
 
   const [showQR, setShowQR] = React.useState(false);
   const qrRef = React.useRef<HTMLDivElement>(null);
@@ -74,6 +68,16 @@ export const EncryptionOutput: React.FC<EncryptionOutputProps> = ({
     });
   };
 
+  const handleDownloadCryptoSeed = () => {
+    if (!output || !isEncrypting) return;
+    downloadCryptoSeedFile(output);
+    toast({
+      title: "File downloaded",
+      description: "Your encrypted content has been saved as a .cryptoseed file.",
+      variant: "default"
+    });
+  };
+
   return (
     <Card className="mt-6 satoshi-card">
       <CardHeader className="pb-3">
@@ -111,6 +115,19 @@ export const EncryptionOutput: React.FC<EncryptionOutputProps> = ({
             </Button>
           </div>
         </div>
+        {isEncrypting && (
+          <div className="mt-3">
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+              onClick={handleDownloadCryptoSeed}
+            >
+              <FileDown className="h-4 w-4" />
+              Download as .cryptoseed file
+            </Button>
+          </div>
+        )}
       </CardHeader>
       <CardContent>
         <div className="p-4 bg-gray-50 rounded-md overflow-auto max-h-96 border border-gray-100">

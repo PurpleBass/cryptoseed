@@ -14,19 +14,140 @@ import { TextEncryption } from "./TextEncryption";
 import { FileEncryption } from "./FileEncryption";
 import { File, FileText, Sprout, AlertCircle, Lock, LockOpen, Shield, WifiOff, HelpCircle } from "lucide-react";
 
+// Helper function to convert between Tiptap JSON and string for encryption
+const convertTiptapForEncryption = (content: any, isEncrypting: boolean): string => {
+  if (isEncrypting) {
+    // For encryption: convert Tiptap JSON to string
+    if (typeof content === 'string') return content;
+    if (content && typeof content === 'object') {
+      return JSON.stringify(content);
+    }
+    return '';
+  } else {
+    // For decryption: content should be the encrypted string (base64)
+    if (typeof content === 'string') return content;
+    // If it's still a Tiptap object, try to extract text content
+    if (content && typeof content === 'object' && content.content) {
+      // Extract plain text from Tiptap structure for decryption
+      const extractText = (node: any): string => {
+        if (node.text) return node.text;
+        if (node.content && Array.isArray(node.content)) {
+          return node.content.map(extractText).join('');
+        }
+        return '';
+      };
+      return content.content.map(extractText).join('');
+    }
+    return '';
+  }
+};
+
+// Helper function to convert decrypted string back to Tiptap JSON
+const convertDecryptedToTiptap = (decryptedString: string): any => {
+  try {
+    // Try to parse as JSON (if it was originally rich text)
+    const parsed = JSON.parse(decryptedString);
+    // Validate it looks like Tiptap content
+    if (parsed && typeof parsed === 'object' && parsed.type === 'doc') {
+      return parsed;
+    }
+    // If not valid Tiptap JSON, return as plain text in Tiptap format
+    return {
+      type: 'doc',
+      content: [
+        {
+          type: 'paragraph',
+          content: [
+            {
+              type: 'text',
+              text: decryptedString
+            }
+          ]
+        }
+      ]
+    };
+  } catch {
+    // If JSON parsing fails, treat as plain text
+    return {
+      type: 'doc',
+      content: [
+        {
+          type: 'paragraph',
+          content: [
+            {
+              type: 'text',
+              text: decryptedString
+            }
+          ]
+        }
+      ]
+    };
+  }
+};
+
+// Helper function to convert Tiptap JSON to readable text for output display
+const convertTiptapToReadableText = (tiptapContent: any): string => {
+  if (!tiptapContent || !tiptapContent.content) {
+    return '';
+  }
+
+  const processNode = (node: any): string => {
+    if (node.type === 'text') {
+      return node.text || '';
+    }
+    
+    if (node.type === 'paragraph') {
+      const content = node.content ? node.content.map(processNode).join('') : '';
+      return content + '\n';
+    }
+    
+    if (node.type === 'bulletList') {
+      const items = node.content ? node.content.map((item: any) => {
+        const text = item.content ? item.content.map(processNode).join('').trim() : '';
+        return `• ${text}`;
+      }).join('\n') : '';
+      return items + '\n';
+    }
+    
+    if (node.type === 'orderedList') {
+      const items = node.content ? node.content.map((item: any, index: number) => {
+        const text = item.content ? item.content.map(processNode).join('').trim() : '';
+        return `${index + 1}. ${text}`;
+      }).join('\n') : '';
+      return items + '\n';
+    }
+    
+    if (node.type === 'taskList') {
+      const items = node.content ? node.content.map((item: any) => {
+        const text = item.content ? item.content.map(processNode).join('').trim() : '';
+        const checked = item.attrs?.checked ? '☑' : '☐';
+        return `${checked} ${text}`;
+      }).join('\n') : '';
+      return items + '\n';
+    }
+    
+    if (node.type === 'listItem' || node.type === 'taskItem') {
+      return node.content ? node.content.map(processNode).join('') : '';
+    }
+    
+    // Handle other node types
+    if (node.content && Array.isArray(node.content)) {
+      return node.content.map(processNode).join('');
+    }
+    
+    return '';
+  };
+
+  const result = tiptapContent.content.map(processNode).join('').trim();
+  return result;
+};
+
 export interface EncryptionContainerProps {
   initialEncrypting?: boolean;
   initialCipher?: string | undefined;
 }
 
 const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: EncryptionContainerProps) => {
-  useEffect(() => {
-    if (typeof initialCipher === 'string' && initialCipher.length > 0) {
-      setMode('text');
-      setTextInput(initialCipher);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialCipher]);
   const {
     mode, 
     isEncrypting, 
@@ -50,8 +171,10 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
     togglePasswordVisibility,
     clearPassword,
     copyToClipboard,
+    copyFormattedContent,
     clearTextInput,
     clearSeedPhrase,
+    loadCryptoSeedFile,
     toast
   } = useEncryption(initialEncrypting);
 
@@ -64,7 +187,22 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
   useEffect(() => {
     if (typeof initialCipher === 'string' && initialCipher.length > 0) {
       setMode('text');
-      setTextInput(initialCipher);
+      // Convert the cipher string to Tiptap format for the editor
+      const tiptapContent = {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [
+              {
+                type: 'text',
+                text: initialCipher
+              }
+            ]
+          }
+        ]
+      };
+      setTextInput(tiptapContent);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialCipher, setMode, setTextInput]);
@@ -101,8 +239,22 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
   const handleProcessText = async () => {
     setIsProcessing(true);
     try {
-      const { result, successMessage } = await processText(textInput, password, isEncrypting);
-      setOutput(result);
+      // Convert textInput to string format for encryption/decryption
+      const textForProcessing = convertTiptapForEncryption(textInput, isEncrypting);
+      
+      const { result, successMessage } = await processText(textForProcessing, password, isEncrypting);
+      
+      // If decrypting, convert the result back to Tiptap format and update textInput
+      if (!isEncrypting) {
+        const tiptapContent = convertDecryptedToTiptap(result);
+        setTextInput(tiptapContent);
+        // For output display, convert to readable formatted text
+        const readableText = convertTiptapToReadableText(tiptapContent);
+        setOutput(readableText || result); // Fallback to raw result if conversion fails
+      } else {
+        setOutput(result);
+      }
+      
       toast({
         title: isEncrypting ? "Encryption successful" : "Decryption successful",
         description: successMessage
@@ -294,6 +446,8 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
             onClearText={clearTextInput}
             onClearPassword={clearPassword}
             onCopyOutput={copyToClipboard}
+            onCopyFormattedOutput={copyFormattedContent}
+            onLoadCryptoSeedFile={loadCryptoSeedFile}
           />
         </TabsContent>
 
