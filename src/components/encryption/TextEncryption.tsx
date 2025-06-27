@@ -167,7 +167,7 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
                   value={typeof textInput === 'string' ? textInput : ''}
                   onChange={(e) => onTextChange(e.target.value)}
                   placeholder="Paste your encrypted text here..."
-                  className="w-full h-32 p-3 border border-gray-200 rounded-md resize-none focus:ring-2 focus:ring-secure-500 focus:border-secure-500 font-mono text-sm placeholder:text-sm placeholder:text-gray-500 placeholder:font-helvetica"
+                  className="w-full h-32 p-3 border border-gray-200 rounded-md resize-none focus:ring-2 focus:ring-secure-500 focus:border-secure-500 font-mono text-sm placeholder:text-sm placeholder:text-gray-400 placeholder:font-helvetica"
                 />
               )}
             </div>

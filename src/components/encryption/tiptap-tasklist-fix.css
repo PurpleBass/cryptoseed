@@ -133,7 +133,7 @@
 
 /* Add placeholder styling for empty editor */
 .tiptap .ProseMirror p.is-editor-empty:first-child::before {
-  color: #9ca3af;
+  color: #a1a1aa;
   content: attr(data-placeholder);
   float: left;
   height: 0;
@@ -144,7 +144,7 @@
 
 /* Alternative placeholder styling */
 .tiptap .is-editor-empty::before {
-  color: #9ca3af;
+  color: #a1a1aa;
   content: attr(data-placeholder);
   float: left;
   height: 0;
