@@ -125,33 +125,10 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
                 <Label htmlFor="textInput" className="text-gray-700">
                   {isEncrypting ? "Plain Text" : "Encrypted Text"}
                 </Label>
-                <div className="flex items-center gap-2">
-                  {!isEncrypting && onLoadCryptoSeedFile && (
-                    <>
-                      <span className="text-sm text-gray-500">or</span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => fileInputRef.current?.click()}
-                        className="text-gray-600 hover:text-gray-700 hover:bg-gray-50 border-gray-200"
-                      >
-                        <Upload className="h-3.5 w-3.5 mr-1.5" />
-                        Load .cryptoseed file
-                      </Button>
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept=".cryptoseed"
-                        onChange={handleFileLoad}
-                        style={{ display: 'none' }}
-                      />
-                    </>
-                  )}
-                  <Button onClick={onClearText} variant="outline" size="sm" className="text-gray-500 hover:text-gray-600 hover:bg-gray-50 border-gray-200">
-                    <Eraser className="h-3.5 w-3.5 mr-1.5" />
-                    <span>Clear</span>
-                  </Button>
-                </div>
+                <Button onClick={onClearText} variant="outline" size="sm" className="text-gray-500 hover:text-gray-600 hover:bg-gray-50 border-gray-200">
+                  <Eraser className="h-3.5 w-3.5 mr-1.5" />
+                  <span>Clear</span>
+                </Button>
               </div>
               {isEncrypting ? (
                 <div className="w-full overflow-hidden">
@@ -169,6 +146,26 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
                   placeholder="Paste your encrypted text here..."
                   className="w-full h-32 p-3 border border-gray-200 rounded-md resize-none focus:ring-2 focus:ring-secure-500 focus:border-secure-500 font-mono text-sm placeholder:text-sm placeholder:text-gray-400 placeholder:font-helvetica"
                 />
+              )}
+              {!isEncrypting && onLoadCryptoSeedFile && (
+                <div className="flex justify-center">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="text-gray-600 hover:text-gray-700 hover:bg-gray-50 border-gray-200"
+                  >
+                    <Upload className="h-3.5 w-3.5 mr-1.5" />
+                    Load .cryptoseed file
+                  </Button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".cryptoseed"
+                    onChange={handleFileLoad}
+                    style={{ display: 'none' }}
+                  />
+                </div>
               )}
             </div>
             <PasswordInput
