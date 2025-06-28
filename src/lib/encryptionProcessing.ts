@@ -1,4 +1,27 @@
-import { encryptMessage, decryptMessage, encryptFile, decryptFile } from "@/lib/encryption";
+import { encryptMessage, encryptFile, decryptFile } from "@/lib/encryption";
+import { 
+  encryptMessageV2, 
+  decryptDataUniversal,
+  getEncryptionInfo,
+  ENCRYPTION_VERSION_V2,
+  ENCRYPTION_VERSION_LEGACY
+} from "@/lib/encryptionV2";
+
+// Encryption version type
+export type EncryptionVersion = 'v1' | 'v2';
+
+// Default encryption version (can be changed based on user preference)
+let defaultEncryptionVersion: EncryptionVersion = 'v2'; // Use enhanced encryption by default
+
+// Function to set the default encryption version
+export function setDefaultEncryptionVersion(version: EncryptionVersion) {
+  defaultEncryptionVersion = version;
+}
+
+// Function to get the current default encryption version
+export function getDefaultEncryptionVersion(): EncryptionVersion {
+  return defaultEncryptionVersion;
+}
 
 // Compression utilities using browser's built-in compression
 async function compressString(text: string): Promise<Uint8Array> {
@@ -116,11 +139,14 @@ export async function processSeedPhrase(
   seedPhrase: string, 
   password: string, 
   isEncrypting: boolean,
-  onProgress?: (progress: number) => void
+  onProgress?: (progress: number) => void,
+  encryptionVersion?: EncryptionVersion
 ) {
   if (!seedPhrase.trim() || !password.trim()) {
     throw new Error("Please provide both a seed phrase and a password");
   }
+
+  const version = encryptionVersion || defaultEncryptionVersion;
   
   if (isEncrypting) {
     // Compress then encrypt seed phrase
@@ -129,23 +155,45 @@ export async function processSeedPhrase(
     onProgress?.(30);
     const compressedBase64 = uint8ArrayToBase64(compressed);
     onProgress?.(50);
-    const encrypted = await encryptMessage(compressedBase64, password, (p) => onProgress?.(50 + p * 0.5));
+    
+    let encrypted: string;
+    let algorithmInfo: string;
+    
+    if (version === 'v2') {
+      encrypted = await encryptMessageV2(compressedBase64, password, (p) => onProgress?.(50 + p * 0.5));
+      algorithmInfo = "ChaCha20-Poly1305 + scrypt";
+    } else {
+      encrypted = await encryptMessage(compressedBase64, password, (p) => onProgress?.(50 + p * 0.5));
+      algorithmInfo = "AES-256-GCM + PBKDF2";
+    }
+    
     return {
       result: encrypted,
-      successMessage: "Your seed phrase has been compressed and encrypted"
+      successMessage: `Your seed phrase has been compressed and encrypted using ${algorithmInfo}`,
+      encryptionInfo: getEncryptionInfo(version === 'v2' ? ENCRYPTION_VERSION_V2 : ENCRYPTION_VERSION_LEGACY)
     };
   } else {
-    // Decrypt then decompress seed phrase
+    // Auto-detect encryption version and decrypt accordingly
     onProgress?.(10);
-    const decryptedCompressed = await decryptMessage(seedPhrase, password, (p) => onProgress?.(10 + p * 0.4));
+    
+    // Try universal decryption first (supports both v1 and v2 automatically)
+    const encryptedData = base64ToUint8Array(seedPhrase);
+    const universalResult = await decryptDataUniversal(encryptedData, password);
+    
     onProgress?.(60);
-    const compressedData = base64ToUint8Array(decryptedCompressed);
+    const compressedData = universalResult.decryptedData;
     onProgress?.(80);
     const decrypted = await decompressToString(compressedData);
     onProgress?.(100);
+    
+    const algorithmInfo = universalResult.algorithm === 'chacha20poly1305' 
+      ? "ChaCha20-Poly1305 + scrypt" 
+      : "AES-256-GCM + PBKDF2";
+    
     return {
       result: decrypted.trim(),
-      successMessage: "Your seed phrase has been decrypted and decompressed"
+      successMessage: `Your seed phrase has been decrypted using ${algorithmInfo} and decompressed`,
+      encryptionInfo: getEncryptionInfo(universalResult.version || ENCRYPTION_VERSION_LEGACY)
     };
   }
 }
@@ -163,11 +211,14 @@ export async function processText(
   text: string, 
   password: string, 
   isEncrypting: boolean,
-  onProgress?: (progress: number) => void
+  onProgress?: (progress: number) => void,
+  encryptionVersion?: EncryptionVersion
 ) {
   if (!text.trim() || !password.trim()) {
     throw new Error("Please provide both text and a password");
   }
+
+  const version = encryptionVersion || defaultEncryptionVersion;
   
   if (isEncrypting) {
     // Compress then encrypt text
@@ -176,23 +227,45 @@ export async function processText(
     onProgress?.(30);
     const compressedBase64 = uint8ArrayToBase64(compressed);
     onProgress?.(50);
-    const encrypted = await encryptMessage(compressedBase64, password, (p) => onProgress?.(50 + p * 0.5));
+    
+    let encrypted: string;
+    let algorithmInfo: string;
+    
+    if (version === 'v2') {
+      encrypted = await encryptMessageV2(compressedBase64, password, (p) => onProgress?.(50 + p * 0.5));
+      algorithmInfo = "ChaCha20-Poly1305 + scrypt";
+    } else {
+      encrypted = await encryptMessage(compressedBase64, password, (p) => onProgress?.(50 + p * 0.5));
+      algorithmInfo = "AES-256-GCM + PBKDF2";
+    }
+    
     return {
       result: encrypted,
-      successMessage: "Your text has been compressed and encrypted"
+      successMessage: `Your text has been compressed and encrypted using ${algorithmInfo}`,
+      encryptionInfo: getEncryptionInfo(version === 'v2' ? ENCRYPTION_VERSION_V2 : ENCRYPTION_VERSION_LEGACY)
     };
   } else {
-    // Decrypt then decompress text
+    // Auto-detect encryption version and decrypt accordingly
     onProgress?.(10);
-    const decryptedCompressed = await decryptMessage(text, password, (p) => onProgress?.(10 + p * 0.4));
+    
+    // Try universal decryption first (supports both v1 and v2 automatically)
+    const encryptedData = base64ToUint8Array(text);
+    const universalResult = await decryptDataUniversal(encryptedData, password);
+    
     onProgress?.(60);
-    const compressedData = base64ToUint8Array(decryptedCompressed);
+    const compressedData = universalResult.decryptedData;
     onProgress?.(80);
     const decrypted = await decompressToString(compressedData);
     onProgress?.(100);
+    
+    const algorithmInfo = universalResult.algorithm === 'chacha20poly1305' 
+      ? "ChaCha20-Poly1305 + scrypt" 
+      : "AES-256-GCM + PBKDF2";
+    
     return {
       result: decrypted.trim(),
-      successMessage: "Your text has been decrypted and decompressed"
+      successMessage: `Your text has been decrypted using ${algorithmInfo} and decompressed`,
+      encryptionInfo: getEncryptionInfo(universalResult.version || ENCRYPTION_VERSION_LEGACY)
     };
   }
 }

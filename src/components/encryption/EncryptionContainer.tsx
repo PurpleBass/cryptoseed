@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { SeedPhraseEncryption } from "./SeedPhraseEncryption";
 import { TextEncryption } from "./TextEncryption";
 import { FileEncryption } from "./FileEncryption";
+import { EncryptionVersionSelector } from "./EncryptionVersionSelector";
 import { File, FileText, Sprout, AlertCircle, Lock, LockOpen, Shield, WifiOff, HelpCircle } from "lucide-react";
 
 // Helper function to convert between Tiptap JSON and string for encryption
@@ -159,6 +160,7 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
     seedPhrase,
     selectedFile,
     fileInputRef,
+    encryptionVersion,
     setMode,
     setIsEncrypting,
     setIsProcessing,
@@ -175,6 +177,7 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
     clearTextInput,
     clearSeedPhrase,
     loadCryptoSeedFile,
+    handleEncryptionVersionChange,
     toast
   } = useEncryption(initialEncrypting);
 
@@ -226,7 +229,7 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
   const handleProcessSeedPhrase = async () => {
     setIsProcessing(true);
     try {
-      const { result, successMessage } = await processSeedPhrase(seedPhrase, password, isEncrypting);
+      const { result, successMessage } = await processSeedPhrase(seedPhrase, password, isEncrypting, undefined, encryptionVersion);
       setOutput(result);
       toast({
         title: isEncrypting ? "Encryption successful" : "Decryption successful",
@@ -250,7 +253,7 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
       // Convert textInput to string format for encryption/decryption
       const textForProcessing = convertTiptapForEncryption(textInput, isEncrypting);
       
-      const { result, successMessage } = await processText(textForProcessing, password, isEncrypting);
+      const { result, successMessage } = await processText(textForProcessing, password, isEncrypting, undefined, encryptionVersion);
       
       // If decrypting, convert the result back to Tiptap format and update textInput
       if (!isEncrypting) {
@@ -349,7 +352,7 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
                 {/* Badge showing encryption method */}
                 <Badge variant="outline" className="ml-2 text-xs flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200">
                   <Shield className="h-3 w-3" />
-                  <span>AES-256-GCM</span>
+                  <span>{encryptionVersion === 'v2' ? 'ChaCha20-Poly1305' : 'AES-256-GCM'}</span>
                 </Badge>
               </div>
             </div>
@@ -418,6 +421,17 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
             <span>Seed Phrase</span>
           </TabsTrigger>
         </TabsList>
+
+        {/* Encryption Version Selector - Only show when encrypting */}
+        {isEncrypting && (
+          <div className="mb-6">
+            <EncryptionVersionSelector
+              selectedVersion={encryptionVersion}
+              onVersionChange={handleEncryptionVersionChange}
+              disabled={isProcessing}
+            />
+          </div>
+        )}
 
         {/* Tab content for Seed Phrase encryption/decryption */}
         <TabsContent value="seedphrase">

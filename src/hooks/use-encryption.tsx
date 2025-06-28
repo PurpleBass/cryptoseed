@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { EncryptionVersion, setDefaultEncryptionVersion, getDefaultEncryptionVersion } from "@/lib/encryptionProcessing";
 
 type EncryptionMode = "seedphrase" | "text" | "file";
 
@@ -14,6 +15,9 @@ export function useEncryption(initialEncrypting?: boolean) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [output, setOutput] = useState("");
+  
+  // Encryption version selection
+  const [encryptionVersion, setEncryptionVersionState] = useState<EncryptionVersion>(getDefaultEncryptionVersion());
   
   // Mode-specific states
   const [textInput, setTextInput] = useState<any>({
@@ -195,6 +199,12 @@ export function useEncryption(initialEncrypting?: boolean) {
     strSetter("");
   };
 
+  // Handle encryption version change
+  const handleEncryptionVersionChange = (version: EncryptionVersion) => {
+    setEncryptionVersionState(version);
+    setDefaultEncryptionVersion(version);
+  };
+
   // Session timeout for auto-wipe (2 minutes of inactivity)
   useEffect(() => {
     let timeout: NodeJS.Timeout;
@@ -250,6 +260,7 @@ export function useEncryption(initialEncrypting?: boolean) {
     seedPhrase,
     selectedFile,
     fileInputRef,
+    encryptionVersion,
     
     // Setters
     setMode,
@@ -273,6 +284,7 @@ export function useEncryption(initialEncrypting?: boolean) {
     loadCryptoSeedFile,
     formatSeedPhrase,
     handleProgress,
+    handleEncryptionVersionChange,
     toast
   };
 }
