@@ -28,12 +28,28 @@ const Index = () => {
 
   useEffect(() => {
     // Hash-based prefill for decryption
-    if (window.location.hash && window.location.hash.length > 1) {
-      setCurrentView("encrypt");
-      setInitialEncrypting(false); // Start in decrypt mode
-      setInitialCipher(decodeURIComponent(window.location.hash.slice(1)));
-    }
-  }, [location]);
+    const handleHashChange = () => {
+      if (window.location.hash && window.location.hash.length > 1) {
+        const hashContent = decodeURIComponent(window.location.hash.slice(1));
+        console.log('Hash detected:', hashContent.substring(0, 50) + '...'); // Debug log
+        setCurrentView("encrypt");
+        setInitialEncrypting(false); // Start in decrypt mode
+        setInitialCipher(hashContent);
+        // Clear the hash from URL for security after reading
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+    };
+
+    // Check hash on initial load
+    handleHashChange();
+
+    // Listen for hash changes (if user manually changes URL)
+    window.addEventListener('hashchange', handleHashChange);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
 
   return <div className="min-h-screen flex flex-col bg-background">
       <Header currentView={currentView} setCurrentView={setCurrentView} />

@@ -186,26 +186,34 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
   // Prefill the cipher into the text input if provided (only on first mount)
   useEffect(() => {
     if (typeof initialCipher === 'string' && initialCipher.length > 0) {
+      console.log('Setting initial cipher:', initialCipher.substring(0, 50) + '...'); // Debug log
       setMode('text');
-      // Convert the cipher string to Tiptap format for the editor
-      const tiptapContent = {
-        type: 'doc',
-        content: [
-          {
-            type: 'paragraph',
-            content: [
-              {
-                type: 'text',
-                text: initialCipher
-              }
-            ]
-          }
-        ]
-      };
-      setTextInput(tiptapContent);
+      
+      // For decrypt mode, set the cipher as a plain string (not Tiptap format)
+      // The TextEncryption component will handle this properly in decrypt mode
+      if (!isEncrypting) {
+        setTextInput(initialCipher);
+      } else {
+        // For encrypt mode, convert to Tiptap format
+        const tiptapContent = {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [
+                {
+                  type: 'text',
+                  text: initialCipher
+                }
+              ]
+            }
+          ]
+        };
+        setTextInput(tiptapContent);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialCipher, setMode, setTextInput]);
+  }, [initialCipher, setMode, setTextInput, isEncrypting]);
   
   const navigate = useNavigate();
 
