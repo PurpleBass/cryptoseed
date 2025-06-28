@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Key, Lock, FileText } from "lucide-react";
+import { Key, Lock, FileText, AlertTriangle } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
 import EncryptionComponent from "@/components/EncryptionComponent";
 import CodeVerification from "@/components/CodeVerification";
@@ -53,6 +53,23 @@ const Index = () => {
 
   return <div className="min-h-screen flex flex-col bg-background">
       <Header currentView={currentView} setCurrentView={setCurrentView} />
+      
+      {/* Security Warning Banner */}
+      <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-b-2 border-amber-200">
+        <div className="satoshi-container py-3 md:py-4">
+          <div className="flex items-center justify-center gap-3 text-center">
+            <AlertTriangle className="h-5 w-5 md:h-6 md:w-6 text-amber-600 flex-shrink-0" />
+            <div className="flex flex-col md:flex-row md:items-center md:gap-2">
+              <span className="text-sm md:text-base font-semibold text-amber-800">
+                ⚠️ UNDER CONSTRUCTION
+              </span>
+              <span className="text-xs md:text-sm text-amber-700">
+                This tool is for educational purposes only. Do not use for real cryptocurrency seed phrases yet.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
       
       {currentView === "encrypt" && <div className="bg-gradient-to-b from-secure-50 to-white pt-4 md:pt-8 pb-4 md:pb-6 border-b border-gray-100">
           <div className="satoshi-container text-center">
