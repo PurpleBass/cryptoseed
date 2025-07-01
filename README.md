@@ -10,9 +10,9 @@
 
 ---
 
-## ⭐️ Latest Security Status (June 2025)
+## ⭐️ Latest Security Status (July 2025)
 - **Mozilla Observatory Score:** A+ (130/100)
-- **AES-256-GCM Encryption:** Industry-standard authenticated encryption with 600,000 PBKDF2 iterations
+- **ChaCha20-Poly1305 Encryption:** Modern authenticated encryption with Argon2id key derivation (OWASP recommended)
 - **Strict Content Security Policy (CSP):**
   - `default-src 'none'` (deny by default)
   - No `'unsafe-inline'` in `style-src` (no inline styles allowed)
@@ -26,7 +26,7 @@
 
 ## What Does CryptoSeed Do?
 - **Encrypts and Decrypts Seed Phrases:**
-  - Securely encrypt and store your wallet recovery phrases or any sensitive text using AES-256-GCM encryption.
+  - Securely encrypt and store your wallet recovery phrases or any sensitive text using ChaCha20-Poly1305 encryption.
 - **Rich Text Encryption:**
   - Advanced rich text editor with formatting support (bold, italic, underline, lists, checklists, text alignment).
   - Privacy-focused Tiptap editor that works completely offline.
