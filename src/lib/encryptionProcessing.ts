@@ -1,17 +1,19 @@
 import { encryptMessage, encryptFile, decryptFile } from "@/lib/encryption";
 import { 
   encryptMessageV2, 
+  encryptMessageV3,
   decryptDataUniversal,
   getEncryptionInfo,
   ENCRYPTION_VERSION_V2,
+  ENCRYPTION_VERSION_V3,
   ENCRYPTION_VERSION_LEGACY
 } from "@/lib/encryptionV2";
 
 // Encryption version type
-export type EncryptionVersion = 'v1' | 'v2';
+export type EncryptionVersion = 'v1' | 'v2' | 'v3';
 
 // Default encryption version (can be changed based on user preference)
-let defaultEncryptionVersion: EncryptionVersion = 'v2'; // Use enhanced encryption by default
+let defaultEncryptionVersion: EncryptionVersion = 'v3'; // Use latest Argon2id encryption by default
 
 // Function to set the default encryption version
 export function setDefaultEncryptionVersion(version: EncryptionVersion) {
@@ -159,7 +161,10 @@ export async function processSeedPhrase(
     let encrypted: string;
     let algorithmInfo: string;
     
-    if (version === 'v2') {
+    if (version === 'v3') {
+      encrypted = await encryptMessageV3(compressedBase64, password, (p) => onProgress?.(50 + p * 0.5));
+      algorithmInfo = "ChaCha20-Poly1305 + Argon2id";
+    } else if (version === 'v2') {
       encrypted = await encryptMessageV2(compressedBase64, password, (p) => onProgress?.(50 + p * 0.5));
       algorithmInfo = "ChaCha20-Poly1305 + scrypt";
     } else {
@@ -170,7 +175,7 @@ export async function processSeedPhrase(
     return {
       result: encrypted,
       successMessage: `Your seed phrase has been compressed and encrypted using ${algorithmInfo}`,
-      encryptionInfo: getEncryptionInfo(version === 'v2' ? ENCRYPTION_VERSION_V2 : ENCRYPTION_VERSION_LEGACY)
+      encryptionInfo: getEncryptionInfo(version === 'v3' ? ENCRYPTION_VERSION_V3 : version === 'v2' ? ENCRYPTION_VERSION_V2 : ENCRYPTION_VERSION_LEGACY)
     };
   } else {
     // Auto-detect encryption version and decrypt accordingly
@@ -189,7 +194,7 @@ export async function processSeedPhrase(
     onProgress?.(100);
     
     const algorithmInfo = universalResult.algorithm === 'chacha20poly1305' 
-      ? "ChaCha20-Poly1305 + scrypt" 
+      ? (universalResult.version === ENCRYPTION_VERSION_V3 ? "ChaCha20-Poly1305 + Argon2id" : "ChaCha20-Poly1305 + scrypt")
       : "AES-256-GCM + PBKDF2";
     
     return {
@@ -233,7 +238,10 @@ export async function processText(
     let encrypted: string;
     let algorithmInfo: string;
     
-    if (version === 'v2') {
+    if (version === 'v3') {
+      encrypted = await encryptMessageV3(compressedBase64, password, (p) => onProgress?.(50 + p * 0.5));
+      algorithmInfo = "ChaCha20-Poly1305 + Argon2id";
+    } else if (version === 'v2') {
       encrypted = await encryptMessageV2(compressedBase64, password, (p) => onProgress?.(50 + p * 0.5));
       algorithmInfo = "ChaCha20-Poly1305 + scrypt";
     } else {
@@ -244,7 +252,7 @@ export async function processText(
     return {
       result: encrypted,
       successMessage: `Your text has been compressed and encrypted using ${algorithmInfo}`,
-      encryptionInfo: getEncryptionInfo(version === 'v2' ? ENCRYPTION_VERSION_V2 : ENCRYPTION_VERSION_LEGACY)
+      encryptionInfo: getEncryptionInfo(version === 'v3' ? ENCRYPTION_VERSION_V3 : version === 'v2' ? ENCRYPTION_VERSION_V2 : ENCRYPTION_VERSION_LEGACY)
     };
   } else {
     // Auto-detect encryption version and decrypt accordingly
@@ -263,7 +271,7 @@ export async function processText(
     onProgress?.(100);
     
     const algorithmInfo = universalResult.algorithm === 'chacha20poly1305' 
-      ? "ChaCha20-Poly1305 + scrypt" 
+      ? (universalResult.version === ENCRYPTION_VERSION_V3 ? "ChaCha20-Poly1305 + Argon2id" : "ChaCha20-Poly1305 + scrypt")
       : "AES-256-GCM + PBKDF2";
     
     return {
