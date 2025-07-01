@@ -1,4 +1,4 @@
-import { encryptMessage, decryptMessage } from "@/lib/encryption";  
+import { encryptMessage, decryptMessage } from "@/lib/encryptionV3";  
 
 // Inserted helper functions to support Node environments:
 const atob = typeof window === "undefined" ? (str: string) => Buffer.from(str, "base64").toString("binary") : window.atob;

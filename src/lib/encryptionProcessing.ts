@@ -1,19 +1,10 @@
-import { encryptMessage, encryptFile, decryptFile } from "@/lib/encryption";
-import { 
-  encryptMessageV2, 
-  encryptMessageV3,
-  decryptDataUniversal,
-  getEncryptionInfo,
-  ENCRYPTION_VERSION_V2,
-  ENCRYPTION_VERSION_V3,
-  ENCRYPTION_VERSION_LEGACY
-} from "@/lib/encryptionV2";
+import { encryptMessage, decryptMessage, encryptFile, decryptFile, getEncryptionInfo } from "@/lib/encryptionV3";
 
-// Encryption version type
-export type EncryptionVersion = 'v1' | 'v2' | 'v3';
+// Encryption version type - V3 only for maximum security
+export type EncryptionVersion = 'v3';
 
-// Default encryption version (can be changed based on user preference)
-let defaultEncryptionVersion: EncryptionVersion = 'v3'; // Use latest Argon2id encryption by default
+// Default encryption version (V3 - Argon2id)
+let defaultEncryptionVersion: EncryptionVersion = 'v3';
 
 // Function to set the default encryption version
 export function setDefaultEncryptionVersion(version: EncryptionVersion) {
@@ -141,14 +132,11 @@ export async function processSeedPhrase(
   seedPhrase: string, 
   password: string, 
   isEncrypting: boolean,
-  onProgress?: (progress: number) => void,
-  encryptionVersion?: EncryptionVersion
+  onProgress?: (progress: number) => void
 ) {
   if (!seedPhrase.trim() || !password.trim()) {
     throw new Error("Please provide both a seed phrase and a password");
   }
-
-  const version = encryptionVersion || defaultEncryptionVersion;
   
   if (isEncrypting) {
     // Compress then encrypt seed phrase
@@ -158,50 +146,40 @@ export async function processSeedPhrase(
     const compressedBase64 = uint8ArrayToBase64(compressed);
     onProgress?.(50);
     
-    let encrypted: string;
-    let algorithmInfo: string;
-    
-    if (version === 'v3') {
-      encrypted = await encryptMessageV3(compressedBase64, password, (p) => onProgress?.(50 + p * 0.5));
-      algorithmInfo = "ChaCha20-Poly1305 + Argon2id";
-    } else if (version === 'v2') {
-      encrypted = await encryptMessageV2(compressedBase64, password, (p) => onProgress?.(50 + p * 0.5));
-      algorithmInfo = "ChaCha20-Poly1305 + scrypt";
-    } else {
-      encrypted = await encryptMessage(compressedBase64, password, (p) => onProgress?.(50 + p * 0.5));
-      algorithmInfo = "AES-256-GCM + PBKDF2";
-    }
+    // Use V3 encryption (Argon2id + ChaCha20-Poly1305)
+    const encrypted = await encryptMessage(compressedBase64, password, (p: number) => onProgress?.(50 + p * 0.5));
+    const algorithmInfo = "ChaCha20-Poly1305 + Argon2id";
     
     return {
       result: encrypted,
       successMessage: `Your seed phrase has been compressed and encrypted using ${algorithmInfo}`,
-      encryptionInfo: getEncryptionInfo(version === 'v3' ? ENCRYPTION_VERSION_V3 : version === 'v2' ? ENCRYPTION_VERSION_V2 : ENCRYPTION_VERSION_LEGACY)
+      encryptionInfo: getEncryptionInfo()
     };
   } else {
-    // Auto-detect encryption version and decrypt accordingly
+    // Decrypt seed phrase
     onProgress?.(10);
     
-    // Try universal decryption first (supports both v1 and v2 automatically)
-    const encryptedData = base64ToUint8Array(seedPhrase);
-    const universalResult = await decryptDataUniversal(encryptedData, password);
-    
-    onProgress?.(60);
-    // Convert decrypted base64 back to compressed Uint8Array
-    const decryptedText = new TextDecoder().decode(universalResult.decryptedData);
-    const compressedData = base64ToUint8Array(decryptedText);
-    onProgress?.(80);
-    const decrypted = await decompressToString(compressedData);
-    onProgress?.(100);
-    
-    const algorithmInfo = universalResult.algorithm === 'chacha20poly1305' 
-      ? (universalResult.version === ENCRYPTION_VERSION_V3 ? "ChaCha20-Poly1305 + Argon2id" : "ChaCha20-Poly1305 + scrypt")
-      : "AES-256-GCM + PBKDF2";
-    
-    return {
-      result: decrypted.trim(),
-      successMessage: `Your seed phrase has been decrypted using ${algorithmInfo} and decompressed`,
-      encryptionInfo: getEncryptionInfo(universalResult.version || ENCRYPTION_VERSION_LEGACY)
-    };
+    try {
+      // Direct V3 decryption
+      const decryptedText = await decryptMessage(seedPhrase, password);
+      onProgress?.(60);
+      
+      // Convert decrypted base64 back to compressed Uint8Array
+      const compressedData = base64ToUint8Array(decryptedText);
+      onProgress?.(80);
+      const decrypted = await decompressToString(compressedData);
+      onProgress?.(100);
+      
+      const algorithmInfo = "ChaCha20-Poly1305 + Argon2id";
+      
+      return {
+        result: decrypted.trim(),
+        successMessage: `Your seed phrase has been decrypted using ${algorithmInfo} and decompressed`,
+        encryptionInfo: getEncryptionInfo()
+      };
+    } catch (error) {
+      throw new Error(`Decryption failed: ${error instanceof Error ? error.message : 'Invalid password or unsupported format'}. This app only supports V3 (Argon2id) encryption.`);
+    }
   }
 }
 
@@ -218,15 +196,12 @@ export async function processText(
   text: string, 
   password: string, 
   isEncrypting: boolean,
-  onProgress?: (progress: number) => void,
-  encryptionVersion?: EncryptionVersion
+  onProgress?: (progress: number) => void
 ) {
   if (!text.trim() || !password.trim()) {
     throw new Error("Please provide both text and a password");
   }
 
-  const version = encryptionVersion || defaultEncryptionVersion;
-  
   if (isEncrypting) {
     // Compress then encrypt text
     onProgress?.(10);
@@ -235,50 +210,40 @@ export async function processText(
     const compressedBase64 = uint8ArrayToBase64(compressed);
     onProgress?.(50);
     
-    let encrypted: string;
-    let algorithmInfo: string;
-    
-    if (version === 'v3') {
-      encrypted = await encryptMessageV3(compressedBase64, password, (p) => onProgress?.(50 + p * 0.5));
-      algorithmInfo = "ChaCha20-Poly1305 + Argon2id";
-    } else if (version === 'v2') {
-      encrypted = await encryptMessageV2(compressedBase64, password, (p) => onProgress?.(50 + p * 0.5));
-      algorithmInfo = "ChaCha20-Poly1305 + scrypt";
-    } else {
-      encrypted = await encryptMessage(compressedBase64, password, (p) => onProgress?.(50 + p * 0.5));
-      algorithmInfo = "AES-256-GCM + PBKDF2";
-    }
+    // Use V3 encryption (Argon2id + ChaCha20-Poly1305)
+    const encrypted = await encryptMessage(compressedBase64, password, (p: number) => onProgress?.(50 + p * 0.5));
+    const algorithmInfo = "ChaCha20-Poly1305 + Argon2id";
     
     return {
       result: encrypted,
       successMessage: `Your text has been compressed and encrypted using ${algorithmInfo}`,
-      encryptionInfo: getEncryptionInfo(version === 'v3' ? ENCRYPTION_VERSION_V3 : version === 'v2' ? ENCRYPTION_VERSION_V2 : ENCRYPTION_VERSION_LEGACY)
+      encryptionInfo: getEncryptionInfo()
     };
   } else {
-    // Auto-detect encryption version and decrypt accordingly
+    // Decrypt text
     onProgress?.(10);
     
-    // Try universal decryption first (supports both v1 and v2 automatically)
-    const encryptedData = base64ToUint8Array(text);
-    const universalResult = await decryptDataUniversal(encryptedData, password);
-    
-    onProgress?.(60);
-    // Convert decrypted base64 back to compressed Uint8Array
-    const decryptedText = new TextDecoder().decode(universalResult.decryptedData);
-    const compressedData = base64ToUint8Array(decryptedText);
-    onProgress?.(80);
-    const decrypted = await decompressToString(compressedData);
-    onProgress?.(100);
-    
-    const algorithmInfo = universalResult.algorithm === 'chacha20poly1305' 
-      ? (universalResult.version === ENCRYPTION_VERSION_V3 ? "ChaCha20-Poly1305 + Argon2id" : "ChaCha20-Poly1305 + scrypt")
-      : "AES-256-GCM + PBKDF2";
-    
-    return {
-      result: decrypted.trim(),
-      successMessage: `Your text has been decrypted using ${algorithmInfo} and decompressed`,
-      encryptionInfo: getEncryptionInfo(universalResult.version || ENCRYPTION_VERSION_LEGACY)
-    };
+    try {
+      // Direct V3 decryption
+      const decryptedText = await decryptMessage(text, password);
+      onProgress?.(60);
+      
+      // Convert decrypted base64 back to compressed Uint8Array
+      const compressedData = base64ToUint8Array(decryptedText);
+      onProgress?.(80);
+      const decrypted = await decompressToString(compressedData);
+      onProgress?.(100);
+      
+      const algorithmInfo = "ChaCha20-Poly1305 + Argon2id";
+      
+      return {
+        result: decrypted.trim(),
+        successMessage: `Your text has been decrypted using ${algorithmInfo} and decompressed`,
+        encryptionInfo: getEncryptionInfo()
+      };
+    } catch (error) {
+      throw new Error(`Decryption failed: ${error instanceof Error ? error.message : 'Invalid password or unsupported format'}. This app only supports V3 (Argon2id) encryption.`);
+    }
   }
 }
 

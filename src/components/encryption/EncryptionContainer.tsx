@@ -1,18 +1,17 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import { useEncryption } from "@/hooks/use-encryption";
-import { isWebCryptoSupported } from "@/lib/encryption";
+import { isWebCryptoSupported } from "@/lib/encryptionV3";
 import { processSeedPhrase, processText, processFile, downloadFile } from "@/lib/encryptionProcessing";
 import { useNavigate } from "react-router-dom";
 import { SeedPhraseEncryption } from "./SeedPhraseEncryption";
 import { TextEncryption } from "./TextEncryption";
 import { FileEncryption } from "./FileEncryption";
-import { EncryptionVersionSelector } from "./EncryptionVersionSelector";
 import { File, FileText, Sprout, AlertCircle, Lock, LockOpen, Shield, WifiOff, HelpCircle } from "lucide-react";
 
 // Helper function to convert between Tiptap JSON and string for encryption
@@ -149,6 +148,8 @@ export interface EncryptionContainerProps {
 }
 
 const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: EncryptionContainerProps) => {
+  const [showSecurityInfo, setShowSecurityInfo] = useState(false);
+  
   const {
     mode, 
     isEncrypting, 
@@ -160,7 +161,6 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
     seedPhrase,
     selectedFile,
     fileInputRef,
-    encryptionVersion,
     setMode,
     setIsEncrypting,
     setIsProcessing,
@@ -177,7 +177,6 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
     clearTextInput,
     clearSeedPhrase,
     loadCryptoSeedFile,
-    handleEncryptionVersionChange,
     toast
   } = useEncryption(initialEncrypting);
 
@@ -229,7 +228,7 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
   const handleProcessSeedPhrase = async () => {
     setIsProcessing(true);
     try {
-      const { result, successMessage } = await processSeedPhrase(seedPhrase, password, isEncrypting, undefined, encryptionVersion);
+      const { result, successMessage } = await processSeedPhrase(seedPhrase, password, isEncrypting, undefined);
       setOutput(result);
       toast({
         title: isEncrypting ? "Encryption successful" : "Decryption successful",
@@ -253,7 +252,7 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
       // Convert textInput to string format for encryption/decryption
       const textForProcessing = convertTiptapForEncryption(textInput, isEncrypting);
       
-      const { result, successMessage } = await processText(textForProcessing, password, isEncrypting, undefined, encryptionVersion);
+      const { result, successMessage } = await processText(textForProcessing, password, isEncrypting, undefined);
       
       // If decrypting, convert the result back to Tiptap format and update textInput
       if (!isEncrypting) {
@@ -349,11 +348,54 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
                 <span className="text-lg font-heading font-bold text-gray-900">
                   {isEncrypting ? "Encrypt" : "Decrypt"}
                 </span>
-                {/* Badge showing encryption method */}
-                <Badge variant="outline" className="ml-2 text-xs flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200">
-                  <Shield className="h-3 w-3" />
-                  <span>{encryptionVersion === 'v2' ? 'ChaCha20-Poly1305' : 'AES-256-GCM'}</span>
-                </Badge>
+                {/* Badge showing encryption method with security info popover */}
+                <Popover open={showSecurityInfo} onOpenChange={setShowSecurityInfo}>
+                  <PopoverTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      className="ml-2 p-0 h-auto"
+                      onClick={() => setShowSecurityInfo(!showSecurityInfo)}
+                    >
+                      <Badge variant="outline" className="text-xs flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200 hover:bg-secure-200 cursor-pointer transition-colors">
+                        <Shield className="h-3 w-3" />
+                        <span>Argon2id + ChaCha20-Poly1305</span>
+                        <HelpCircle className="h-3 w-3 ml-1" />
+                      </Badge>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80" side="bottom" align="start">
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <Shield className="h-4 w-4 text-purple-600" />
+                        <h4 className="font-semibold text-sm">Future-Proof Encryption (V3)</h4>
+                        <Badge variant="secondary" className="text-xs">Current Standard</Badge>
+                      </div>
+                      
+                      <div className="text-xs text-gray-600">
+                        <p className="mb-2 font-medium">ChaCha20-Poly1305 + Argon2id key derivation</p>
+                        
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div className="flex items-center gap-1">
+                            <span className="text-green-600">✓</span>
+                            <span>Memory-hard KDF</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <span className="text-green-600">✓</span>
+                            <span>Post-quantum resistant</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <span className="text-green-600">✓</span>
+                            <span>OWASP recommended</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <span className="text-green-600">✓</span>
+                            <span>Maximum security</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
           </div>
@@ -421,17 +463,6 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
             <span>Seed Phrase</span>
           </TabsTrigger>
         </TabsList>
-
-        {/* Encryption Version Selector - Only show when encrypting */}
-        {isEncrypting && (
-          <div className="mb-6">
-            <EncryptionVersionSelector
-              selectedVersion={encryptionVersion}
-              onVersionChange={handleEncryptionVersionChange}
-              disabled={isProcessing}
-            />
-          </div>
-        )}
 
         {/* Tab content for Seed Phrase encryption/decryption */}
         <TabsContent value="seedphrase">

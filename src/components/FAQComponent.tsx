@@ -479,7 +479,7 @@ const FAQComponent = () => {
                     <ol className="list-decimal pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
                       <li>
                         <strong>Source Inspection:</strong> Review the source code on our GitHub repository, 
-                        particularly the encryption implementation in <code>src/lib/encryption.ts</code>.
+                        particularly the encryption implementation in <code>src/lib/encryptionV3.ts</code>.
                       </li>
                       <li>
                         <strong>Build Verification:</strong> Clone the repository and <strong>build the application yourself</strong> 

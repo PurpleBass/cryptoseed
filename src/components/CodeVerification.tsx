@@ -21,7 +21,7 @@ const CodeVerification = () => {
         <Search className="h-4 w-4" />
         <AlertDescription className="text-xs sm:text-sm">
           We encourage you to review the encryption implementation to verify its security.
-          The core encryption logic is in <code className="text-xs bg-secure-200 px-1 rounded">src/lib/encryption.ts</code>
+          The core encryption logic is in <code className="text-xs bg-secure-200 px-1 rounded">src/lib/encryptionV3.ts</code>
         </AlertDescription>
       </Alert>
       
@@ -156,7 +156,7 @@ export async function decryptMessage(encryptedMessage: string, password: string)
                     <h3 className="text-sm font-medium mb-2 text-left">Key Files:</h3>
                     <ul className="list-disc pl-6 space-y-2">
                       <li>
-                        <code className="bg-gray-100 px-1 rounded text-xs">src/lib/encryption.ts</code> - Core encryption/decryption logic
+                        <code className="bg-gray-100 px-1 rounded text-xs">src/lib/encryptionV3.ts</code> - Core encryption/decryption logic
                       </li>
                       <li>
                         <code className="bg-gray-100 px-1 rounded text-xs">src/lib/secureWipe.ts</code> - Memory protection utilities
