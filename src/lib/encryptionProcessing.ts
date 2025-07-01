@@ -181,7 +181,9 @@ export async function processSeedPhrase(
     const universalResult = await decryptDataUniversal(encryptedData, password);
     
     onProgress?.(60);
-    const compressedData = universalResult.decryptedData;
+    // Convert decrypted base64 back to compressed Uint8Array
+    const decryptedText = new TextDecoder().decode(universalResult.decryptedData);
+    const compressedData = base64ToUint8Array(decryptedText);
     onProgress?.(80);
     const decrypted = await decompressToString(compressedData);
     onProgress?.(100);
@@ -253,7 +255,9 @@ export async function processText(
     const universalResult = await decryptDataUniversal(encryptedData, password);
     
     onProgress?.(60);
-    const compressedData = universalResult.decryptedData;
+    // Convert decrypted base64 back to compressed Uint8Array
+    const decryptedText = new TextDecoder().decode(universalResult.decryptedData);
+    const compressedData = base64ToUint8Array(decryptedText);
     onProgress?.(80);
     const decrypted = await decompressToString(compressedData);
     onProgress?.(100);
