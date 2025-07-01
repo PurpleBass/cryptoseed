@@ -108,7 +108,7 @@ describe('CryptoSeed V3 Processing Integration', () => {
     const decryptResult = await processText(encryptResult.result, testPassword, false);
     expect(decryptResult.result).toBe(testMessage);
     expect(decryptResult.successMessage).toContain('Argon2id');
-  }, 30000); // Increased timeout for Argon2id
+  }, 5000); // Reduced timeout for test environment
 
   test('should process seed phrase encryption and decryption', async () => {
     // Test encryption
@@ -120,7 +120,7 @@ describe('CryptoSeed V3 Processing Integration', () => {
     const decryptResult = await processSeedPhrase(encryptResult.result, testPassword, false);
     expect(decryptResult.result).toBe(testSeedPhrase);
     expect(decryptResult.successMessage).toContain('Argon2id');
-  }, 30000); // Increased timeout for Argon2id
+  }, 5000); // Reduced timeout for test environment
 
   test('should handle wrong passwords correctly', async () => {
     const encryptResult = await processText(testMessage, testPassword, true);

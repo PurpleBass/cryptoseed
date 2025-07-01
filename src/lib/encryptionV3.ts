@@ -36,10 +36,11 @@ const SALT_SIZE = 32; // 256 bits
 const NONCE_SIZE = 12; // 96 bits for ChaCha20-Poly1305
 const AAD_SIZE = 8; // 64 bits (timestamp + version)
 
-// Argon2id parameters
-const ARGON2ID_MEMORY = 65536; // 64MB in KB (production)
-const ARGON2ID_ITERATIONS = 3;
-const ARGON2ID_PARALLELISM = 4;
+// Argon2id parameters - configurable for testing
+const isTestEnvironment = typeof process !== 'undefined' && process.env.NODE_ENV === 'test';
+const ARGON2ID_MEMORY = isTestEnvironment ? 256 : 65536; // 256KB for tests, 64MB for production
+const ARGON2ID_ITERATIONS = isTestEnvironment ? 1 : 3; // Faster for tests
+const ARGON2ID_PARALLELISM = isTestEnvironment ? 1 : 4; // Less parallel for tests
 const ARGON2ID_KEY_LENGTH = 32; // 256 bits
 
 /**
