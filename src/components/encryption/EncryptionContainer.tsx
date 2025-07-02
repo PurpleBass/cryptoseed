@@ -149,6 +149,7 @@ export interface EncryptionContainerProps {
 
 const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: EncryptionContainerProps) => {
   const [showSecurityInfo, setShowSecurityInfo] = useState(false);
+  const [hasUsedInitialCipher, setHasUsedInitialCipher] = useState(false);
   
   const {
     mode, 
@@ -185,11 +186,12 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
     setIsEncrypting(initialEncrypting ?? true);
   }, [initialEncrypting, setIsEncrypting]);
 
-  // Prefill the cipher into the text input if provided (only on first mount)
+  // Prefill the cipher into the text input if provided (only once per initialCipher)
   useEffect(() => {
-    if (typeof initialCipher === 'string' && initialCipher.length > 0) {
+    if (typeof initialCipher === 'string' && initialCipher.length > 0 && !hasUsedInitialCipher) {
       console.log('Setting initial cipher:', initialCipher.substring(0, 50) + '...'); // Debug log
       setMode('text');
+      setHasUsedInitialCipher(true);
       
       // For decrypt mode, set the cipher as a plain string (not Tiptap format)
       // The TextEncryption component will handle this properly in decrypt mode
@@ -214,8 +216,9 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
         setTextInput(tiptapContent);
       }
     }
+    // Only run when initialCipher changes or when isEncrypting changes for the first time
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialCipher, setMode, setTextInput, isEncrypting]);
+  }, [initialCipher, setMode, setTextInput, isEncrypting, hasUsedInitialCipher, setHasUsedInitialCipher]);
   
   const navigate = useNavigate();
 
