@@ -33,7 +33,7 @@ export function useEncryption(initialEncrypting?: boolean) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  // Reset output and file selection when switching between encryption/decryption modes
+  // Reset data when switching between encryption/decryption modes for cleaner UX
   useEffect(() => {
     setOutput("");
     setSelectedFile(null);
@@ -61,6 +61,58 @@ export function useEncryption(initialEncrypting?: boolean) {
       fileInputRef.current.value = "";
     }
   }, [isEncrypting]);
+
+  // Clear irrelevant data when switching between tabs (text/file/seedphrase) for cleaner UX
+  useEffect(() => {
+    setOutput("");
+    setProgress(0);
+    
+    // Clear mode-specific data when switching tabs
+    if (mode === "text") {
+      // Clear file and seed phrase data when switching to text tab
+      setSelectedFile(null);
+      setSeedPhrase("");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    } else if (mode === "file") {
+      // Clear text and seed phrase data when switching to file tab
+      setSeedPhrase("");
+      if (isEncrypting) {
+        setTextInput({
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: []
+            }
+          ]
+        });
+      } else {
+        setTextInput("");
+      }
+    } else if (mode === "seedphrase") {
+      // Clear text and file data when switching to seed phrase tab
+      setSelectedFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      if (isEncrypting) {
+        setTextInput({
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: []
+            }
+          ]
+        });
+      } else {
+        setTextInput("");
+      }
+    }
+    // Note: Password is preserved when switching tabs for user convenience
+  }, [mode, isEncrypting]);
 
   // Progress callback for encryption operations
   const handleProgress = (progressValue: number) => {

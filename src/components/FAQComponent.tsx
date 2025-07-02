@@ -1,24 +1,10 @@
-import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { AlertCircle, HelpCircle, Shield, FileText } from "lucide-react";
+import { AlertCircle, HelpCircle, Shield } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Separator } from "@/components/ui/separator";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 const FAQComponent = () => {
-  const openDialog = (dialogType: string) => {
-    setTimeout(() => {
-      const footerLinks = Array.from(document.querySelectorAll('footer a, footer button'));
-      const targetLink = footerLinks.find(link => link.textContent?.trim().includes(dialogType));
-      if (targetLink && targetLink instanceof HTMLElement) {
-        targetLink.click();
-      } else {
-        console.error(`Could not find footer link for: ${dialogType}`);
-      }
-    }, 100);
-  };
   return <div className="w-full mx-auto px-2 sm:px-4 max-w-4xl">
       <div className="mb-4 sm:mb-6 text-center">
         <div className="flex items-center gap-2 justify-center">
