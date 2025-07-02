@@ -158,3 +158,35 @@ Created `test-url-share-fix.js` with comprehensive manual testing instructions c
 2. Mode switching after URL load
 3. Tab switching after URL load
 4. Verification that content doesn't re-populate
+
+### Final Solution: Timing Fix with setTimeout
+
+After further testing, it was discovered that the prefill content wasn't showing up at all when loading from URL hash. The issue was a timing problem between the clearing effect and the prefill effect.
+
+**Problem**: The clearing effect in `useEncryption` was running before the prefill effect in `EncryptionContainer`, causing the prefilled content to be immediately cleared.
+
+**Final Solution**: Used `setTimeout(0)` to ensure the prefill runs on the next event loop tick, after all synchronous effects have completed:
+
+```typescript
+useEffect(() => {
+  if (typeof initialCipher === 'string' && initialCipher.length > 0 && !hasUsedInitialCipher) {
+    // Use setTimeout to ensure this runs after the clearing effect
+    setTimeout(() => {
+      setMode('text');
+      if (!isEncrypting) {
+        setTextInput(initialCipher);
+        setHasUsedInitialCipher(true);
+      }
+      // ... rest of prefill logic
+    }, 0); // Run on next tick
+  }
+}, [initialCipher, setMode, setTextInput, isEncrypting, hasUsedInitialCipher, setHasUsedInitialCipher]);
+```
+
+### Complete Working Behavior
+- ✅ **URL Load**: Content appears correctly in decrypt mode input box
+- ✅ **Mode Switch**: Content clears when switching to encrypt mode  
+- ✅ **Return Switch**: Content stays empty when switching back to decrypt
+- ✅ **Tab Switch**: Content clears when switching between tabs
+- ✅ **No Re-prefill**: Content never re-populates after being cleared
+- ✅ **Normal Usage**: Unaffected by the URL prefill logic
