@@ -190,31 +190,36 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
   useEffect(() => {
     if (typeof initialCipher === 'string' && initialCipher.length > 0 && !hasUsedInitialCipher) {
       console.log('Setting initial cipher:', initialCipher.substring(0, 50) + '...'); // Debug log
-      setMode('text');
-      setHasUsedInitialCipher(true);
       
-      // For decrypt mode, set the cipher as a plain string (not Tiptap format)
-      // The TextEncryption component will handle this properly in decrypt mode
-      if (!isEncrypting) {
-        setTextInput(initialCipher);
-      } else {
-        // For encrypt mode, convert to Tiptap format
-        const tiptapContent = {
-          type: 'doc',
-          content: [
-            {
-              type: 'paragraph',
-              content: [
-                {
-                  type: 'text',
-                  text: initialCipher
-                }
-              ]
-            }
-          ]
-        };
-        setTextInput(tiptapContent);
-      }
+      // Use setTimeout to ensure this runs after the clearing effect
+      setTimeout(() => {
+        setMode('text');
+        
+        // For decrypt mode, set the cipher as a plain string (not Tiptap format)
+        // The TextEncryption component will handle this properly in decrypt mode
+        if (!isEncrypting) {
+          setTextInput(initialCipher);
+          setHasUsedInitialCipher(true); // Mark as used after successful prefill
+        } else {
+          // For encrypt mode, convert to Tiptap format
+          const tiptapContent = {
+            type: 'doc',
+            content: [
+              {
+                type: 'paragraph',
+                content: [
+                  {
+                    type: 'text',
+                    text: initialCipher
+                  }
+                ]
+              }
+            ]
+          };
+          setTextInput(tiptapContent);
+          setHasUsedInitialCipher(true); // Mark as used after successful prefill
+        }
+      }, 0); // Run on next tick
     }
     // Only run when initialCipher changes or when isEncrypting changes for the first time
     // eslint-disable-next-line react-hooks/exhaustive-deps
