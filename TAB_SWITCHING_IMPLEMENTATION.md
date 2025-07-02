@@ -116,3 +116,45 @@ Test at: http://localhost:8082/
 - Could add user preference to control clearing behavior
 - Could add animation/feedback when data is cleared
 - Could implement undo functionality for accidental clears
+
+## Additional Fix: URL Share Button Issue
+
+### Problem Identified
+After the initial implementation, an additional issue was discovered: when content was loaded via URL hash (share button), the prefilled content would persist when switching between encrypt/decrypt modes, defeating the purpose of the clearing functionality.
+
+### Root Cause
+The prefill logic in `EncryptionContainer.tsx` had `isEncrypting` in its dependency array:
+```typescript
+}, [initialCipher, setMode, setTextInput, isEncrypting]);
+```
+
+This meant that every time the user switched between encrypt/decrypt modes, the prefill logic would run again and re-populate the textInput with the `initialCipher`, even after the clearing logic had cleared it.
+
+### Solution Implemented
+Added a state flag to track whether the `initialCipher` has already been used:
+
+```typescript
+const [hasUsedInitialCipher, setHasUsedInitialCipher] = useState(false);
+
+// Modified prefill logic
+useEffect(() => {
+  if (typeof initialCipher === 'string' && initialCipher.length > 0 && !hasUsedInitialCipher) {
+    // ... prefill logic ...
+    setHasUsedInitialCipher(true);
+  }
+}, [initialCipher, setMode, setTextInput, isEncrypting, hasUsedInitialCipher, setHasUsedInitialCipher]);
+```
+
+### Behavior After Fix
+- ✅ URL hash content loads once when page is accessed via share link
+- ✅ Switching to encrypt mode clears the prefilled content
+- ✅ Switching back to decrypt mode stays empty (no re-prefill)
+- ✅ Tab switching also clears content and doesn't re-prefill
+- ✅ Normal (non-URL) usage is unaffected
+
+### Testing
+Created `test-url-share-fix.js` with comprehensive manual testing instructions covering:
+1. URL hash prefill behavior
+2. Mode switching after URL load
+3. Tab switching after URL load
+4. Verification that content doesn't re-populate
