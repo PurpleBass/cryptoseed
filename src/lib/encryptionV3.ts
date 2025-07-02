@@ -16,6 +16,10 @@ import { chacha20poly1305 } from '@noble/ciphers/chacha';
 import { randomBytes } from '@noble/hashes/utils';
 import { wipeBytes } from './secureWipe';
 
+// Browser/Node.js compatibility for base64 operations
+const btoa = typeof window !== 'undefined' ? window.btoa : (str: string) => Buffer.from(str, 'binary').toString('base64');
+const atob = typeof window !== 'undefined' ? window.atob : (str: string) => Buffer.from(str, 'base64').toString('binary');
+
 export interface EncryptionResult {
   encryptedData: Uint8Array;
   timestamp: number;
@@ -231,7 +235,7 @@ export async function decryptMessage(
 }
 
 /**
- * File encryption using V3 format
+ * File encryption using V3 format - creates .cryptoseed files
  */
 export async function encryptFile(
   file: File, 
@@ -247,10 +251,26 @@ export async function encryptFile(
   
   const result = await encryptData(data, password);
   
-  if (onProgress) onProgress(80);
+  if (onProgress) onProgress(70);
   
-  const encryptedBlob = new Blob([result.encryptedData], { type: 'application/octet-stream' });
-  const fileName = `${file.name}.encrypted`;
+  // Create .cryptoseed file format
+  const base64Content = btoa(String.fromCharCode(...result.encryptedData));
+  const cryptoSeedData = {
+    version: "3.0",
+    algorithm: "ChaCha20-Poly1305",
+    kdf: "Argon2id",
+    encrypted: true,
+    timestamp: new Date().toISOString(),
+    originalFileName: file.name,
+    content: base64Content,
+    app: "CryptoSeed"
+  };
+  
+  if (onProgress) onProgress(90);
+  
+  const jsonContent = JSON.stringify(cryptoSeedData, null, 2);
+  const encryptedBlob = new Blob([jsonContent], { type: 'application/json' });
+  const fileName = `${file.name}.cryptoseed`;
   
   if (onProgress) onProgress(100);
   
@@ -258,7 +278,7 @@ export async function encryptFile(
 }
 
 /**
- * File decryption for V3 format
+ * File decryption for V3 format - handles .cryptoseed files
  */
 export async function decryptFile(
   file: File, 
@@ -267,26 +287,79 @@ export async function decryptFile(
 ): Promise<{ decryptedData: Blob; fileName: string }> {
   if (onProgress) onProgress(0);
   
-  const arrayBuffer = await file.arrayBuffer();
-  const encryptedData = new Uint8Array(arrayBuffer);
+  const fileContent = await file.text();
   
-  if (onProgress) onProgress(30);
+  if (onProgress) onProgress(20);
   
-  const result = await decryptData(encryptedData, password);
-  
-  if (onProgress) onProgress(80);
-  
-  const decryptedBlob = new Blob([result.decryptedData]);
-  let fileName = file.name;
-  
-  // Remove .encrypted extension if present
-  if (fileName.endsWith('.encrypted')) {
-    fileName = fileName.slice(0, -10);
+  try {
+    // Parse .cryptoseed file format
+    const cryptoSeedData = JSON.parse(fileContent);
+    
+    // Validate the structure
+    if (!cryptoSeedData.version || !cryptoSeedData.content || !cryptoSeedData.encrypted) {
+      throw new Error("Invalid .cryptoseed file format");
+    }
+    
+    if (!cryptoSeedData.app || cryptoSeedData.app !== "CryptoSeed") {
+      throw new Error("This file was not created by CryptoSeed");
+    }
+    
+    if (onProgress) onProgress(40);
+    
+    // Convert base64 content back to Uint8Array
+    const base64Content = cryptoSeedData.content;
+    const binaryString = atob(base64Content);
+    const encryptedData = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      encryptedData[i] = binaryString.charCodeAt(i);
+    }
+    
+    if (onProgress) onProgress(60);
+    
+    const result = await decryptData(encryptedData, password);
+    
+    if (onProgress) onProgress(90);
+    
+    const decryptedBlob = new Blob([result.decryptedData]);
+    let fileName = cryptoSeedData.originalFileName || 'decrypted-file';
+    
+    // Fallback: remove .cryptoseed extension if no originalFileName
+    if (!cryptoSeedData.originalFileName && file.name.endsWith('.cryptoseed')) {
+      fileName = file.name.slice(0, -11); // Remove .cryptoseed
+    }
+    
+    if (onProgress) onProgress(100);
+    
+    return { decryptedData: decryptedBlob, fileName };
+  } catch (error) {
+    // Fallback for old .encrypted files (legacy support during transition)
+    if (onProgress) onProgress(30);
+    
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const encryptedData = new Uint8Array(arrayBuffer);
+      
+      if (onProgress) onProgress(60);
+      
+      const result = await decryptData(encryptedData, password);
+      
+      if (onProgress) onProgress(90);
+      
+      const decryptedBlob = new Blob([result.decryptedData]);
+      let fileName = file.name;
+      
+      // Remove .encrypted extension if present
+      if (fileName.endsWith('.encrypted')) {
+        fileName = fileName.slice(0, -10);
+      }
+      
+      if (onProgress) onProgress(100);
+      
+      return { decryptedData: decryptedBlob, fileName };
+    } catch (fallbackError) {
+      throw new Error(`Failed to decrypt file: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   }
-  
-  if (onProgress) onProgress(100);
-  
-  return { decryptedData: decryptedBlob, fileName };
 }
 
 /**

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Tiptap Text Alignment</title>
+    <script src="https://unpkg.com/@tiptap/core@2.23.0/dist/index.umd.js"></script>
+    <script src="https://unpkg.com/@tiptap/starter-kit@2.23.0/dist/index.umd.js"></script>
+    <script src="https://unpkg.com/@tiptap/extension-text-align@2.23.0/dist/index.umd.js"></script>
+    <style>
+        .editor {
+            border: 1px solid #ccc;
+            padding: 10px;
+            min-height: 200px;
+        }
+        .toolbar {
+            margin-bottom: 10px;
+        }
+        button {
+            margin: 2px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <button onclick="editor.commands.setTextAlign('left')">Left</button>
+        <button onclick="editor.commands.setTextAlign('center')">Center</button>
+        <button onclick="editor.commands.setTextAlign('right')">Right</button>
+        <button onclick="logAlignment()">Log Current</button>
+    </div>
+    <div class="editor" id="editor"></div>
+
+    <script>
+        const { Editor } = Tiptap;
+        const { StarterKit } = TiptapStarterKit;
+        const { TextAlign } = TiptapTextAlign;
+
+        const editor = new Editor({
+            element: document.querySelector('#editor'),
+            extensions: [
+                StarterKit,
+                TextAlign.configure({
+                    types: ['paragraph'],
+                    alignments: ['left', 'center', 'right'],
+                    defaultAlignment: 'left'
+                })
+            ],
+            content: '<p>This is a test paragraph for text alignment.</p>',
+            onUpdate: () => {
+                console.log('Editor content updated');
+                console.log('HTML:', editor.getHTML());
+            }
+        });
+
+        function logAlignment() {
+            console.log('Current alignment states:', {
+                left: editor.isActive({ textAlign: 'left' }),
+                center: editor.isActive({ textAlign: 'center' }),
+                right: editor.isActive({ textAlign: 'right' })
+            });
+            console.log('Paragraph attributes:', editor.getAttributes('paragraph'));
+            console.log('Current HTML:', editor.getHTML());
+        }
+
+        // Initial log
+        setTimeout(logAlignment, 100);
+    </script>
+</body>
+</html>

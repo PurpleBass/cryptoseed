@@ -38,63 +38,84 @@ const CodeVerification = () => {
           <CollapsibleContent>
             <div className="p-4 border-t">
               <div className="text-xs sm:text-sm text-muted-foreground mb-3 text-left">
-                This is the actual implementation of our AES-256-GCM encryption using the Web Crypto API, PBKDF2 key derivation, and secure memory handling. The output format includes a version byte, salt, IV, AAD (timestamp + version), and ciphertext. All encryption and decryption is performed client-side, and sensitive key material is wiped from memory after use.
+                This is the actual implementation of our ChaCha20-Poly1305 encryption using Argon2id key derivation and secure memory handling. The output format includes a version header, salt, nonce, AAD (additional authenticated data), and ciphertext. All encryption and decryption is performed client-side, and sensitive key material is wiped from memory after use.
               </div>
               <div className="p-4 bg-muted rounded-md overflow-auto max-h-[600px]">
                 <pre className="text-xs md:text-sm whitespace-pre text-left ml-0 text-gray-700">
 {`/**
- * AES-256-GCM encryption with PBKDF2 key derivation and secure memory wiping
+ * ChaCha20-Poly1305 encryption with Argon2id key derivation and secure memory wiping
  *
- * - PBKDF2 (SHA-256, 600,000 iterations) derives a 256-bit key from the password and random salt
- * - AES-GCM encrypts data with a random IV and 8-byte AAD (timestamp + version)
- * - Output: [version|salt|iv|aad|ciphertext]
+ * - Argon2id (memory-hard, 64MB memory, 3 iterations) derives a 256-bit key from password and random salt
+ * - ChaCha20-Poly1305 encrypts data with a random nonce and AAD (timestamp + version)
+ * - Output: [version|salt|nonce|aad|ciphertext]
  * - All operations are client-side; no data is sent to any server
  */
 
 export async function encryptMessage(message: string, password: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(message);
-  const version = 1;
-  const salt = new Uint8Array(16);
-  crypto.getRandomValues(salt);
-  const iv = new Uint8Array(12);
-  crypto.getRandomValues(iv);
-  const key = await pbkdf2(password, salt, 600000, 32, 'SHA-256');
-  // AAD: 4 bytes timestamp, 4 bytes version
+  const version = 3;
+  const salt = randomBytes(SALT_SIZE);
+  const nonce = randomBytes(NONCE_SIZE);
+  
+  // Derive key using Argon2id
+  const key = argon2id(password, salt, {
+    m: ARGON2ID_MEMORY,
+    t: ARGON2ID_ITERATIONS, 
+    p: ARGON2ID_PARALLELISM,
+    dkLen: KEY_SIZE
+  });
+  
+  // Additional authenticated data (timestamp + version)
   const timestamp = Date.now();
-  const aad = new Uint8Array(8);
+  const aad = new Uint8Array(12);
   const aadView = new DataView(aad.buffer);
-  aadView.setUint32(0, timestamp, false);
-  aadView.setUint32(4, version, false);
-  const cryptoKey = await crypto.subtle.importKey('raw', key, { name: 'AES-GCM' }, false, ['encrypt']);
-  const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv, additionalData: aad, tagLength: 128 }, cryptoKey, data);
-  const encryptedData = new Uint8Array(encrypted);
-  // Output: version|salt|iv|aad|ciphertext
-  const output = new Uint8Array(1 + salt.length + iv.length + aad.length + encryptedData.length);
+  aadView.setUint32(0, version, false);
+  aadView.setBigUint64(4, BigInt(timestamp), false);
+  
+  // Initialize ChaCha20-Poly1305 cipher
+  const cipher = chacha20poly1305(key, nonce, aad);
+  const ciphertext = cipher.encrypt(data);
+  
+  // Combine: version|salt|nonce|aad|ciphertext
+  const output = new Uint8Array(4 + salt.length + nonce.length + aad.length + ciphertext.length);
   let offset = 0;
-  output[offset++] = version;
+  new DataView(output.buffer).setUint32(offset, version, false); offset += 4;
   output.set(salt, offset); offset += salt.length;
-  output.set(iv, offset); offset += iv.length;
+  output.set(nonce, offset); offset += nonce.length;
   output.set(aad, offset); offset += aad.length;
-  output.set(encryptedData, offset);
+  output.set(ciphertext, offset);
+  
+  // Secure memory cleanup
   wipeBytes(key);
+  
   return uint8ToBase64(output);
 }
 
 export async function decryptMessage(encryptedMessage: string, password: string): Promise<string> {
   const encryptedData = base64ToUint8(encryptedMessage);
   let offset = 0;
-  const version = encryptedData[offset++];
-  const salt = encryptedData.slice(offset, offset + 16); offset += 16;
-  const iv = encryptedData.slice(offset, offset + 12); offset += 12;
-  const aad = encryptedData.slice(offset, offset + 8); offset += 8;
+  const version = new DataView(encryptedData.buffer).getUint32(offset, false); offset += 4;
+  const salt = encryptedData.slice(offset, offset + SALT_SIZE); offset += SALT_SIZE;
+  const nonce = encryptedData.slice(offset, offset + NONCE_SIZE); offset += NONCE_SIZE;
+  const aad = encryptedData.slice(offset, offset + 12); offset += 12;
   const ciphertext = encryptedData.slice(offset);
-  const key = await pbkdf2(password, salt, 600000, 32, 'SHA-256');
-  const cryptoKey = await crypto.subtle.importKey('raw', key, { name: 'AES-GCM' }, false, ['decrypt']);
-  const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv, additionalData: aad, tagLength: 128 }, cryptoKey, ciphertext);
+  
+  // Derive key using Argon2id
+  const key = argon2id(password, salt, {
+    m: ARGON2ID_MEMORY,
+    t: ARGON2ID_ITERATIONS,
+    p: ARGON2ID_PARALLELISM,
+    dkLen: KEY_SIZE
+  });
+  
+  // Initialize ChaCha20-Poly1305 cipher for decryption
+  const cipher = chacha20poly1305(key, nonce, aad);
+  const decrypted = cipher.decrypt(ciphertext);
+  
   wipeBytes(key);
   const decoder = new TextDecoder();
-  return decoder.decode(new Uint8Array(decrypted));
+  return decoder.decode(decrypted);
 }`}
                 </pre>
               </div>
@@ -126,17 +147,18 @@ export async function decryptMessage(encryptedMessage: string, password: string)
                         implementation, which provides hardware-accelerated encryption operations.
                       </li>
                       <li>
-                        <strong>AES-256-GCM:</strong> We use AES in Galois/Counter Mode with a 256-bit 
-                        key for encryption, which is currently considered unbreakable with proper 
-                        implementation.
+                        <strong>ChaCha20-Poly1305:</strong> We use ChaCha20-Poly1305 authenticated encryption
+                        which provides both confidentiality and integrity in a single operation,
+                        and is considered more resistant to timing attacks than traditional encryption.
                       </li>
                       <li>
-                        <strong>PBKDF2:</strong> Passwords are strengthened using PBKDF2 with 600,000 
-                        iterations of SHA-256 hashing, making brute force attacks impractical.
+                        <strong>Argon2id:</strong> Passwords are strengthened using Argon2id with 64MB memory, 
+                        3 iterations, and 4-way parallelism - a memory-hard function that makes 
+                        brute force attacks computationally impractical.
                       </li>
                       <li>
                         <strong>Versioned Format:</strong> Our encryption format includes a version 
-                        byte to maintain backward compatibility with future security improvements.
+                        header to maintain backward compatibility with future security improvements.
                       </li>
                       <li>
                         <strong>Secure Memory Handling:</strong> After encryption/decryption operations, 

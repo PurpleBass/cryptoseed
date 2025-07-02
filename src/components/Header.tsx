@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
           </div>
           <span className="block text-secure-700 text-base md:text-lg font-semibold tracking-tight">Plant privacy. Sprout Freedom.</span>
           <p className="text-center text-sm md:text-base text-gray-600 max-w-2xl mx-auto px-2">
-            A zero-knowledge, open-source AES-256 encryption tool that works offline. No data leaves your device, no backdoors, completely verifiable.
+            A zero-knowledge, open-source ChaCha20-Poly1305 encryption tool that works offline. No data leaves your device, no backdoors, completely verifiable.
           </p>
           
           <Tabs 

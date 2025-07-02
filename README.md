@@ -33,7 +33,7 @@
 - **Zero-Knowledge:**
   - All encryption and decryption happen locally in your browser. No data ever leaves your device.
 - **Military-Grade Security:**
-  - Uses AES-256-GCM encryption with strong password-based key derivation (PBKDF2, 600,000 iterations) and secure memory handling.
+  - Uses ChaCha20-Poly1305 authenticated encryption with Argon2id key derivation (OWASP recommended) and secure memory handling.
 - **File Export/Import:**
   - Download encrypted content as `.cryptoseed` files with metadata and compression.
   - Load `.cryptoseed` files for seamless decryption workflow.
@@ -70,7 +70,7 @@
 - **Responsive Layout:** Optimized for both desktop and mobile devices with proper word wrapping
 - **Smart Indicators:** Real-time offline detection with user guidance
 - **Brand Positioning:** Slogan "Plant privacy. Sprout Freedom." prominently placed in header
-- **Technical Accuracy:** Updated encryption badges to show complete "AES-256-GCM" specification
+- **Technical Accuracy:** Updated encryption to show complete "ChaCha20-Poly1305 + Argon2id" specification
 
 ### Bug Fixes & Polish
 - **Word Wrapping:** Fixed text expansion issues in editors and textareas

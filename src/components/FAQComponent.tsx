@@ -71,8 +71,8 @@ const FAQComponent = () => {
                   <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">How does this app work?</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
-                      Our app uses a very strong encryption method called <strong>AES-256</strong> (the same technology used by
-                      governments and banks) to protect your data.
+                      Our app uses a very strong encryption method called <strong>ChaCha20-Poly1305</strong> with <strong>Argon2id</strong> key derivation 
+                      (the latest recommended standards by OWASP and cryptography experts) to protect your data.
                     </p>
                     <p className="mt-1 sm:mt-2">
                       Here's how it works in simple terms:
@@ -95,7 +95,7 @@ const FAQComponent = () => {
                   <AccordionTrigger className="text-sm sm:text-base py-2 text-left justify-start">How secure is this encryption?</AccordionTrigger>
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
-                      <strong>AES-256 encryption is extremely secure</strong>. If implemented correctly (as it is in this app):
+                      <strong>ChaCha20-Poly1305 encryption is extremely secure</strong>. If implemented correctly (as it is in this app):
                     </p>
                     <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
                       <li>It would take <strong>billions of years</strong> for all the world's computers to crack it</li>
@@ -206,7 +206,7 @@ const FAQComponent = () => {
                         </ul>
                       </li>
                       <li>
-                        <strong>Industry-Standard Encryption</strong>: Using AES-256, the same technology used by governments and financial institutions
+                        <strong>Industry-Standard Encryption</strong>: Using ChaCha20-Poly1305 with Argon2id, the latest recommended cryptographic standards
                         <ul className="list-disc pl-4 sm:pl-6 mt-1">
                           <li>Considered unbreakable with current technology</li>
                           <li>Recommended by cybersecurity experts</li>
@@ -329,7 +329,7 @@ const FAQComponent = () => {
                     </p>
                     <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
                       <li>
-                        <strong>Encryption Algorithm:</strong> AES-256-GCM (Galois/Counter Mode)
+                        <strong>Encryption Algorithm:</strong> ChaCha20-Poly1305 (Authenticated Encryption)
                         <ul className="list-disc pl-4 sm:pl-6 mt-1">
                           <li><strong>256-bit key length</strong> (maximum security level for AES)</li>
                           <li>GCM provides both <strong>confidentiality and authenticity</strong></li>
@@ -337,7 +337,7 @@ const FAQComponent = () => {
                         </ul>
                       </li>
                       <li>
-                        <strong>Key Derivation:</strong> PBKDF2 (Password-Based Key Derivation Function 2)
+                        <strong>Key Derivation:</strong> Argon2id (Memory-hard, OWASP recommended)
                         <ul className="list-disc pl-4 sm:pl-6 mt-1">
                           <li><strong>600,000 iterations</strong> of SHA-256 hashing</li>
                           <li><strong>Unique random salt</strong> for each encryption operation</li>
@@ -411,7 +411,7 @@ const FAQComponent = () => {
                     </p>
                     <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
                       <li>
-                        <strong>Confidentiality:</strong> AES-256 ensures that without the correct key, 
+                        <strong>Confidentiality:</strong> ChaCha20-Poly1305 ensures that without the correct key, 
                         recovering the plaintext is <strong>computationally infeasible</strong> with current technology.
                       </li>
                       <li>
@@ -463,7 +463,7 @@ const FAQComponent = () => {
                         Lost passwords mean permanently lost data.
                       </li>
                       <li>
-                        <strong>Quantum Computing:</strong> AES-256 is believed to be <strong>resistant to quantum attacks</strong>, 
+                        <strong>Quantum Computing:</strong> ChaCha20-Poly1305 is believed to be <strong>more resistant to quantum attacks</strong> than traditional encryption methods, 
                         but as quantum computing advances, this assessment may change over time.
                       </li>
                     </ul>

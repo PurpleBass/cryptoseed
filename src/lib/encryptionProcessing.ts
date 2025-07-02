@@ -295,9 +295,11 @@ export function downloadCryptoSeedFile(encryptedContent: string, filename?: stri
   const defaultFilename = `encrypted-${timestamp}.cryptoseed`;
   const finalFilename = filename || defaultFilename;
   
-  // Create a structured format for the .cryptoseed file
+  // Create a structured format for the .cryptoseed file (V3 format)
   const cryptoSeedData = {
-    version: "1.0",
+    version: "3.0",
+    algorithm: "ChaCha20-Poly1305",
+    kdf: "Argon2id",
     encrypted: true,
     timestamp: new Date().toISOString(),
     content: encryptedContent,
@@ -321,6 +323,11 @@ export function readCryptoSeedFile(fileContent: string): { isValid: boolean; con
     
     if (!data.app || data.app !== "CryptoSeed") {
       return { isValid: false, error: "This file was not created by CryptoSeed" };
+    }
+    
+    // Check version compatibility (support both legacy v1.0 and current v3.0)
+    if (data.version !== "1.0" && data.version !== "3.0") {
+      return { isValid: false, error: `Unsupported .cryptoseed version: ${data.version}` };
     }
     
     return { isValid: true, content: data.content };

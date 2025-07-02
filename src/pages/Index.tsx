@@ -93,7 +93,7 @@ const Index = () => {
                     <h3 className="font-medium text-sm md:text-base text-gray-900">Seed Phrase Protection</h3>
                   </div>
                   <p className="text-xs md:text-sm text-gray-600 min-h-[3rem]">
-                    Securely encrypt and store your wallet recovery phrases using AES-256 encryption. 
+                    Securely encrypt and store your wallet recovery phrases using ChaCha20-Poly1305 encryption. 
                     Prevent unauthorized access to your crypto assets.
                   </p>
                 </div>
@@ -176,7 +176,7 @@ const Index = () => {
                     <p>By accessing or using the Service, you agree to be bound by these Terms. If you do not agree to all the terms and conditions, you may not access or use the Service.</p>
                     
                     <h3 className="text-base font-medium text-gray-900">2. Description of Service</h3>
-                    <p>Crypto Seed is a client-side encryption tool that allows users to encrypt sensitive information using AES-256 encryption. The Service operates entirely within your browser and does not transmit your data to any servers.</p>
+                    <p>Crypto Seed is a client-side encryption tool that allows users to encrypt sensitive information using ChaCha20-Poly1305 encryption with Argon2id key derivation. The Service operates entirely within your browser and does not transmit your data to any servers.</p>
                     
                     <h3 className="text-base font-medium text-gray-900">3. No Warranty</h3>
                     <p>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.</p>

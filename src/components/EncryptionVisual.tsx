@@ -51,7 +51,7 @@ const EncryptionVisual = () => {
                 <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mb-2">
                   <Lock className="h-6 w-6 text-secure-600" />
                 </div>
-                <span className="text-xs font-medium">AES-256-GCM Encryption</span>
+                <span className="text-xs font-medium">ChaCha20-Poly1305 Encryption</span>
               </div>
               
               {/* Arrow */}
@@ -78,7 +78,7 @@ const EncryptionVisual = () => {
                 PBKDF2-SHA256 to create a strong encryption key that's resistant to brute force attacks.
               </li>
               <li>
-                <strong>Secure Encryption:</strong> Your data is encrypted using AES-256 in Galois/Counter Mode (GCM), 
+                <strong>Secure Encryption:</strong> Your data is encrypted using ChaCha20-Poly1305 authenticated encryption with Argon2id key derivation, 
                 providing both confidentiality and authenticity verification.
               </li>
               <li>
