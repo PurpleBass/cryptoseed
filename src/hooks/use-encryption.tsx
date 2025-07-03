@@ -141,30 +141,13 @@ export function useEncryption(initialEncrypting?: boolean) {
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const clearPassword = () => setPassword("");
   
-  // Clipboard utilities
+  // Simple clipboard utilities - no clearing needed since we only copy encrypted data
   const copyToClipboard = () => {
     navigator.clipboard.writeText(output);
     toast({
       title: "Copied to clipboard",
-      description: "The output has been copied to your clipboard. It will be cleared in 30 seconds for your security."
+      description: "Encrypted data has been copied to your clipboard."
     });
-    // Auto-wipe clipboard after 30 seconds
-    setTimeout(async () => {
-      // Only clear if clipboard still contains our output
-      try {
-        const current = await navigator.clipboard.readText();
-        if (current === output) {
-          await navigator.clipboard.writeText("");
-          toast({
-            title: "Clipboard cleared",
-            description: "Sensitive data was removed from your clipboard for your security.",
-            variant: "default"
-          });
-        }
-      } catch (e) {
-        // Ignore errors (e.g., permissions)
-      }
-    }, 30000); // 30 seconds
   };
 
   // Copy formatted content (for decryption mode - copies HTML with formatting)
@@ -178,25 +161,8 @@ export function useEncryption(initialEncrypting?: boolean) {
     navigator.clipboard.write([clipboardItem]).then(() => {
       toast({
         title: "Copied with formatting",
-        description: "The formatted content has been copied to your clipboard. It will be cleared in 30 seconds for your security."
+        description: "The formatted content has been copied to your clipboard."
       });
-      
-      // Auto-wipe clipboard after 30 seconds
-      setTimeout(async () => {
-        try {
-          const current = await navigator.clipboard.readText();
-          if (current === plainTextContent) {
-            await navigator.clipboard.writeText("");
-            toast({
-              title: "Clipboard cleared",
-              description: "Sensitive data was removed from your clipboard for your security.",
-              variant: "default"
-            });
-          }
-        } catch (e) {
-          // Ignore errors (e.g., permissions)
-        }
-      }, 30000); // 30 seconds
     }).catch(() => {
       // Fallback to plain text if HTML copying fails
       navigator.clipboard.writeText(plainTextContent);

@@ -183,10 +183,54 @@ useEffect(() => {
 }, [initialCipher, setMode, setTextInput, isEncrypting, hasUsedInitialCipher, setHasUsedInitialCipher]);
 ```
 
-### Complete Working Behavior
-- ✅ **URL Load**: Content appears correctly in decrypt mode input box
-- ✅ **Mode Switch**: Content clears when switching to encrypt mode  
-- ✅ **Return Switch**: Content stays empty when switching back to decrypt
-- ✅ **Tab Switch**: Content clears when switching between tabs
-- ✅ **No Re-prefill**: Content never re-populates after being cleared
-- ✅ **Normal Usage**: Unaffected by the URL prefill logic
+## Latest Fix Attempt: Timing Issue Resolution
+
+### Problem Analysis
+After thorough testing, the URL hash prefill was still not working reliably. The issue was identified as a timing problem between the clearing effects in `useEncryption` and the prefill effect in `EncryptionContainer`.
+
+### Root Cause
+The prefill effect had `isEncrypting` in its dependency array, which caused timing issues:
+```typescript
+}, [initialCipher, setMode, setTextInput, isEncrypting, hasUsedInitialCipher, setHasUsedInitialCipher]);
+```
+
+When the component mounted:
+1. `isEncrypting` state might not be set to the correct value immediately
+2. The effect could run before `isEncrypting` was properly synchronized
+3. This caused the condition `!isEncrypting` to potentially be incorrect
+
+### Fix Applied
+1. **Changed dependency from `isEncrypting` to `initialEncrypting`**: Used the prop value instead of state to avoid timing issues
+2. **Added setTimeout(0)**: Ensured the prefill runs after all other synchronous effects
+3. **Updated condition logic**: Used `!initialEncrypting` instead of `!isEncrypting`
+
+```typescript
+// Use setTimeout to ensure this runs after all other effects have completed
+setTimeout(() => {
+  console.log('Executing prefill after timeout');
+  setMode('text');
+  
+  // Use initialEncrypting instead of isEncrypting to avoid timing issues
+  if (!initialEncrypting) {
+    console.log('Setting textInput for decrypt mode');
+    setTextInput(initialCipher);
+  } else {
+    // ... encrypt mode logic
+  }
+  setHasUsedInitialCipher(true);
+}, 0);
+```
+
+### Expected Behavior After Fix
+- ✅ URL hash content loads correctly in decrypt mode
+- ✅ Content is visible in the decrypt input box immediately
+- ✅ Switching to encrypt mode clears the content
+- ✅ Switching back to decrypt mode stays empty
+- ✅ Tab switching clears content and doesn't re-prefill
+- ✅ Console logs show proper execution order
+
+### Testing Instructions
+Use the verification script: `node verify-hash-fix.js`
+Or test with quick URL: `http://localhost:8081/#UXVpY2sgdGVzdCBmb3IgVVJMIGhhc2ggcHJlZmlsbA==`
+
+## Summary
