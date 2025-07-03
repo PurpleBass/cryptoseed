@@ -42,6 +42,8 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
   const [showHelp, setShowHelp] = useState(false);
   const [preservedSelection, setPreservedSelection] = useState<any>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isEditorFocused, setIsEditorFocused] = useState(false);
+  const [hasSelection, setHasSelection] = useState(false);
   const editorRef = useRef<HTMLDivElement>(null);
 
   // Detect mobile viewport for touch-optimized UI
@@ -104,8 +106,16 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
     onUpdate: ({ editor }) => {
       onChange(editor.getJSON());
     },
-    onSelectionUpdate: () => {
-      // Forces re-render when selection changes
+    onFocus: () => {
+      setIsEditorFocused(true);
+    },
+    onBlur: () => {
+      setIsEditorFocused(false);
+    },
+    onSelectionUpdate: ({ editor }) => {
+      // Update selection state for toolbar visibility
+      const { selection } = editor.state;
+      setHasSelection(!selection.empty);
     },
   });
 
@@ -288,16 +298,17 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
 
   return (
     <div className="modern-editor-container">
-      {/* Mobile-First Toolbar - only show when editable */}
-      {editable && (
+      {/* Contextual Toolbar - only show when editor is focused or has selection */}
+      {editable && (isEditorFocused || hasSelection) && (
         <>
           <div className="editor-toolbar">
-            {/* Primary formatting row */}
+            {/* Mobile-optimized toolbar layout */}
             <div className="toolbar-row">
+              {/* Essential formatting group */}
               <div className="toolbar-group">
                 <Button 
                   type="button" 
-                  size={isMobile ? "sm" : "sm"} 
+                  size="sm"
                   variant="outline" 
                   onClick={() => formatWithSelection(() => editor.chain().focus().toggleBold().run())} 
                   className={`toolbar-btn ${editor.isActive('bold') ? 'active' : ''}`}
@@ -308,7 +319,7 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
                 </Button>
                 <Button 
                   type="button" 
-                  size={isMobile ? "sm" : "sm"} 
+                  size="sm"
                   variant="outline" 
                   onClick={() => formatWithSelection(() => editor.chain().focus().toggleItalic().run())} 
                   className={`toolbar-btn ${editor.isActive('italic') ? 'active' : ''}`}
@@ -319,7 +330,7 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
                 </Button>
                 <Button 
                   type="button" 
-                  size={isMobile ? "sm" : "sm"} 
+                  size="sm"
                   variant="outline" 
                   onClick={() => formatWithSelection(() => editor.chain().focus().toggleUnderline().run())} 
                   className={`toolbar-btn ${editor.isActive('underline') ? 'active' : ''}`}
@@ -328,24 +339,26 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
                 >
                   <u className="text-sm">U</u>
                 </Button>
-                <Button 
-                  type="button" 
-                  size={isMobile ? "sm" : "sm"} 
-                  variant="outline" 
-                  onClick={() => formatWithSelection(() => editor.chain().focus().toggleStrike().run())} 
-                  className={`toolbar-btn ${editor.isActive('strike') ? 'active' : ''}`}
-                  aria-label="Strikethrough" 
-                  title="Strikethrough (Ctrl+Shift+X)"
-                >
-                  <s className="text-sm">S</s>
-                </Button>
+                {!isMobile && (
+                  <Button 
+                    type="button" 
+                    size="sm"
+                    variant="outline" 
+                    onClick={() => formatWithSelection(() => editor.chain().focus().toggleStrike().run())} 
+                    className={`toolbar-btn ${editor.isActive('strike') ? 'active' : ''}`}
+                    aria-label="Strikethrough" 
+                    title="Strikethrough (Ctrl+Shift+X)"
+                  >
+                    <s className="text-sm">S</s>
+                  </Button>
+                )}
               </div>
               
-              {/* Text alignment */}
+              {/* Text alignment - compact on mobile */}
               <div className="toolbar-group">
                 <Button 
                   type="button" 
-                  size={isMobile ? "sm" : "sm"} 
+                  size="sm"
                   variant="outline" 
                   onClick={toggleTextAlign} 
                   className="toolbar-btn"
@@ -356,18 +369,18 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
                 </Button>
               </div>
               
-              {/* Lists */}
+              {/* Lists dropdown - more compact on mobile */}
               <div className="toolbar-group">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button 
                       type="button" 
-                      size={isMobile ? "sm" : "sm"} 
+                      size="sm"
                       variant="outline" 
                       className={`toolbar-btn ${(editor.isActive('bulletList') || editor.isActive('orderedList') || editor.isActive('taskList')) ? 'active' : ''}`}
                       title="Lists"
                     >
-                      <List className="h-4 w-4" />
+                      <List className="h-3.5 w-3.5" />
                       <ChevronDown className="h-3 w-3 ml-1" />
                     </Button>
                   </DropdownMenuTrigger>
@@ -394,56 +407,60 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
                 </DropdownMenu>
               </div>
               
-              {/* Actions */}
-              <div className="toolbar-group">
-                <Button 
-                  type="button" 
-                  size={isMobile ? "sm" : "sm"} 
-                  variant="outline" 
-                  onClick={() => editor.chain().focus().setHorizontalRule().run()} 
-                  className="toolbar-btn"
-                  aria-label="Horizontal Rule" 
-                  title="Horizontal Rule"
-                >
-                  ―
-                </Button>
-                <Button 
-                  type="button" 
-                  size={isMobile ? "sm" : "sm"} 
-                  variant="outline" 
-                  onClick={() => editor.chain().focus().undo().run()} 
-                  className="toolbar-btn"
-                  aria-label="Undo" 
-                  title="Undo (Ctrl+Z)"
-                >
-                  ↺
-                </Button>
-                <Button 
-                  type="button" 
-                  size={isMobile ? "sm" : "sm"} 
-                  variant="outline" 
-                  onClick={() => editor.chain().focus().redo().run()} 
-                  className="toolbar-btn"
-                  aria-label="Redo" 
-                  title="Redo (Ctrl+Y)"
-                >
-                  ↻
-                </Button>
-              </div>
+              {/* Desktop-only actions */}
+              {!isMobile && (
+                <div className="toolbar-group">
+                  <Button 
+                    type="button" 
+                    size="sm"
+                    variant="outline" 
+                    onClick={() => editor.chain().focus().setHorizontalRule().run()} 
+                    className="toolbar-btn"
+                    aria-label="Horizontal Rule" 
+                    title="Horizontal Rule"
+                  >
+                    ―
+                  </Button>
+                  <Button 
+                    type="button" 
+                    size="sm"
+                    variant="outline" 
+                    onClick={() => editor.chain().focus().undo().run()} 
+                    className="toolbar-btn"
+                    aria-label="Undo" 
+                    title="Undo (Ctrl+Z)"
+                  >
+                    ↺
+                  </Button>
+                  <Button 
+                    type="button" 
+                    size="sm"
+                    variant="outline" 
+                    onClick={() => editor.chain().focus().redo().run()} 
+                    className="toolbar-btn"
+                    aria-label="Redo" 
+                    title="Redo (Ctrl+Y)"
+                  >
+                    ↻
+                  </Button>
+                </div>
+              )}
               
-              {/* Help toggle */}
-              <div className="toolbar-group ml-auto">
-                <Button 
-                  type="button" 
-                  size="sm" 
-                  variant="ghost" 
-                  onClick={() => setShowHelp((v) => !v)} 
-                  className="text-xs text-gray-600 hover:text-gray-800"
-                  aria-label="Show formatting help"
-                >
-                  {showHelp ? 'Hide' : 'Show'} Shortcuts
-                </Button>
-              </div>
+              {/* Help toggle - desktop only */}
+              {!isMobile && (
+                <div className="toolbar-group ml-auto">
+                  <Button 
+                    type="button" 
+                    size="sm" 
+                    variant="ghost" 
+                    onClick={() => setShowHelp((v) => !v)} 
+                    className="text-xs text-gray-600 hover:text-gray-800"
+                    aria-label="Show formatting help"
+                  >
+                    {showHelp ? 'Hide' : 'Show'} Shortcuts
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
           
@@ -470,7 +487,7 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
       {/* Modern Editor Container */}
       <div 
         ref={editorRef} 
-        className={`modern-editor ${editable ? 'editable' : 'readonly'} ${preservedSelection ? 'has-selection' : ''}`}
+        className={`modern-editor ${editable ? 'editable' : 'readonly'} ${hasSelection ? 'has-selection' : ''} ${isEditorFocused ? 'focused' : ''}`}
       >
         <EditorContent editor={editor} />
       </div>

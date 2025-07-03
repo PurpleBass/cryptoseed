@@ -179,7 +179,7 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
     clearSeedPhrase,
     loadCryptoSeedFile,
     toast
-  } = useEncryption(initialEncrypting, !!initialCipher);
+  } = useEncryption(initialEncrypting);
 
   // Sync isEncrypting state with initialEncrypting prop if it changes (e.g., after hash detected)
   useEffect(() => {
@@ -347,89 +347,91 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
   // Main render method for the Encryption Component
   return (
     <div className="satoshi-container px-4 md:px-0 py-10 bg-white">
-      {/* Header section with encryption/decryption mode toggle */}
-      <div className="mb-8 flex flex-col sm:flex-row items-center justify-center bg-gray-50 p-3 rounded-lg space-x-0 sm:space-x-4 space-y-2 sm:space-y-0">
-        {/* Switch between encryption and decryption modes */}
-        <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto justify-center">
-          <div className="flex items-center gap-2 w-full sm:w-auto justify-center">
-            <div className="flex items-center space-x-2 w-full sm:w-auto justify-center">
-              <Switch 
-                id="encrypt-mode" 
-                checked={isEncrypting} 
-                onCheckedChange={setIsEncrypting} 
-                className="data-[state=checked]:bg-secure-500" 
-              />
-              <div className="flex items-center justify-center">
-                {/* Show lock icon based on current mode */}
-                {isEncrypting ? <Lock className="h-4 w-4 mr-2 text-secure-500" /> : <LockOpen className="h-4 w-4 mr-2 text-gray-500" />}
-                <span className="text-lg font-heading font-bold text-gray-900">
-                  {isEncrypting ? "Encrypt" : "Decrypt"}
-                </span>
-                {/* Badge showing encryption method with security info popover */}
-                <Popover open={showSecurityInfo} onOpenChange={setShowSecurityInfo}>
-                  <PopoverTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      className="ml-2 p-0 h-auto"
-                      onClick={() => setShowSecurityInfo(!showSecurityInfo)}
-                    >
-                      <Badge variant="outline" className="text-xs flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200 hover:bg-secure-200 cursor-pointer transition-colors">
-                        <Shield className="h-3 w-3" />
-                        <span>Argon2id + ChaCha20-Poly1305</span>
-                        <HelpCircle className="h-3 w-3 ml-1" />
-                      </Badge>
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-80" side="bottom" align="start">
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2">
-                        <Shield className="h-4 w-4 text-purple-600" />
-                        <h4 className="font-semibold text-sm">Future-Proof Encryption (V3)</h4>
-                        <Badge variant="secondary" className="text-xs">Current Standard</Badge>
-                      </div>
-                      
-                      <div className="text-xs text-gray-600">
-                        <p className="mb-2 font-medium">ChaCha20-Poly1305 + Argon2id key derivation</p>
-                        
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                          <div className="flex items-center gap-1">
-                            <span className="text-green-600">✓</span>
-                            <span>Memory-hard KDF</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <span className="text-green-600">✓</span>
-                            <span>Post-quantum resistant</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <span className="text-green-600">✓</span>
-                            <span>OWASP recommended</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <span className="text-green-600">✓</span>
-                            <span>Maximum security</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </div>
+      {/* Mobile-First Header - Clean and Simple */}
+      <div className="mb-8">
+        {/* Primary Toggle - Mobile Optimized */}
+        <div className="flex items-center justify-center bg-gray-50 p-4 rounded-lg mb-4">
+          <div className="flex items-center gap-3">
+            <Switch 
+              id="encrypt-mode" 
+              checked={isEncrypting} 
+              onCheckedChange={setIsEncrypting} 
+              className="data-[state=checked]:bg-secure-500" 
+            />
+            <div className="flex items-center gap-2">
+              {isEncrypting ? <Lock className="h-5 w-5 text-secure-500" /> : <LockOpen className="h-5 w-5 text-gray-500" />}
+              <span className="text-xl font-heading font-bold text-gray-900">
+                {isEncrypting ? "Encrypt" : "Decrypt"}
+              </span>
             </div>
           </div>
         </div>
         
-        {/* Additional information and offline recommendation */}
-        <div className="flex gap-2 items-center justify-center sm:justify-start">
+        {/* Secondary Info - Collapsible on Mobile */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
+          {/* Algorithm Info - Compact Design */}
+          <Popover open={showSecurityInfo} onOpenChange={setShowSecurityInfo}>
+            <PopoverTrigger asChild>
+              <Button 
+                variant="ghost" 
+                className="h-auto p-2 text-xs hover:bg-gray-100 rounded-md"
+                onClick={() => setShowSecurityInfo(!showSecurityInfo)}
+              >
+                <Badge variant="outline" className="text-xs flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200 hover:bg-secure-200 cursor-pointer transition-colors">
+                  <Shield className="h-3 w-3" />
+                  <span className="hidden sm:inline">Argon2id + ChaCha20-Poly1305</span>
+                  <span className="sm:hidden">Military-grade</span>
+                  <HelpCircle className="h-3 w-3 ml-1" />
+                </Badge>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80" side="bottom" align="center">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-purple-600" />
+                  <h4 className="font-semibold text-sm">Future-Proof Encryption (V3)</h4>
+                  <Badge variant="secondary" className="text-xs">Current Standard</Badge>
+                </div>
+                
+                <div className="text-xs text-gray-600">
+                  <p className="mb-2 font-medium">ChaCha20-Poly1305 + Argon2id key derivation</p>
+                  
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="flex items-center gap-1">
+                      <span className="text-green-600">✓</span>
+                      <span>Memory-hard KDF</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-green-600">✓</span>
+                      <span>Post-quantum resistant</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-green-600">✓</span>
+                      <span>OWASP recommended</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-green-600">✓</span>
+                      <span>Maximum security</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+          
+          {/* Offline Badge - Simplified */}
           <Badge variant="outline" className="text-xs flex items-center gap-1 bg-gray-200 text-gray-800 border-gray-300">
             <WifiOff className="h-3 w-3" />
-            <span>Offline recommended</span>
+            <span className="hidden sm:inline">Offline recommended</span>
+            <span className="sm:hidden">Offline</span>
           </Badge>
-          {/* Popover with additional information */}
+          
+          {/* Help Button - Mobile Optimized */}
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full hover:bg-gray-300/50 p-0">
-                <HelpCircle className="h-3.5 w-3.5 text-gray-700" />
-                <span className="sr-only">Why offline recommended?</span>
+              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-gray-300/50 p-0">
+                <HelpCircle className="h-4 w-4 text-gray-700" />
+                <span className="sr-only">Help</span>
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80 p-3 text-sm">

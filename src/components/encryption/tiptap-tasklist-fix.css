@@ -254,7 +254,21 @@
 }
 
 .editor-toolbar {
-  @apply mb-3 p-2 bg-gray-50 rounded-t-lg border border-gray-200;
+  @apply mb-0 p-2 bg-gray-50 rounded-t-lg border border-gray-200 border-b-0;
+  /* Smooth transitions for contextual appearance */
+  transition: all 0.3s ease;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .toolbar-row {
@@ -280,7 +294,11 @@
 
 .modern-editor.editable {
   @apply cursor-text bg-white border border-gray-200 p-4 focus-within:border-green-500 focus-within:ring-2 focus-within:ring-green-100;
-  border-top: none; /* Connect with toolbar */
+}
+
+/* When toolbar is present, connect editor to it */
+.modern-editor-container:has(.editor-toolbar) .modern-editor.editable {
+  border-top: none;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
@@ -291,6 +309,10 @@
 
 .modern-editor.has-selection {
   @apply ring-2 ring-green-200 border-green-300;
+}
+
+.modern-editor.focused {
+  @apply border-green-500 ring-2 ring-green-100;
 }
 
 .editor-help {
