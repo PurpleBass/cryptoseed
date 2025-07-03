@@ -41,7 +41,18 @@ const formattingShortcuts = [
 export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ value, onChange, editable = true, onEditorReady }) => {
   const [showHelp, setShowHelp] = useState(false);
   const [preservedSelection, setPreservedSelection] = useState<any>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const editorRef = useRef<HTMLDivElement>(null);
+
+  // Detect mobile viewport for touch-optimized UI
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const editor = useEditor({
     extensions: [
@@ -276,73 +287,191 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
 
 
   return (
-    <div>
-      {/* Toolbar - only show when editable */}
+    <div className="modern-editor-container">
+      {/* Mobile-First Toolbar - only show when editable */}
       {editable && (
         <>
-          <div className="flex flex-wrap gap-1 mb-2">
-            {/* Text formatting controls - always visible on the left */}
-            <Button type="button" size="sm" variant="outline" onClick={() => formatWithSelection(() => editor.chain().focus().toggleBold().run())} className={editor.isActive('bold') ? 'bg-secure-100' : ''} aria-label="Bold" title="Bold"><b>B</b></Button>
-            <Button type="button" size="sm" variant="outline" onClick={() => formatWithSelection(() => editor.chain().focus().toggleItalic().run())} className={editor.isActive('italic') ? 'bg-secure-100' : ''} aria-label="Italic" title="Italic"><i>I</i></Button>
-            <Button type="button" size="sm" variant="outline" onClick={() => formatWithSelection(() => editor.chain().focus().toggleUnderline().run())} className={editor.isActive('underline') ? 'bg-secure-100' : ''} aria-label="Underline" title="Underline"><u>U</u></Button>
-            <Button type="button" size="sm" variant="outline" onClick={() => formatWithSelection(() => editor.chain().focus().toggleStrike().run())} className={editor.isActive('strike') ? 'bg-secure-100' : ''} aria-label="Strikethrough" title="Strikethrough"><s>S</s></Button>
-            
-            {/* Text alignment toggle */}
-            <Button type="button" size="sm" variant="outline" onClick={toggleTextAlign} aria-label="Text Alignment" title="Text Alignment (Left → Center → Right)" className="flex items-center">
-              {getAlignmentIcon()}
-            </Button>
-            
-            {/* Lists dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button type="button" size="sm" variant="outline" className={`flex items-center gap-1 ${(editor.isActive('bulletList') || editor.isActive('orderedList') || editor.isActive('taskList')) ? 'bg-secure-100' : ''}`} title="Lists">
-                  <List className="h-3.5 w-3.5" />
-                  <ChevronDown className="h-3 w-3" />
+          <div className="editor-toolbar">
+            {/* Primary formatting row */}
+            <div className="toolbar-row">
+              <div className="toolbar-group">
+                <Button 
+                  type="button" 
+                  size={isMobile ? "sm" : "sm"} 
+                  variant="outline" 
+                  onClick={() => formatWithSelection(() => editor.chain().focus().toggleBold().run())} 
+                  className={`toolbar-btn ${editor.isActive('bold') ? 'active' : ''}`}
+                  aria-label="Bold" 
+                  title="Bold (Ctrl+B)"
+                >
+                  <b className="text-sm">B</b>
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                <DropdownMenuItem onClick={() => formatWithSelection(() => editor.chain().focus().toggleBulletList().run())} className={editor.isActive('bulletList') ? 'bg-secure-50' : ''}>
-                  • Bullet List
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => formatWithSelection(() => editor.chain().focus().toggleOrderedList().run())} className={editor.isActive('orderedList') ? 'bg-secure-50' : ''}>
-                  1. Numbered List
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => formatWithSelection(() => editor.chain().focus().toggleTaskList().run())} className={editor.isActive('taskList') ? 'bg-secure-50' : ''}>
-                  ☑ Checklist
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            
-            {/* Separator */}
-            <div className="w-px h-6 bg-gray-300 mx-1"></div>
-            
-            {/* Horizontal rule */}
-            <Button type="button" size="sm" variant="outline" onClick={() => editor.chain().focus().setHorizontalRule().run()} aria-label="Horizontal Rule" title="Horizontal Rule">―</Button>
-            
-            {/* Undo/Redo */}
-            <Button type="button" size="sm" variant="outline" onClick={() => editor.chain().focus().undo().run()} aria-label="Undo" title="Undo">↺</Button>
-            <Button type="button" size="sm" variant="outline" onClick={() => editor.chain().focus().redo().run()} aria-label="Redo" title="Redo">↻</Button>
-            
-            {/* Help toggle */}
-            <Button type="button" size="sm" variant="ghost" onClick={() => setShowHelp((v) => !v)} aria-label="Show formatting help">{showHelp ? 'Hide' : 'Show'} Shortcuts</Button>
+                <Button 
+                  type="button" 
+                  size={isMobile ? "sm" : "sm"} 
+                  variant="outline" 
+                  onClick={() => formatWithSelection(() => editor.chain().focus().toggleItalic().run())} 
+                  className={`toolbar-btn ${editor.isActive('italic') ? 'active' : ''}`}
+                  aria-label="Italic" 
+                  title="Italic (Ctrl+I)"
+                >
+                  <i className="text-sm">I</i>
+                </Button>
+                <Button 
+                  type="button" 
+                  size={isMobile ? "sm" : "sm"} 
+                  variant="outline" 
+                  onClick={() => formatWithSelection(() => editor.chain().focus().toggleUnderline().run())} 
+                  className={`toolbar-btn ${editor.isActive('underline') ? 'active' : ''}`}
+                  aria-label="Underline" 
+                  title="Underline (Ctrl+U)"
+                >
+                  <u className="text-sm">U</u>
+                </Button>
+                <Button 
+                  type="button" 
+                  size={isMobile ? "sm" : "sm"} 
+                  variant="outline" 
+                  onClick={() => formatWithSelection(() => editor.chain().focus().toggleStrike().run())} 
+                  className={`toolbar-btn ${editor.isActive('strike') ? 'active' : ''}`}
+                  aria-label="Strikethrough" 
+                  title="Strikethrough (Ctrl+Shift+X)"
+                >
+                  <s className="text-sm">S</s>
+                </Button>
+              </div>
+              
+              {/* Text alignment */}
+              <div className="toolbar-group">
+                <Button 
+                  type="button" 
+                  size={isMobile ? "sm" : "sm"} 
+                  variant="outline" 
+                  onClick={toggleTextAlign} 
+                  className="toolbar-btn"
+                  aria-label="Text Alignment" 
+                  title="Text Alignment (Left → Center → Right)"
+                >
+                  {getAlignmentIcon()}
+                </Button>
+              </div>
+              
+              {/* Lists */}
+              <div className="toolbar-group">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      type="button" 
+                      size={isMobile ? "sm" : "sm"} 
+                      variant="outline" 
+                      className={`toolbar-btn ${(editor.isActive('bulletList') || editor.isActive('orderedList') || editor.isActive('taskList')) ? 'active' : ''}`}
+                      title="Lists"
+                    >
+                      <List className="h-4 w-4" />
+                      <ChevronDown className="h-3 w-3 ml-1" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="min-w-[160px]">
+                    <DropdownMenuItem 
+                      onClick={() => formatWithSelection(() => editor.chain().focus().toggleBulletList().run())} 
+                      className={editor.isActive('bulletList') ? 'bg-secure-50' : ''}
+                    >
+                      <span className="mr-2">•</span> Bullet List
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={() => formatWithSelection(() => editor.chain().focus().toggleOrderedList().run())} 
+                      className={editor.isActive('orderedList') ? 'bg-secure-50' : ''}
+                    >
+                      <span className="mr-2">1.</span> Numbered List
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={() => formatWithSelection(() => editor.chain().focus().toggleTaskList().run())} 
+                      className={editor.isActive('taskList') ? 'bg-secure-50' : ''}
+                    >
+                      <span className="mr-2">☑</span> Checklist
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              
+              {/* Actions */}
+              <div className="toolbar-group">
+                <Button 
+                  type="button" 
+                  size={isMobile ? "sm" : "sm"} 
+                  variant="outline" 
+                  onClick={() => editor.chain().focus().setHorizontalRule().run()} 
+                  className="toolbar-btn"
+                  aria-label="Horizontal Rule" 
+                  title="Horizontal Rule"
+                >
+                  ―
+                </Button>
+                <Button 
+                  type="button" 
+                  size={isMobile ? "sm" : "sm"} 
+                  variant="outline" 
+                  onClick={() => editor.chain().focus().undo().run()} 
+                  className="toolbar-btn"
+                  aria-label="Undo" 
+                  title="Undo (Ctrl+Z)"
+                >
+                  ↺
+                </Button>
+                <Button 
+                  type="button" 
+                  size={isMobile ? "sm" : "sm"} 
+                  variant="outline" 
+                  onClick={() => editor.chain().focus().redo().run()} 
+                  className="toolbar-btn"
+                  aria-label="Redo" 
+                  title="Redo (Ctrl+Y)"
+                >
+                  ↻
+                </Button>
+              </div>
+              
+              {/* Help toggle */}
+              <div className="toolbar-group ml-auto">
+                <Button 
+                  type="button" 
+                  size="sm" 
+                  variant="ghost" 
+                  onClick={() => setShowHelp((v) => !v)} 
+                  className="text-xs text-gray-600 hover:text-gray-800"
+                  aria-label="Show formatting help"
+                >
+                  {showHelp ? 'Hide' : 'Show'} Shortcuts
+                </Button>
+              </div>
+            </div>
           </div>
+          
           {/* Collapsible Help Box */}
           {showHelp && (
-            <div className="mb-2 p-2 rounded bg-muted text-xs text-left border border-gray-200">
-              <div className="font-semibold mb-1">Formatting Shortcuts</div>
-              <div className="text-green-700 mb-2 p-1 bg-green-50 rounded text-xs">
-                💡 <strong>Tip:</strong> Select text once and apply multiple formats! Your selection stays active with both buttons and keyboard shortcuts until you click elsewhere.
+            <div className="editor-help">
+              <div className="font-semibold mb-2 text-gray-800">Formatting Shortcuts</div>
+              <div className="help-tip">
+                <strong>Tip:</strong> Select text once and apply multiple formats! Your selection stays active with both buttons and keyboard shortcuts until you click elsewhere.
               </div>
-              <ul className="list-disc pl-5 space-y-0.5">
+              <div className="shortcuts-grid">
                 {formattingShortcuts.map((item) => (
-                  <li key={item.label}><span className="font-medium">{item.label}:</span> {item.keys}</li>
+                  <div key={item.label} className="shortcut-item">
+                    <span className="shortcut-label">{item.label}:</span>
+                    <span className="shortcut-keys">{item.keys}</span>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           )}
         </>
       )}
-      <div ref={editorRef} className={`rounded-md min-h-32 text-left tiptap font-sans overflow-hidden max-w-full ${editable ? 'cursor-text bg-white border border-gray-200 p-3' : 'bg-transparent'} ${preservedSelection ? 'ring-1 ring-secure-200' : ''}`}>
+      
+      {/* Modern Editor Container */}
+      <div 
+        ref={editorRef} 
+        className={`modern-editor ${editable ? 'editable' : 'readonly'} ${preservedSelection ? 'has-selection' : ''}`}
+      >
         <EditorContent editor={editor} />
       </div>
     </div>

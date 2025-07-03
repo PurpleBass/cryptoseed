@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Eraser, Copy, Upload } from "lucide-react";
+import { Eraser, Copy, Upload, Lock, Unlock } from "lucide-react";
 import { EncryptionOutput } from "./EncryptionOutput";
 import { PasswordInput } from "./PasswordInput";
 import { SecureRichTextEditor } from "./SecureRichTextEditor";
@@ -109,9 +109,9 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
 
   return (
     <>
-      <Card className="satoshi-card">
+      <Card className="bg-white border border-gray-100 shadow-sm">
         <CardHeader className="pb-3">
-          <CardTitle className="text-xl text-gray-900 font-heading">
+          <CardTitle className="text-xl text-gray-900">
             {isEncrypting ? "Text to Encrypt" : "Encrypted Text to Decrypt"}
           </CardTitle>
           <CardDescription className="text-gray-600">
@@ -125,57 +125,64 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
                 <Label htmlFor="textInput" className="text-gray-700">
                   {isEncrypting ? "Plain Text" : "Encrypted Text"}
                 </Label>
-                <Button onClick={onClearText} variant="outline" size="sm" className="text-gray-500 hover:text-gray-600 hover:bg-gray-50 border-gray-200">
-                  <Eraser className="h-3.5 w-3.5 mr-1.5" />
+                <Button 
+                  onClick={onClearText} 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-gray-500 hover:text-gray-600 hover:bg-gray-50 border-gray-200"
+                >
+                  <Eraser className="h-4 w-4 mr-2" />
                   <span>Clear</span>
                 </Button>
-              </div>
+            </div>
+            
+            <div className="w-full overflow-hidden">
               {isEncrypting ? (
-                <div className="w-full overflow-hidden">
-                  <SecureRichTextEditor
-                    value={textInput}
-                    onChange={onTextChange}
-                    editable={true}
-                  />
-                </div>
+                <SecureRichTextEditor
+                  value={textInput}
+                  onChange={onTextChange}
+                  editable={true}
+                />
               ) : (
                 <textarea
                   id="encryptedTextInput"
                   value={typeof textInput === 'string' ? textInput : ''}
                   onChange={(e) => onTextChange(e.target.value)}
                   placeholder="Paste your encrypted text here..."
-                  className="w-full h-32 p-3 border border-gray-200 rounded-md resize-none focus:ring-2 focus:ring-secure-500 focus:border-secure-500 font-mono text-sm placeholder:text-sm placeholder:text-gray-400 placeholder:font-helvetica"
+                  className="w-full h-32 p-3 border border-gray-200 rounded-md resize-none focus:ring-2 focus:ring-green-500 focus:border-green-500 font-mono text-sm placeholder:text-sm placeholder:text-gray-400"
                 />
               )}
-              {!isEncrypting && onLoadCryptoSeedFile && (
-                <div className="flex justify-center">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="text-gray-600 hover:text-gray-700 hover:bg-gray-50 border-gray-200"
-                  >
-                    <Upload className="h-3.5 w-3.5 mr-1.5" />
-                    Load .cryptoseed file
-                  </Button>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".cryptoseed"
-                    onChange={handleFileLoad}
-                    style={{ display: 'none' }}
-                  />
-                </div>
-              )}
             </div>
-            <PasswordInput
-              password={password}
-              showPassword={showPassword}
-              onPasswordChange={onPasswordChange}
-              onTogglePassword={onTogglePassword}
-              onClearPassword={onClearPassword}
-            />
+            
+            {!isEncrypting && onLoadCryptoSeedFile && (
+              <div className="flex justify-center">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="text-gray-600 hover:text-gray-700 hover:bg-gray-50 border-gray-200"
+                >
+                  <Upload className="h-4 w-4 mr-2" />
+                  Load .cryptoseed file
+                </Button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".cryptoseed"
+                  onChange={handleFileLoad}
+                  style={{ display: 'none' }}
+                />
+              </div>
+            )}
           </div>
+          <PasswordInput
+            password={password}
+            showPassword={showPassword}
+            onPasswordChange={onPasswordChange}
+            onTogglePassword={onTogglePassword}
+            onClearPassword={onClearPassword}
+          />
+        </div>
         </CardContent>
         <CardFooter>
           <Button
@@ -183,21 +190,44 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
             onClick={onProcess}
             className="w-full bg-green-500 hover:bg-green-600 text-white"
           >
-            {isProcessing ? "Processing..." : isEncrypting ? "Encrypt Text" : "Decrypt Text"}
+            {isProcessing ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+                Processing...
+              </>
+            ) : (
+              <>
+                {isEncrypting ? <Lock className="h-4 w-4 mr-2" /> : <Unlock className="h-4 w-4 mr-2" />}
+                {isEncrypting ? "Encrypt Text" : "Decrypt Text"}
+              </>
+            )}
           </Button>
         </CardFooter>
       </Card>
-      {output && isEncrypting && <EncryptionOutput output={output} isEncrypting={isEncrypting} onCopy={onCopyOutput} />}
+      
+      {/* Encryption Output */}
+      {output && isEncrypting && (
+        <EncryptionOutput 
+          output={output} 
+          isEncrypting={isEncrypting} 
+          onCopy={onCopyOutput} 
+        />
+      )}
+      
+      {/* Decryption Output */}
       {output && !isEncrypting && (
-        <Card className="mt-6 satoshi-card">
+        <Card className="mt-6 bg-white border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
             <div className="flex justify-between items-center">
-              <CardTitle className="text-xl text-gray-900 font-heading">Decrypted Content</CardTitle>
+              <CardTitle className="text-xl text-gray-900 flex items-center gap-2">
+                <Unlock className="h-5 w-5" />
+                Decrypted Content
+              </CardTitle>
               <Button 
                 onClick={handleCopyDecryptedContent} 
                 variant="ghost"
-                size="icon"
-                className="text-secure-500 hover:text-secure-600 hover:bg-secure-50"
+                size="sm"
+                className="text-green-600 hover:text-green-700 hover:bg-green-50"
                 aria-label="Copy Decrypted Content"
               >
                 <Copy className="h-4 w-4" />
@@ -205,7 +235,7 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
             </div>
           </CardHeader>
           <CardContent>
-            <div className="p-4 bg-secure-50 rounded-md border border-secure-100">
+            <div className="p-4 bg-green-50 rounded-md border border-green-200">
               <SecureRichTextEditor
                 value={textInput}
                 onChange={() => {}} // No-op since it's read-only

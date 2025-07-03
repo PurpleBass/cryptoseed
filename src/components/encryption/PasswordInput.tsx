@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eraser, Eye, EyeOff } from "lucide-react";
+import { Eraser, Eye, EyeOff, KeyRound } from "lucide-react";
 import { PasswordStrengthMeter } from "./PasswordStrengthMeter";
 
 interface PasswordInputProps {
@@ -21,29 +21,39 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
   onClearPassword,
 }) => {
   return (
-    <div className="grid gap-2">
-      <div className="flex items-center justify-between">
-        <Label htmlFor="password" className="text-gray-700">Password</Label>
-        <Button onClick={onClearPassword} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
-          <Eraser className="h-3.5 w-3.5 mr-1.5" />
+    <div className="password-input-container">
+      <div className="password-header">
+        <Label htmlFor="password" className="password-label-modern flex items-center gap-2">
+          <KeyRound className="h-4 w-4" />
+          Password
+        </Label>
+        <Button 
+          onClick={onClearPassword} 
+          variant="outline" 
+          size="sm" 
+          className="password-clear-button-modern"
+        >
+          <Eraser className="h-4 w-4 mr-2" />
           <span>Clear</span>
         </Button>
       </div>
-      <div className="relative">
+      <div className="password-input-wrapper">
         <Input
           id="password"
           type={showPassword ? "text" : "password"}
           value={password}
           onChange={(e) => onPasswordChange(e.target.value)}
           placeholder="Enter a strong password"
-          className="satoshi-input pr-10 placeholder:text-sm placeholder:text-gray-400 placeholder:font-helvetica"
+          className="password-input-modern"
+          style={{ paddingRight: '60px' }} // Extra space to avoid overlap with browser suggestions
         />
         <Button
           type="button"
           variant="ghost"
           size="icon"
           onClick={onTogglePassword}
-          className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+          className="password-toggle-modern"
+          aria-label={showPassword ? "Hide password" : "Show password"}
         >
           {showPassword ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
         </Button>

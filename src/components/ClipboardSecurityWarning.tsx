@@ -34,13 +34,13 @@ export function ClipboardSecurityWarning({
   const getContentTypeWarning = () => {
     switch (contentType) {
       case "seed":
-        return "⚠️ CRITICAL: This is a cryptocurrency seed phrase. If compromised, you could lose all funds in your wallet.";
+        return "CRITICAL: This is a cryptocurrency seed phrase. If compromised, you could lose all funds in your wallet.";
       case "decrypted":
-        return "⚠️ WARNING: This is decrypted sensitive data that could be valuable to attackers.";
+        return "WARNING: This is decrypted sensitive data that could be valuable to attackers.";
       case "encrypted":
-        return "ℹ️ This is encrypted data, but the encryption key (your password) could still be at risk.";
+        return "This is encrypted data, but the encryption key (your password) could still be at risk.";
       default:
-        return "⚠️ This contains sensitive data that should be protected.";
+        return "This contains sensitive data that should be protected.";
     }
   };
 

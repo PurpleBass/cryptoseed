@@ -247,3 +247,241 @@
   outline: none !important;
   box-shadow: none !important;
 }
+
+/* Modern Editor Styles - Mobile-First Design */
+.modern-editor-container {
+  @apply w-full;
+}
+
+.editor-toolbar {
+  @apply mb-3 p-2 bg-gray-50 rounded-t-lg border border-gray-200;
+}
+
+.toolbar-row {
+  @apply flex flex-wrap items-center gap-2;
+}
+
+.toolbar-group {
+  @apply flex items-center gap-1;
+}
+
+.toolbar-btn {
+  @apply min-w-[36px] h-9 border-gray-300 hover:border-gray-400 hover:bg-gray-100 transition-all duration-200;
+  touch-action: manipulation; /* Better touch handling */
+}
+
+.toolbar-btn.active {
+  @apply bg-green-100 border-green-300 text-green-800 hover:bg-green-200;
+}
+
+.modern-editor {
+  @apply rounded-md min-h-32 text-left font-sans overflow-hidden max-w-full transition-all duration-200;
+}
+
+.modern-editor.editable {
+  @apply cursor-text bg-white border border-gray-200 p-4 focus-within:border-green-500 focus-within:ring-2 focus-within:ring-green-100;
+  border-top: none; /* Connect with toolbar */
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.modern-editor.readonly {
+  @apply bg-transparent;
+}
+
+.modern-editor.has-selection {
+  @apply ring-2 ring-green-200 border-green-300;
+}
+
+.editor-help {
+  @apply mb-2 p-4 rounded-lg bg-blue-50 text-sm text-left border border-blue-200;
+}
+
+.help-tip {
+  @apply text-green-700 mb-3 p-2 bg-green-50 rounded text-xs border border-green-200;
+}
+
+.shortcuts-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs;
+}
+
+.shortcut-item {
+  @apply flex justify-between items-center py-1 px-2 bg-white rounded border border-gray-200;
+}
+
+.shortcut-label {
+  @apply font-medium text-gray-700;
+}
+
+.shortcut-keys {
+  @apply text-gray-500 font-mono text-xs;
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  .editor-toolbar {
+    @apply p-2;
+  }
+  
+  .toolbar-group {
+    @apply gap-0.5;
+  }
+  
+  .toolbar-btn {
+    @apply min-w-[32px] h-8 text-sm;
+  }
+  
+  .modern-editor.editable {
+    @apply p-3;
+  }
+  
+  .shortcuts-grid {
+    @apply grid-cols-1;
+  }
+}
+
+/* Enhanced touch targets for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .toolbar-btn {
+    @apply min-h-[44px] min-w-[44px]; /* Apple's recommended touch target size */
+  }
+}
+
+/* Modern Text Encryption Component Styles */
+.modern-encryption-card {
+  @apply bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden;
+}
+
+.modern-output-card {
+  @apply bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden mt-6;
+}
+
+.card-header-modern {
+  @apply p-6 pb-4 bg-gradient-to-r from-green-50 to-blue-50 border-b border-gray-100;
+}
+
+.card-title-modern {
+  @apply text-xl font-bold text-gray-900 mb-2;
+}
+
+.card-description-modern {
+  @apply text-gray-600 text-sm leading-relaxed;
+}
+
+.card-content-modern {
+  @apply p-6 space-y-6;
+}
+
+.card-footer-modern {
+  @apply p-6 pt-4 bg-gray-50 border-t border-gray-100;
+}
+
+.input-section {
+  @apply space-y-4;
+}
+
+.input-header {
+  @apply flex items-center justify-between;
+}
+
+.input-label-modern {
+  @apply text-sm font-semibold text-gray-700;
+}
+
+.clear-button-modern {
+  @apply text-gray-500 hover:text-gray-700 hover:bg-gray-100 border-gray-300 text-sm;
+}
+
+.input-container {
+  @apply w-full;
+}
+
+.rich-editor-container {
+  @apply w-full overflow-hidden;
+}
+
+.encrypted-textarea-modern {
+  @apply w-full h-32 p-4 border border-gray-200 rounded-lg resize-none focus:ring-2 focus:ring-green-500 focus:border-green-500 font-mono text-sm placeholder:text-sm placeholder:text-gray-400 transition-all duration-200;
+}
+
+.file-upload-section {
+  @apply flex justify-center pt-2;
+}
+
+.upload-button-modern {
+  @apply text-gray-600 hover:text-gray-800 hover:bg-gray-100 border-gray-300 bg-white;
+}
+
+.password-section {
+  @apply pt-2;
+}
+
+.process-button-modern {
+  @apply w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
+}
+
+.output-header {
+  @apply flex justify-between items-center;
+}
+
+.copy-button-modern {
+  @apply text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg p-2;
+}
+
+.decrypted-content-container {
+  @apply p-4 bg-green-50 rounded-lg border border-green-200;
+}
+
+/* Modern Password Input Component Styles */
+.password-input-container {
+  @apply space-y-3;
+}
+
+.password-header {
+  @apply flex items-center justify-between;
+}
+
+.password-label-modern {
+  @apply text-sm font-semibold text-gray-700;
+}
+
+.password-clear-button-modern {
+  @apply text-gray-500 hover:text-gray-700 hover:bg-gray-100 border-gray-300 text-sm;
+}
+
+.password-input-wrapper {
+  @apply relative;
+}
+
+.password-input-modern {
+  @apply w-full py-3 px-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 placeholder:text-sm placeholder:text-gray-400 transition-all duration-200;
+  /* Ensure enough padding for our toggle button AND browser suggestions */
+  padding-right: 60px !important;
+}
+
+.password-toggle-modern {
+  @apply absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md z-10;
+  /* Ensure the toggle button is positioned correctly */
+  pointer-events: auto;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .password-header {
+    @apply flex-col items-start gap-2;
+  }
+  
+  .password-clear-button-modern {
+    @apply self-end;
+  }
+  
+  .password-input-modern {
+    @apply py-3 px-3 text-base; /* Prevent zoom on iOS */
+    /* Ensure adequate space on mobile for both our button and browser suggestions */
+    padding-right: 65px !important;
+  }
+  
+  .password-toggle-modern {
+    @apply right-2 h-10 w-10; /* Larger touch target but positioned to avoid overlap */
+  }
+}

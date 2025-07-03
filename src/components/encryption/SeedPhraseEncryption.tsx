@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Eraser } from "lucide-react";
+import { Eraser, Lock, Unlock } from "lucide-react";
 import SeedPhraseInput from "../SeedPhraseInput";
 import { EncryptionOutput } from "./EncryptionOutput";
 import { PasswordInput } from "./PasswordInput";
@@ -64,8 +64,13 @@ export const SeedPhraseEncryption: React.FC<SeedPhraseEncryptionProps> = ({
                   <Label htmlFor="seedPhraseInput" className="text-gray-700">
                     Encrypted Seed Phrase
                   </Label>
-                  <Button onClick={onClearSeedPhrase} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
-                    <Eraser className="h-3.5 w-3.5 mr-1.5" />
+                  <Button 
+                    onClick={onClearSeedPhrase} 
+                    variant="outline" 
+                    size="sm" 
+                    className="text-gray-500 hover:text-gray-600 hover:bg-gray-50 border-gray-200"
+                  >
+                    <Eraser className="h-4 w-4 mr-2" />
                     <span>Clear</span>
                   </Button>
                 </div>
@@ -74,7 +79,7 @@ export const SeedPhraseEncryption: React.FC<SeedPhraseEncryptionProps> = ({
                   value={seedPhrase}
                   onChange={(e) => onSeedPhraseChange(e.target.value)}
                   placeholder="Paste the encrypted seed phrase here"
-                  className="min-h-32 satoshi-input w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-sm placeholder:text-gray-400 placeholder:font-helvetica"
+                  className="w-full h-32 p-3 border border-gray-200 rounded-md resize-none focus:ring-2 focus:ring-green-500 focus:border-green-500 font-mono text-sm placeholder:text-sm placeholder:text-gray-400"
                 />
               </div>
             )}
@@ -94,7 +99,22 @@ export const SeedPhraseEncryption: React.FC<SeedPhraseEncryptionProps> = ({
             onClick={onProcess} 
             className="w-full bg-green-500 hover:bg-green-600 text-white"
           >
-            {isProcessing ? "Processing..." : isEncrypting ? "Encrypt Seed Phrase" : "Decrypt Seed Phrase"}
+            {isProcessing ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+                Processing...
+              </>
+            ) : isEncrypting ? (
+              <>
+                <Lock className="h-4 w-4 mr-2" />
+                Encrypt Seed Phrase
+              </>
+            ) : (
+              <>
+                <Unlock className="h-4 w-4 mr-2" />
+                Decrypt Seed Phrase
+              </>
+            )}
           </Button>
         </CardFooter>
       </Card>

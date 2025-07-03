@@ -61,7 +61,7 @@ const Index = () => {
             <AlertTriangle className="h-5 w-5 md:h-6 md:w-6 text-amber-600 flex-shrink-0" />
             <div className="flex flex-col md:flex-row md:items-center md:gap-2">
               <span className="text-sm md:text-base font-semibold text-amber-800">
-                ⚠️ UNDER CONSTRUCTION
+                UNDER CONSTRUCTION
               </span>
               <span className="text-xs md:text-sm text-amber-700">
                 This tool is for educational purposes only. Do not use for real cryptocurrency seed phrases yet.
