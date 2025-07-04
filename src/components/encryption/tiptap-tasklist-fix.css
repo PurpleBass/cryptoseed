@@ -42,16 +42,15 @@
   list-style-type: square;
 }
 
-/* Editor Focus Styling - Highlight entire editor box */
+/* Editor Focus Styling - Clean mobile focus without green squares */
 .tiptap {
   outline: none;
   transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-/* When editor is focused, highlight the entire container */
+/* Remove aggressive focus styles that create green squares */
 .tiptap:focus-within {
-  border-color: #22c55e !important; /* Green border */
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1) !important; /* Green glow */
+  /* Remove this to prevent green squares on mobile */
 }
 
 /* Remove default focus outline from individual elements inside editor */
@@ -70,6 +69,18 @@
 
 .tiptap .ProseMirror:focus {
   outline: none;
+}
+
+/* Disable any mobile-specific focus highlights that might cause green squares */
+.tiptap .ProseMirror:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.tiptap .ProseMirror *:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
 }
 
 /* Ensure the editor content area is always visible and has proper spacing */
@@ -146,6 +157,37 @@
 .tiptap .ProseMirror [data-text-align="right"] p,
 .tiptap .ProseMirror [data-text-align="right"] li {
   text-align: right !important;
+}
+
+/* Force text alignment to work on mobile - more specific selectors */
+.tiptap .ProseMirror p,
+.tiptap .ProseMirror li {
+  /* Allow text-align to be applied via inline styles */
+  text-align: inherit;
+}
+
+/* Mobile-specific text alignment fixes */
+@media (max-width: 768px) {
+  .tiptap .ProseMirror p[style*="text-align"],
+  .tiptap .ProseMirror li[style*="text-align"] {
+    /* Force text alignment to work on mobile */
+    text-align: inherit !important;
+  }
+  
+  .tiptap .ProseMirror p[style*="text-align: center"],
+  .tiptap .ProseMirror li[style*="text-align: center"] {
+    text-align: center !important;
+  }
+  
+  .tiptap .ProseMirror p[style*="text-align: right"],
+  .tiptap .ProseMirror li[style*="text-align: right"] {
+    text-align: right !important;
+  }
+  
+  .tiptap .ProseMirror p[style*="text-align: left"],
+  .tiptap .ProseMirror li[style*="text-align: left"] {
+    text-align: left !important;
+  }
 }
 
 /* Override the root text-align: center for the editor content */
@@ -293,7 +335,8 @@
 }
 
 .modern-editor.editable {
-  @apply cursor-text bg-white border border-gray-200 p-4 focus-within:border-green-500 focus-within:ring-2 focus-within:ring-green-100;
+  @apply cursor-text bg-white border border-gray-200 p-4;
+  /* Remove focus-within styles that cause green squares on mobile */
 }
 
 /* When toolbar is present, connect editor to it */
@@ -308,11 +351,25 @@
 }
 
 .modern-editor.has-selection {
-  @apply ring-2 ring-green-200 border-green-300;
+  @apply ring-1 ring-green-200 border-green-300;
 }
 
 .modern-editor.focused {
-  @apply border-green-500 ring-2 ring-green-100;
+  @apply border-green-400;
+  /* Subtle focus indication without aggressive styling */
+}
+
+/* Mobile-specific focus handling */
+@media (max-width: 768px) {
+  .modern-editor.focused {
+    @apply border-gray-400;
+    /* Even more subtle on mobile to prevent visual issues */
+  }
+  
+  .modern-editor.has-selection {
+    @apply ring-0 border-gray-300;
+    /* Remove selection ring on mobile */
+  }
 }
 
 .editor-help {

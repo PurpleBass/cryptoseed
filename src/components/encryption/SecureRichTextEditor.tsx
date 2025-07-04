@@ -249,39 +249,52 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
     };
   }, [editor, preservedSelection]);
 
-  // Helper function to restore preserved selection
-  const restoreSelection = () => {
-    if (preservedSelection && editor) {
-      // Restore the selection after formatting
-      editor.commands.setTextSelection({
-        from: preservedSelection.from,
-        to: preservedSelection.to
-      });
-    }
-  };
-
   if (!editor) return null;
 
   // Helper function to toggle text alignment while preserving selection
   const toggleTextAlign = () => {
+    if (!editor) return;
+    
+    // Force focus first to ensure the editor is active
+    editor.commands.focus();
+    
     // Cycle through left -> center -> right -> left
     if (editor.isActive({ textAlign: 'center' })) {
-      editor.commands.setTextAlign('right');
+      editor.chain().focus().setTextAlign('right').run();
     } else if (editor.isActive({ textAlign: 'right' })) {
-      editor.commands.setTextAlign('left');
+      editor.chain().focus().setTextAlign('left').run();
     } else {
-      editor.commands.setTextAlign('center');
+      editor.chain().focus().setTextAlign('center').run();
     }
-    
-    // Restore selection after a brief delay
-    setTimeout(restoreSelection, 10);
   };
 
   // Helper function for formatting commands that preserves selection
   const formatWithSelection = (command: () => any) => {
+    if (!editor) return;
+    
+    // Ensure editor is focused first
+    editor.commands.focus();
     command();
-    // Restore selection after a brief delay to allow the command to complete
-    setTimeout(restoreSelection, 10);
+  };
+
+  // Helper function for list commands that ensures proper focus
+  const handleListCommand = (listType: 'bulletList' | 'orderedList' | 'taskList') => {
+    if (!editor) return;
+    
+    // Force focus and then toggle the list
+    editor.commands.focus();
+    
+    switch (listType) {
+      case 'bulletList':
+        editor.chain().focus().toggleBulletList().run();
+        break;
+      case 'orderedList':
+        editor.chain().focus().toggleOrderedList().run();
+        break;
+      case 'taskList':
+        editor.chain().focus().toggleTaskList().run();
+        break;
+    }
   };
 
   // Get current text alignment icon (depends on updateTrigger for re-rendering)
@@ -386,19 +399,19 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start" className="min-w-[160px]">
                     <DropdownMenuItem 
-                      onClick={() => formatWithSelection(() => editor.chain().focus().toggleBulletList().run())} 
+                      onClick={() => handleListCommand('bulletList')} 
                       className={editor.isActive('bulletList') ? 'bg-secure-50' : ''}
                     >
                       <span className="mr-2">•</span> Bullet List
                     </DropdownMenuItem>
                     <DropdownMenuItem 
-                      onClick={() => formatWithSelection(() => editor.chain().focus().toggleOrderedList().run())} 
+                      onClick={() => handleListCommand('orderedList')} 
                       className={editor.isActive('orderedList') ? 'bg-secure-50' : ''}
                     >
                       <span className="mr-2">1.</span> Numbered List
                     </DropdownMenuItem>
                     <DropdownMenuItem 
-                      onClick={() => formatWithSelection(() => editor.chain().focus().toggleTaskList().run())} 
+                      onClick={() => handleListCommand('taskList')} 
                       className={editor.isActive('taskList') ? 'bg-secure-50' : ''}
                     >
                       <span className="mr-2">☑</span> Checklist
