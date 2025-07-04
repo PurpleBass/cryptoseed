@@ -311,11 +311,181 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
 
   return (
     <div className="modern-editor-container">
-      {/* Contextual Toolbar - only show when editor is focused or has selection */}
-      {editable && (isEditorFocused || hasSelection) && (
-        <>
-          <div className="editor-toolbar">
-            {/* Mobile-optimized toolbar layout */}
+      {/* Desktop Toolbar - positioned above editor as before */}
+      {editable && !isMobile && (isEditorFocused || hasSelection) && (
+        <div className="editor-toolbar">
+          {/* Desktop toolbar layout */}
+          <div className="toolbar-row">
+            {/* Essential formatting group */}
+            <div className="toolbar-group">
+              <Button 
+                type="button" 
+                size="sm"
+                variant="outline" 
+                onClick={() => formatWithSelection(() => editor.chain().focus().toggleBold().run())} 
+                className={`toolbar-btn ${editor.isActive('bold') ? 'active' : ''}`}
+                aria-label="Bold" 
+                title="Bold (Ctrl+B)"
+              >
+                <b className="text-sm">B</b>
+              </Button>
+              <Button 
+                type="button" 
+                size="sm"
+                variant="outline" 
+                onClick={() => formatWithSelection(() => editor.chain().focus().toggleItalic().run())} 
+                className={`toolbar-btn ${editor.isActive('italic') ? 'active' : ''}`}
+                aria-label="Italic" 
+                title="Italic (Ctrl+I)"
+              >
+                <i className="text-sm">I</i>
+              </Button>
+              <Button 
+                type="button" 
+                size="sm"
+                variant="outline" 
+                onClick={() => formatWithSelection(() => editor.chain().focus().toggleUnderline().run())} 
+                className={`toolbar-btn ${editor.isActive('underline') ? 'active' : ''}`}
+                aria-label="Underline" 
+                title="Underline (Ctrl+U)"
+              >
+                <u className="text-sm">U</u>
+              </Button>
+              <Button 
+                type="button" 
+                size="sm"
+                variant="outline" 
+                onClick={() => formatWithSelection(() => editor.chain().focus().toggleStrike().run())} 
+                className={`toolbar-btn ${editor.isActive('strike') ? 'active' : ''}`}
+                aria-label="Strikethrough" 
+                title="Strikethrough (Ctrl+Shift+X)"
+              >
+                <s className="text-sm">S</s>
+              </Button>
+            </div>
+            
+            {/* Text alignment */}
+            <div className="toolbar-group">
+              <Button 
+                type="button" 
+                size="sm"
+                variant="outline" 
+                onClick={toggleTextAlign} 
+                className="toolbar-btn"
+                aria-label="Text Alignment" 
+                title="Text Alignment (Left → Center → Right)"
+              >
+                {getAlignmentIcon()}
+              </Button>
+            </div>
+            
+            {/* Lists dropdown */}
+            <div className="toolbar-group">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    type="button" 
+                    size="sm"
+                    variant="outline" 
+                    className={`toolbar-btn ${(editor.isActive('bulletList') || editor.isActive('orderedList') || editor.isActive('taskList')) ? 'active' : ''}`}
+                    title="Lists"
+                  >
+                    <List className="h-3.5 w-3.5" />
+                    <ChevronDown className="h-3 w-3 ml-1" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="min-w-[160px]">
+                  <DropdownMenuItem 
+                    onClick={() => handleListCommand('bulletList')} 
+                    className={editor.isActive('bulletList') ? 'bg-secure-50' : ''}
+                  >
+                    <span className="mr-2">•</span> Bullet List
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => handleListCommand('orderedList')} 
+                    className={editor.isActive('orderedList') ? 'bg-secure-50' : ''}
+                  >
+                    <span className="mr-2">1.</span> Numbered List
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => handleListCommand('taskList')} 
+                    className={editor.isActive('taskList') ? 'bg-secure-50' : ''}
+                  >
+                    <span className="mr-2">☑</span> Checklist
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            
+            {/* Desktop actions */}
+            <div className="toolbar-group">
+              <Button 
+                type="button" 
+                size="sm"
+                variant="outline" 
+                onClick={() => editor.chain().focus().setHorizontalRule().run()} 
+                className="toolbar-btn"
+                aria-label="Horizontal Rule" 
+                title="Horizontal Rule"
+              >
+                ―
+              </Button>
+              <Button 
+                type="button" 
+                size="sm"
+                variant="outline" 
+                onClick={() => editor.chain().focus().undo().run()} 
+                className="toolbar-btn"
+                aria-label="Undo" 
+                title="Undo (Ctrl+Z)"
+                disabled={!editor.can().undo()}
+              >
+                ↺
+              </Button>
+              <Button 
+                type="button" 
+                size="sm"
+                variant="outline" 
+                onClick={() => editor.chain().focus().redo().run()} 
+                className="toolbar-btn"
+                aria-label="Redo" 
+                title="Redo (Ctrl+Y)"
+                disabled={!editor.can().redo()}
+              >
+                ↻
+              </Button>
+            </div>
+            
+            {/* Help toggle - desktop only */}
+            <div className="toolbar-group ml-auto">
+              <Button 
+                type="button" 
+                size="sm" 
+                variant="ghost" 
+                onClick={() => setShowHelp((v) => !v)} 
+                className="text-xs text-gray-600 hover:text-gray-800"
+                aria-label="Show formatting help"
+              >
+                {showHelp ? 'Hide' : 'Show'} Shortcuts
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Editor Content - shared by both mobile and desktop */}
+      <div 
+        ref={editorRef} 
+        className={`modern-editor ${editable ? 'editable' : 'readonly'} ${hasSelection ? 'has-selection' : ''} ${isEditorFocused ? 'focused' : ''}`}
+      >
+        <EditorContent editor={editor} />
+      </div>
+      
+      {/* Mobile Floating Toolbar - positioned above keyboard when focused */}
+      {editable && isMobile && (isEditorFocused || hasSelection) && (
+        <div className="mobile-floating-toolbar">
+          <div className="mobile-toolbar-content">
+            {/* Primary formatting row */}
             <div className="toolbar-row">
               {/* Essential formatting group */}
               <div className="toolbar-group">
@@ -324,9 +494,9 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
                   size="sm"
                   variant="outline" 
                   onClick={() => formatWithSelection(() => editor.chain().focus().toggleBold().run())} 
-                  className={`toolbar-btn ${editor.isActive('bold') ? 'active' : ''}`}
+                  className={`toolbar-btn-mobile ${editor.isActive('bold') ? 'active' : ''}`}
                   aria-label="Bold" 
-                  title="Bold (Ctrl+B)"
+                  title="Bold"
                 >
                   <b className="text-sm">B</b>
                 </Button>
@@ -335,9 +505,9 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
                   size="sm"
                   variant="outline" 
                   onClick={() => formatWithSelection(() => editor.chain().focus().toggleItalic().run())} 
-                  className={`toolbar-btn ${editor.isActive('italic') ? 'active' : ''}`}
+                  className={`toolbar-btn-mobile ${editor.isActive('italic') ? 'active' : ''}`}
                   aria-label="Italic" 
-                  title="Italic (Ctrl+I)"
+                  title="Italic"
                 >
                   <i className="text-sm">I</i>
                 </Button>
@@ -346,43 +516,30 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
                   size="sm"
                   variant="outline" 
                   onClick={() => formatWithSelection(() => editor.chain().focus().toggleUnderline().run())} 
-                  className={`toolbar-btn ${editor.isActive('underline') ? 'active' : ''}`}
+                  className={`toolbar-btn-mobile ${editor.isActive('underline') ? 'active' : ''}`}
                   aria-label="Underline" 
-                  title="Underline (Ctrl+U)"
+                  title="Underline"
                 >
                   <u className="text-sm">U</u>
                 </Button>
-                {!isMobile && (
-                  <Button 
-                    type="button" 
-                    size="sm"
-                    variant="outline" 
-                    onClick={() => formatWithSelection(() => editor.chain().focus().toggleStrike().run())} 
-                    className={`toolbar-btn ${editor.isActive('strike') ? 'active' : ''}`}
-                    aria-label="Strikethrough" 
-                    title="Strikethrough (Ctrl+Shift+X)"
-                  >
-                    <s className="text-sm">S</s>
-                  </Button>
-                )}
               </div>
               
-              {/* Text alignment - compact on mobile */}
+              {/* Text alignment */}
               <div className="toolbar-group">
                 <Button 
                   type="button" 
                   size="sm"
                   variant="outline" 
                   onClick={toggleTextAlign} 
-                  className="toolbar-btn"
+                  className="toolbar-btn-mobile"
                   aria-label="Text Alignment" 
-                  title="Text Alignment (Left → Center → Right)"
+                  title="Text Alignment"
                 >
                   {getAlignmentIcon()}
                 </Button>
               </div>
               
-              {/* Lists dropdown - more compact on mobile */}
+              {/* Lists dropdown */}
               <div className="toolbar-group">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -390,11 +547,10 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
                       type="button" 
                       size="sm"
                       variant="outline" 
-                      className={`toolbar-btn ${(editor.isActive('bulletList') || editor.isActive('orderedList') || editor.isActive('taskList')) ? 'active' : ''}`}
+                      className={`toolbar-btn-mobile ${(editor.isActive('bulletList') || editor.isActive('orderedList') || editor.isActive('taskList')) ? 'active' : ''}`}
                       title="Lists"
                     >
                       <List className="h-3.5 w-3.5" />
-                      <ChevronDown className="h-3 w-3 ml-1" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start" className="min-w-[160px]">
@@ -420,90 +576,55 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
                 </DropdownMenu>
               </div>
               
-              {/* Desktop-only actions */}
-              {!isMobile && (
-                <div className="toolbar-group">
-                  <Button 
-                    type="button" 
-                    size="sm"
-                    variant="outline" 
-                    onClick={() => editor.chain().focus().setHorizontalRule().run()} 
-                    className="toolbar-btn"
-                    aria-label="Horizontal Rule" 
-                    title="Horizontal Rule"
-                  >
-                    ―
-                  </Button>
-                  <Button 
-                    type="button" 
-                    size="sm"
-                    variant="outline" 
-                    onClick={() => editor.chain().focus().undo().run()} 
-                    className="toolbar-btn"
-                    aria-label="Undo" 
-                    title="Undo (Ctrl+Z)"
-                  >
-                    ↺
-                  </Button>
-                  <Button 
-                    type="button" 
-                    size="sm"
-                    variant="outline" 
-                    onClick={() => editor.chain().focus().redo().run()} 
-                    className="toolbar-btn"
-                    aria-label="Redo" 
-                    title="Redo (Ctrl+Y)"
-                  >
-                    ↻
-                  </Button>
-                </div>
-              )}
-              
-              {/* Help toggle - desktop only */}
-              {!isMobile && (
-                <div className="toolbar-group ml-auto">
-                  <Button 
-                    type="button" 
-                    size="sm" 
-                    variant="ghost" 
-                    onClick={() => setShowHelp((v) => !v)} 
-                    className="text-xs text-gray-600 hover:text-gray-800"
-                    aria-label="Show formatting help"
-                  >
-                    {showHelp ? 'Hide' : 'Show'} Shortcuts
-                  </Button>
-                </div>
-              )}
+              {/* Undo/Redo actions */}
+              <div className="toolbar-group">
+                <Button 
+                  type="button" 
+                  size="sm"
+                  variant="outline" 
+                  onClick={() => editor.chain().focus().undo().run()} 
+                  className="toolbar-btn-mobile"
+                  aria-label="Undo" 
+                  title="Undo"
+                  disabled={!editor.can().undo()}
+                >
+                  ↺
+                </Button>
+                <Button 
+                  type="button" 
+                  size="sm"
+                  variant="outline" 
+                  onClick={() => editor.chain().focus().redo().run()} 
+                  className="toolbar-btn-mobile"
+                  aria-label="Redo" 
+                  title="Redo"
+                  disabled={!editor.can().redo()}
+                >
+                  ↻
+                </Button>
+              </div>
             </div>
           </div>
-          
-          {/* Collapsible Help Box */}
-          {showHelp && (
-            <div className="editor-help">
-              <div className="font-semibold mb-2 text-gray-800">Formatting Shortcuts</div>
-              <div className="help-tip">
-                <strong>Tip:</strong> Select text once and apply multiple formats! Your selection stays active with both buttons and keyboard shortcuts until you click elsewhere.
-              </div>
-              <div className="shortcuts-grid">
-                {formattingShortcuts.map((item) => (
-                  <div key={item.label} className="shortcut-item">
-                    <span className="shortcut-label">{item.label}:</span>
-                    <span className="shortcut-keys">{item.keys}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </>
+        </div>
       )}
       
-      {/* Modern Editor Container */}
-      <div 
-        ref={editorRef} 
-        className={`modern-editor ${editable ? 'editable' : 'readonly'} ${hasSelection ? 'has-selection' : ''} ${isEditorFocused ? 'focused' : ''}`}
-      >
-        <EditorContent editor={editor} />
-      </div>
+      {/* Desktop Help Panel */}
+      {!isMobile && showHelp && editable && (
+        <div className="editor-help">
+          <div className="font-semibold mb-2 text-gray-800">Formatting Shortcuts</div>
+          <div className="help-tip">
+            <strong>Tip:</strong> Select text once and apply multiple formats! Your selection stays active with both buttons and keyboard shortcuts until you click elsewhere.
+          </div>
+          <div className="shortcuts-grid">
+            {formattingShortcuts.map((item) => (
+              <div key={item.label} className="shortcut-item">
+                <span className="shortcut-label">{item.label}:</span>
+                <span className="shortcut-keys">{item.keys}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
