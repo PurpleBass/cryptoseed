@@ -83,21 +83,7 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),                                   // 1️⃣ React-SWC first
 
-    mode !== "development" &&                  // 2️⃣ CSP only in prod
-      csp({
-        policy: {
-          "default-src": ["none"],
-          "script-src": ["self"],
-          "style-src": ["self"],
-          "img-src": ["self", "data:"],
-          "font-src": ["self"],
-          "connect-src": ["self"],
-          "object-src": ["none"],
-          "base-uri": ["self"],
-          "form-action": ["self"],
-          "frame-ancestors": ["none"]
-        } as const
-      }),
+    // 2️⃣ CSP handled by _headers file instead of plugin
 
 
     VitePWA({                                      // 4️⃣ PWA
