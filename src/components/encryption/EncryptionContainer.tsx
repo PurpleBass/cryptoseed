@@ -59,19 +59,25 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
 
   // Prefill the cipher into the text input if provided (only once per initialCipher)
   useEffect(() => {
-    console.log('Prefill effect triggered:', {
-      initialCipher: initialCipher ? initialCipher.substring(0, 50) + '...' : 'none',
-      hasUsedInitialCipher,
-      isEncrypting,
-      initialEncrypting
-    });
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Prefill effect triggered:', {
+        hasInitialCipher: !!initialCipher,
+        hasUsedInitialCipher,
+        isEncrypting,
+        initialEncrypting
+      });
+    }
     
     if (typeof initialCipher === 'string' && initialCipher.length > 0 && !hasUsedInitialCipher) {
-      console.log('Setting initial cipher:', initialCipher.substring(0, 50) + '...'); // Debug log
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Setting initial cipher'); // Removed sensitive content
+      }
       
       // Use setTimeout to ensure this runs after all other effects have completed
       setTimeout(() => {
-        console.log('Executing prefill after timeout');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Executing prefill after timeout');
+        }
         // Always set to text mode for URL sharing
         setMode('text');
         
@@ -80,10 +86,14 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
           // For decrypt mode, set the cipher as a plain string
           // Use initialEncrypting instead of isEncrypting to avoid timing issues
           if (!initialEncrypting) {
-            console.log('Setting textInput for decrypt mode');
+            if (process.env.NODE_ENV === 'development') {
+              console.log('Setting textInput for decrypt mode');
+            }
             setTextInput(initialCipher);
           } else {
-            console.log('Setting textInput for encrypt mode');
+            if (process.env.NODE_ENV === 'development') {
+              console.log('Setting textInput for encrypt mode');
+            }
             // For encrypt mode, just set the string directly
             setTextInput(initialCipher);
           }

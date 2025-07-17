@@ -48,9 +48,22 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Check if it's a .cryptoseed file
+    // Security: File size limit (10MB max for .cryptoseed files)
+    const maxFileSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxFileSize) {
+      alert('File too large. Maximum size is 10MB.');
+      return;
+    }
+
+    // Security: Strict file validation
     if (!file.name.endsWith('.cryptoseed')) {
-      alert('Please select a .cryptoseed file');
+      alert('Invalid file type. Please select a .cryptoseed file.');
+      return;
+    }
+
+    // Security: MIME type validation (text/plain expected for .cryptoseed)
+    if (file.type && !['text/plain', 'application/octet-stream', ''].includes(file.type)) {
+      alert('Invalid file format. Please select a valid .cryptoseed file.');
       return;
     }
 
@@ -58,14 +71,26 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
     reader.onload = (e) => {
       const content = e.target?.result as string;
       if (content && onLoadCryptoSeedFile) {
+        // Security: Additional content length validation
+        if (content.length > maxFileSize) {
+          alert('File content too large.');
+          return;
+        }
+        
         const result = readCryptoSeedFile(content);
         if (result.isValid && result.content) {
           onLoadCryptoSeedFile(result.content);
         } else {
-          alert(result.error || 'Failed to load .cryptoseed file');
+          // Security: Generic error message - no implementation details
+          alert('Unable to load file. Please ensure it is a valid .cryptoseed file.');
         }
       }
     };
+    
+    reader.onerror = () => {
+      alert('Error reading file. Please try again.');
+    };
+    
     reader.readAsText(file);
     
     // Clear the file input
@@ -75,21 +100,8 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
   };
 
   // Helper function to check if content has actual text
-  const hasTextContent = (content: any): boolean => {
-    if (!content) return false;
-    if (typeof content === 'string') return content.trim().length > 0;
-    if (typeof content === 'object' && content.content) {
-      // For Tiptap JSON, check if any content nodes have text
-      const checkNode = (node: any): boolean => {
-        if (node.text && node.text.trim().length > 0) return true;
-        if (node.content && Array.isArray(node.content)) {
-          return node.content.some(checkNode);
-        }
-        return false;
-      };
-      return Array.isArray(content.content) && content.content.some(checkNode);
-    }
-    return false;
+  const hasTextContent = (content: string): boolean => {
+    return !!(content && content.trim().length > 0);
   };
 
   return (

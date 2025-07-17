@@ -30,13 +30,39 @@ const Index = () => {
     // Hash-based prefill for decryption
     const handleHashChange = () => {
       if (window.location.hash && window.location.hash.length > 1) {
-        const hashContent = decodeURIComponent(window.location.hash.slice(1));
-        console.log('Hash detected:', hashContent.substring(0, 50) + '...'); // Debug log
-        setCurrentView("encrypt");
-        setInitialEncrypting(false); // Start in decrypt mode
-        setInitialCipher(hashContent);
-        // Clear the hash from URL for security after reading
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        const rawHash = window.location.hash.slice(1);
+        
+        // Security: Hash length validation (prevent DoS via huge URLs)
+        const maxHashLength = 100000; // 100KB max
+        if (rawHash.length > maxHashLength) {
+          console.warn('URL hash too long, ignoring');
+          return;
+        }
+        
+        // Security: Basic format validation (base64-like characters expected)
+        if (!/^[A-Za-z0-9+/=%-]+$/.test(rawHash)) {
+          console.warn('Invalid hash format, ignoring');
+          return;
+        }
+        
+        try {
+          const hashContent = decodeURIComponent(rawHash);
+          
+          // Security: Additional length check after decoding
+          if (hashContent.length > maxHashLength) {
+            console.warn('Decoded hash too long, ignoring');
+            return;
+          }
+          
+          console.log('Hash detected and validated'); // Removed sensitive content from log
+          setCurrentView("encrypt");
+          setInitialEncrypting(false); // Start in decrypt mode
+          setInitialCipher(hashContent);
+          // Clear the hash from URL for security after reading
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        } catch (error) {
+          console.warn('Failed to decode hash, ignoring');
+        }
       }
     };
 
