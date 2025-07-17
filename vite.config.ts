@@ -2,7 +2,6 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { VitePWA } from "vite-plugin-pwa";
-import csp from "vite-plugin-csp";
 import analyzer from "rollup-plugin-analyzer";
 
 export default defineConfig(({ mode }) => ({
@@ -43,16 +42,29 @@ export default defineConfig(({ mode }) => ({
       ].filter(Boolean),
       
       output: {
+        // Ensure React loads first by controlling chunk names (alphabetical loading)
+        chunkFileNames: (chunkInfo) => {
+          if (chunkInfo.name === 'react-core') return 'assets/01-react-core-[hash].js';
+          if (chunkInfo.name === 'react-dom') return 'assets/02-react-dom-[hash].js';
+          if (chunkInfo.name === 'react-router') return 'assets/03-react-router-[hash].js';
+          return 'assets/[name]-[hash].js';
+        },
+        
         // Manual chunking strategy with function approach for better control
         manualChunks(id) {
-          // React ecosystem
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom') || id.includes('node_modules/react-router')) {
-            return 'react-vendor';
+          // React core - highest priority, loads first
+          if (id.includes('node_modules/react/') && !id.includes('react-dom') && !id.includes('react-router')) {
+            return 'react-core';
           }
           
-          // Tiptap rich text editor
-          if (id.includes('@tiptap/')) {
-            return 'editor-vendor';
+          // React DOM - second priority
+          if (id.includes('node_modules/react-dom')) {
+            return 'react-dom';
+          }
+          
+          // React ecosystem (router, etc.) - third priority
+          if (id.includes('node_modules/react-router')) {
+            return 'react-router';
           }
           
           // Noble crypto libraries
@@ -60,7 +72,7 @@ export default defineConfig(({ mode }) => ({
             return 'crypto-vendor';
           }
           
-          // Radix UI components
+          // Radix UI components (depends on React, so after React)
           if (id.includes('@radix-ui/')) {
             return 'ui-vendor';
           }
@@ -71,7 +83,7 @@ export default defineConfig(({ mode }) => ({
             return 'utils-vendor';
           }
           
-          // Large third-party libraries
+          // Large third-party libraries (after React core)
           if (id.includes('node_modules/')) {
             return 'vendor';
           }
