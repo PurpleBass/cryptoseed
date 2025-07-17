@@ -367,8 +367,8 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
           </div>
         </div>
         
-        {/* Security Info Pills - Modern Design */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+        {/* Security Info Pills - Horizontal Compact Design */}
+        <div className="flex flex-wrap items-center justify-center gap-3">
           {/* Algorithm Info - Modern Pill Design */}
           <Popover open={showSecurityInfo} onOpenChange={setShowSecurityInfo}>
             <PopoverTrigger asChild>
@@ -421,25 +421,21 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
             </PopoverContent>
           </Popover>
           
-          {/* Offline Badge - Modern Pill Design */}
-          <div className="flex items-center gap-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-full px-3 sm:px-4 py-2">
-            <WifiOff className="h-4 w-4" />
-            <span className="text-xs sm:text-sm font-medium">
-              <span className="hidden sm:inline">Offline recommended</span>
-              <span className="sm:hidden">Offline</span>
-            </span>
-          </div>
-          
-          {/* Help Button - Modern Design */}
+          {/* Offline Badge with Integrated Help - Modern Pill Design */}
           <Popover>
             <PopoverTrigger asChild>
               <Button 
                 variant="ghost" 
-                size="icon" 
-                className="h-9 w-9 rounded-full hover:bg-gray-100 border border-gray-200 bg-white"
+                className="h-auto p-0 hover:bg-transparent"
               >
-                <HelpCircle className="h-4 w-4 text-gray-600" />
-                <span className="sr-only">Help</span>
+                <div className="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-full px-3 sm:px-4 py-2 transition-colors cursor-pointer">
+                  <WifiOff className="h-4 w-4" />
+                  <span className="text-xs sm:text-sm font-medium">
+                    <span className="hidden sm:inline">Offline recommended</span>
+                    <span className="sm:hidden">Offline</span>
+                  </span>
+                  <HelpCircle className="h-3 w-3 opacity-70" />
+                </div>
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80 p-3 text-sm">
