@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { VitePWA } from "vite-plugin-pwa";
 import csp from "vite-plugin-csp";
+import analyzer from "rollup-plugin-analyzer";
 
 export default defineConfig(({ mode }) => ({
   server: {
@@ -20,6 +21,63 @@ export default defineConfig(({ mode }) => ({
             "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
           }
         : undefined
+  },
+
+  build: {
+    // Reduce chunk size warning limit
+    chunkSizeWarningLimit: 600,
+    
+    // Additional optimizations
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true, // Remove console.logs in production
+        drop_debugger: true,
+      },
+    },
+    
+    rollupOptions: {
+      plugins: [
+        // Bundle analyzer for development analysis
+        mode === "development" && analyzer({ summaryOnly: true })
+      ].filter(Boolean),
+      
+      output: {
+        // Manual chunking strategy with function approach for better control
+        manualChunks(id) {
+          // React ecosystem
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom') || id.includes('node_modules/react-router')) {
+            return 'react-vendor';
+          }
+          
+          // Tiptap rich text editor
+          if (id.includes('@tiptap/')) {
+            return 'editor-vendor';
+          }
+          
+          // Noble crypto libraries
+          if (id.includes('@noble/')) {
+            return 'crypto-vendor';
+          }
+          
+          // Radix UI components
+          if (id.includes('@radix-ui/')) {
+            return 'ui-vendor';
+          }
+          
+          // Utility libraries
+          if (id.includes('lucide-react') || id.includes('clsx') || id.includes('tailwind-merge') || 
+              id.includes('date-fns') || id.includes('zod') || id.includes('class-variance-authority')) {
+            return 'utils-vendor';
+          }
+          
+          // Large third-party libraries
+          if (id.includes('node_modules/')) {
+            return 'vendor';
+          }
+        }
+      }
+    }
   },
 
   plugins: [

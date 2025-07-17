@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Eraser, Copy, Upload, Lock, Unlock } from "lucide-react";
 import { EncryptionOutput } from "./EncryptionOutput";
 import { PasswordInput } from "./PasswordInput";
-import { SecureRichTextEditor } from "./SecureRichTextEditor";
+import { LazySecureRichTextEditor } from "./LazySecureRichTextEditor";
 import { readCryptoSeedFile } from "@/lib/encryptionProcessing";
 
 interface TextEncryptionProps {
@@ -138,7 +138,7 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
             
             <div className="w-full overflow-hidden">
               {isEncrypting ? (
-                <SecureRichTextEditor
+                <LazySecureRichTextEditor
                   value={textInput}
                   onChange={onTextChange}
                   editable={true}
@@ -236,11 +236,11 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
           </CardHeader>
           <CardContent>
             <div className="p-4 bg-green-50 rounded-md border border-green-200">
-              <SecureRichTextEditor
+              <LazySecureRichTextEditor
                 value={textInput}
                 onChange={() => {}} // No-op since it's read-only
                 editable={false}
-                onEditorReady={(editor) => {
+                onEditorReady={(editor: any) => {
                   decryptionEditorRef.current = editor;
                 }}
               />

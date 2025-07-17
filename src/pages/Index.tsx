@@ -3,7 +3,7 @@ import { Key, Lock, FileText } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
 import EncryptionComponent from "@/components/EncryptionComponent";
 import CodeVerification from "@/components/CodeVerification";
-import FAQComponent from "@/components/FAQComponent";
+import { LazyFAQComponent } from "@/components/LazyFAQComponent";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 // import { useIsMobile } from "@/hooks/use-mobile";
@@ -108,7 +108,7 @@ const Index = () => {
       <main className="flex-1">
         {currentView === "encrypt" && <EncryptionComponent initialEncrypting={initialEncrypting} initialCipher={initialCipher} />}
         {currentView === "verify" && <CodeVerification />}
-        {currentView === "faq" && <FAQComponent />}
+        {currentView === "faq" && <LazyFAQComponent />}
       </main>
       
       <footer className="py-6 md:py-10 bg-gray-50 border-t border-gray-100">
