@@ -231,7 +231,7 @@
   height: 0;
   pointer-events: none;
   font-family: "SF Mono", "Monaco", "Menlo", "Consolas", "Liberation Mono", "Courier New", "monospace";
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
 /* Alternative placeholder styling */
@@ -242,7 +242,7 @@
   height: 0;
   pointer-events: none;
   font-family: "SF Mono", "Monaco", "Menlo", "Consolas", "Liberation Mono", "Courier New", "monospace";
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
 /* Remove any default focus styles from paragraphs and other elements */
@@ -514,7 +514,7 @@
 }
 
 .encrypted-textarea-modern {
-  @apply w-full h-32 p-4 border border-gray-200 rounded-lg resize-none focus:ring-2 focus:ring-green-500 focus:border-green-500 font-mono text-sm placeholder:text-sm placeholder:text-gray-400 transition-all duration-200;
+  @apply w-full h-32 p-4 border border-gray-200 rounded-lg resize-none focus:ring-2 focus:ring-green-500 focus:border-green-500 font-mono text-sm placeholder:text-xs placeholder:text-gray-400 transition-all duration-200;
 }
 
 .file-upload-section {
@@ -567,7 +567,7 @@
 }
 
 .password-input-modern {
-  @apply w-full py-3 px-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 font-mono placeholder:text-sm placeholder:text-gray-400 transition-all duration-200;
+  @apply w-full py-3 px-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 font-mono placeholder:text-xs placeholder:text-gray-400 transition-all duration-200;
   /* Ensure enough padding for our toggle button AND browser suggestions */
   padding-right: 60px !important;
 }

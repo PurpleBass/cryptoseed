@@ -16,7 +16,7 @@ export const WordInput: React.FC<WordInputProps> = ({ index, value, onChange }) 
         value={value}
         onChange={(e) => onChange(index, e.target.value)}
         placeholder={`Word ${index + 1}`}
-        className="satoshi-input font-mono placeholder:text-sm placeholder:text-gray-400 w-full"
+        className="satoshi-input font-mono placeholder:text-xs placeholder:text-gray-400 w-full"
       />
     </div>
   );
