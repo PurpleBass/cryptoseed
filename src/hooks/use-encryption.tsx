@@ -17,15 +17,7 @@ export function useEncryption(initialEncrypting?: boolean) {
   
   
   // Mode-specific states
-  const [textInput, setTextInput] = useState<any>({
-    type: 'doc',
-    content: [
-      {
-        type: 'paragraph',
-        content: []
-      }
-    ]
-  });
+  const [textInput, setTextInput] = useState<string>("");
   const [seedPhrase, setSeedPhrase] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   
@@ -42,16 +34,8 @@ export function useEncryption(initialEncrypting?: boolean) {
     
     // Reset textInput based on the current mode
     if (isEncrypting) {
-      // For encryption mode: use Tiptap JSON structure
-      setTextInput({
-        type: 'doc',
-        content: [
-          {
-            type: 'paragraph',
-            content: []
-          }
-        ]
-      });
+      // For encryption mode: use empty string
+      setTextInput("");
     } else {
       // For decryption mode: use empty string for encrypted text input
       setTextInput("");
@@ -79,15 +63,7 @@ export function useEncryption(initialEncrypting?: boolean) {
       // Clear text and seed phrase data when switching to file tab
       setSeedPhrase("");
       if (isEncrypting) {
-        setTextInput({
-          type: 'doc',
-          content: [
-            {
-              type: 'paragraph',
-              content: []
-            }
-          ]
-        });
+        setTextInput("");
       } else {
         setTextInput("");
       }
@@ -98,15 +74,7 @@ export function useEncryption(initialEncrypting?: boolean) {
         fileInputRef.current.value = "";
       }
       if (isEncrypting) {
-        setTextInput({
-          type: 'doc',
-          content: [
-            {
-              type: 'paragraph',
-              content: []
-            }
-          ]
-        });
+        setTextInput("");
       } else {
         setTextInput("");
       }
@@ -150,42 +118,11 @@ export function useEncryption(initialEncrypting?: boolean) {
     });
   };
 
-  // Copy formatted content (for decryption mode - copies HTML with formatting)
-  const copyFormattedContent = (htmlContent: string, plainTextContent: string) => {
-    // Use the modern clipboard API to write both HTML and plain text
-    const clipboardItem = new ClipboardItem({
-      'text/html': new Blob([htmlContent], { type: 'text/html' }),
-      'text/plain': new Blob([plainTextContent], { type: 'text/plain' })
-    });
-    
-    navigator.clipboard.write([clipboardItem]).then(() => {
-      toast({
-        title: "Copied with formatting",
-        description: "The formatted content has been copied to your clipboard."
-      });
-    }).catch(() => {
-      // Fallback to plain text if HTML copying fails
-      navigator.clipboard.writeText(plainTextContent);
-      toast({
-        title: "Copied as plain text",
-        description: "The content has been copied as plain text to your clipboard."
-      });
-    });
-  };
-
   // Clear utilities
   const clearTextInput = () => {
     if (isEncrypting) {
-      // For encryption mode: reset to empty Tiptap structure
-      setTextInput({
-        type: 'doc',
-        content: [
-          {
-            type: 'paragraph',
-            content: []
-          }
-        ]
-      });
+      // For encryption mode: reset to empty string
+      setTextInput("");
     } else {
       // For decryption mode: reset to empty string
       setTextInput("");
@@ -286,7 +223,6 @@ export function useEncryption(initialEncrypting?: boolean) {
     togglePasswordVisibility,
     clearPassword,
     copyToClipboard,
-    copyFormattedContent,
     clearTextInput,
     clearSeedPhrase,
     loadCryptoSeedFile,

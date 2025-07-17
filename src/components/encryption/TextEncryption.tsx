@@ -2,27 +2,26 @@ import React, { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Eraser, Copy, Upload, Lock, Unlock } from "lucide-react";
 import { EncryptionOutput } from "./EncryptionOutput";
 import { PasswordInput } from "./PasswordInput";
-import { LazySecureRichTextEditor } from "./LazySecureRichTextEditor";
 import { readCryptoSeedFile } from "@/lib/encryptionProcessing";
 
 interface TextEncryptionProps {
   isEncrypting: boolean;
   isProcessing: boolean;
-  textInput: any;
+  textInput: string;
   password: string;
   showPassword: boolean;
   output: string;
-  onTextChange: (text: any) => void;
+  onTextChange: (text: string) => void;
   onPasswordChange: (password: string) => void;
   onTogglePassword: () => void;
   onProcess: () => void;
   onClearText: () => void;
   onClearPassword: () => void;
   onCopyOutput: () => void;
-  onCopyFormattedOutput?: (htmlContent: string, plainTextContent: string) => void;
   onLoadCryptoSeedFile?: (content: string) => void;
 }
 
@@ -40,23 +39,9 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
   onClearText,
   onClearPassword,
   onCopyOutput,
-  onCopyFormattedOutput,
   onLoadCryptoSeedFile,
 }) => {
-  const decryptionEditorRef = useRef<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Helper function to copy decrypted content with formatting
-  const handleCopyDecryptedContent = () => {
-    if (decryptionEditorRef.current && onCopyFormattedOutput) {
-      const htmlContent = decryptionEditorRef.current.getHTML();
-      const plainTextContent = decryptionEditorRef.current.getText();
-      onCopyFormattedOutput(htmlContent, plainTextContent);
-    } else {
-      // Fallback to regular copy if formatted copy is not available
-      onCopyOutput();
-    }
-  };
 
   // Helper function to handle .cryptoseed file loading
   const handleFileLoad = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -138,15 +123,17 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
             
             <div className="w-full overflow-hidden">
               {isEncrypting ? (
-                <LazySecureRichTextEditor
+                <Textarea
+                  id="textInput"
                   value={textInput}
-                  onChange={onTextChange}
-                  editable={true}
+                  onChange={(e) => onTextChange(e.target.value)}
+                  placeholder="Enter your text to encrypt..."
+                  className="w-full h-32 p-3 border border-gray-200 rounded-md resize-none focus:ring-2 focus:ring-green-500 focus:border-green-500 font-mono text-sm placeholder:text-xs placeholder:text-gray-400"
                 />
               ) : (
-                <textarea
+                <Textarea
                   id="encryptedTextInput"
-                  value={typeof textInput === 'string' ? textInput : ''}
+                  value={textInput}
                   onChange={(e) => onTextChange(e.target.value)}
                   placeholder="Paste your encrypted text here..."
                   className="w-full h-32 p-3 border border-gray-200 rounded-md resize-none focus:ring-2 focus:ring-green-500 focus:border-green-500 font-mono text-sm placeholder:text-xs placeholder:text-gray-400"
@@ -224,7 +211,7 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
                 Decrypted Content
               </CardTitle>
               <Button 
-                onClick={handleCopyDecryptedContent} 
+                onClick={onCopyOutput} 
                 variant="ghost"
                 size="sm"
                 className="text-green-600 hover:text-green-700 hover:bg-green-50"
@@ -236,13 +223,10 @@ export const TextEncryption: React.FC<TextEncryptionProps> = ({
           </CardHeader>
           <CardContent>
             <div className="p-4 bg-green-50 rounded-md border border-green-200">
-              <LazySecureRichTextEditor
+              <Textarea
                 value={textInput}
-                onChange={() => {}} // No-op since it's read-only
-                editable={false}
-                onEditorReady={(editor: any) => {
-                  decryptionEditorRef.current = editor;
-                }}
+                readOnly
+                className="w-full h-32 p-3 border border-gray-200 rounded-md resize-none bg-green-50"
               />
             </div>
           </CardContent>
