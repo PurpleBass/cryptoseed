@@ -380,7 +380,7 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
                 <Badge variant="outline" className="text-xs flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200 hover:bg-secure-200 cursor-pointer transition-colors">
                   <Shield className="h-3 w-3" />
                   <span className="hidden sm:inline">Argon2id + ChaCha20-Poly1305</span>
-                  <span className="sm:hidden">Military-grade</span>
+                  <span className="sm:hidden">Argon2id + ChaCha20-Poly1305</span>
                   <HelpCircle className="h-3 w-3 ml-1" />
                 </Badge>
               </Button>
@@ -423,7 +423,7 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
           <Badge variant="outline" className="text-xs flex items-center gap-1 bg-gray-200 text-gray-800 border-gray-300">
             <WifiOff className="h-3 w-3" />
             <span className="hidden sm:inline">Offline recommended</span>
-            <span className="sm:hidden">Offline</span>
+            <span className="sm:hidden">Offline recommended</span>
           </Badge>
           
           {/* Help Button - Mobile Optimized */}
