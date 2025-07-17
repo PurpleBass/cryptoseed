@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { EditorContent, useEditor } from '@tiptap/react';
+import { EditorContent, useEditor, BubbleMenu } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import TaskList from '@tiptap/extension-task-list';
 import TaskItem from '@tiptap/extension-task-item';
@@ -311,8 +311,8 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
 
   return (
     <div className="modern-editor-container">
-      {/* Static Toolbar - positioned above editor for both mobile and desktop */}
-      {editable && (isEditorFocused || hasSelection) && (
+      {/* Desktop Static Toolbar - hidden on mobile */}
+      {editable && !isMobile && (isEditorFocused || hasSelection) && (
         <div className="editor-toolbar">
           <div className="toolbar-row">
             {/* Essential formatting group */}
@@ -480,6 +480,106 @@ export const SecureRichTextEditor: React.FC<SecureRichTextEditorProps> = ({ valu
         className={`modern-editor ${editable ? 'editable' : 'readonly'} ${hasSelection ? 'has-selection' : ''} ${isEditorFocused ? 'focused' : ''}`}
       >
         <EditorContent editor={editor} />
+        
+        {/* Mobile Bubble Menu - only shown on mobile when text is selected */}
+        {editable && isMobile && (
+          <BubbleMenu 
+            editor={editor} 
+            tippyOptions={{ duration: 100 }}
+            className="bubble-menu"
+          >
+            <div className="bubble-menu-content">
+              {/* Essential formatting */}
+              <Button 
+                type="button" 
+                size="sm"
+                variant="outline" 
+                onClick={() => formatWithSelection(() => editor.chain().focus().toggleBold().run())} 
+                className={`bubble-btn ${editor.isActive('bold') ? 'active' : ''}`}
+                aria-label="Bold"
+              >
+                <b className="text-sm">B</b>
+              </Button>
+              <Button 
+                type="button" 
+                size="sm"
+                variant="outline" 
+                onClick={() => formatWithSelection(() => editor.chain().focus().toggleItalic().run())} 
+                className={`bubble-btn ${editor.isActive('italic') ? 'active' : ''}`}
+                aria-label="Italic"
+              >
+                <i className="text-sm">I</i>
+              </Button>
+              <Button 
+                type="button" 
+                size="sm"
+                variant="outline" 
+                onClick={() => formatWithSelection(() => editor.chain().focus().toggleUnderline().run())} 
+                className={`bubble-btn ${editor.isActive('underline') ? 'active' : ''}`}
+                aria-label="Underline"
+              >
+                <u className="text-sm">U</u>
+              </Button>
+              <Button 
+                type="button" 
+                size="sm"
+                variant="outline" 
+                onClick={() => formatWithSelection(() => editor.chain().focus().toggleStrike().run())} 
+                className={`bubble-btn ${editor.isActive('strike') ? 'active' : ''}`}
+                aria-label="Strikethrough"
+              >
+                <s className="text-sm">S</s>
+              </Button>
+              
+              {/* Text alignment */}
+              <Button 
+                type="button" 
+                size="sm"
+                variant="outline" 
+                onClick={toggleTextAlign} 
+                className="bubble-btn"
+                aria-label="Text Alignment"
+              >
+                {getAlignmentIcon()}
+              </Button>
+              
+              {/* Lists dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    type="button" 
+                    size="sm"
+                    variant="outline" 
+                    className={`bubble-btn ${(editor.isActive('bulletList') || editor.isActive('orderedList') || editor.isActive('taskList')) ? 'active' : ''}`}
+                    title="Lists"
+                  >
+                    <List className="h-3.5 w-3.5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="min-w-[160px]">
+                  <DropdownMenuItem 
+                    onClick={() => handleListCommand('bulletList')} 
+                    className={editor.isActive('bulletList') ? 'bg-secure-50' : ''}
+                  >
+                    <span className="mr-2">•</span> Bullet List
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => handleListCommand('orderedList')} 
+                    className={editor.isActive('orderedList') ? 'bg-secure-50' : ''}
+                  >
+                    <span className="mr-2">1.</span> Numbered List
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => handleListCommand('taskList')} 
+                    className={editor.isActive('taskList') ? 'bg-secure-50' : ''}
+                  >
+                    <span className="mr-2">☑</span> Checklist
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </BubbleMenu>
+        )}
       </div>
       
       {/* Desktop Help Panel */}
