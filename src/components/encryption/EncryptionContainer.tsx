@@ -347,48 +347,50 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
   // Main render method for the Encryption Component
   return (
     <div className="satoshi-container px-4 md:px-0 py-10 bg-white">
-      {/* Mobile-First Header - Clean and Simple */}
-      <div className="mb-8">
-        {/* Primary Toggle - Mobile Optimized */}
-        <div className="flex items-center justify-center bg-gray-50 p-4 rounded-lg mb-4">
-          <div className="flex items-center gap-3">
+      {/* Modern Header Design - Capsule Style */}
+      <div className="mb-8 space-y-6">
+        {/* Primary Toggle - Modern Capsule Design */}
+        <div className="flex justify-center">
+          <div className="flex items-center gap-4 bg-white border border-gray-200 rounded-full px-4 sm:px-6 py-3 shadow-sm">
+            <div className="flex items-center gap-2 sm:gap-3">
+              {isEncrypting ? <Lock className="h-5 w-5 text-green-600" /> : <LockOpen className="h-5 w-5 text-blue-600" />}
+              <span className="text-base sm:text-lg font-semibold text-gray-900">
+                {isEncrypting ? "Encrypt" : "Decrypt"}
+              </span>
+            </div>
             <Switch 
               id="encrypt-mode" 
               checked={isEncrypting} 
               onCheckedChange={setIsEncrypting} 
-              className="data-[state=checked]:bg-secure-500" 
+              className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-blue-500" 
             />
-            <div className="flex items-center gap-2">
-              {isEncrypting ? <Lock className="h-5 w-5 text-secure-500" /> : <LockOpen className="h-5 w-5 text-gray-500" />}
-              <span className="text-xl font-heading font-bold text-gray-900">
-                {isEncrypting ? "Encrypt" : "Decrypt"}
-              </span>
-            </div>
           </div>
         </div>
         
-        {/* Secondary Info - Collapsible on Mobile */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-          {/* Algorithm Info - Compact Design */}
+        {/* Security Info Pills - Modern Design */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          {/* Algorithm Info - Modern Pill Design */}
           <Popover open={showSecurityInfo} onOpenChange={setShowSecurityInfo}>
             <PopoverTrigger asChild>
               <Button 
                 variant="ghost" 
-                className="h-auto p-2 text-xs hover:bg-gray-100 rounded-md"
+                className="h-auto p-0 hover:bg-transparent"
                 onClick={() => setShowSecurityInfo(!showSecurityInfo)}
               >
-                <Badge variant="outline" className="text-xs flex items-center gap-1 bg-secure-100 text-secure-800 border-secure-200 hover:bg-secure-200 cursor-pointer transition-colors">
-                  <Shield className="h-3 w-3" />
-                  <span className="hidden sm:inline">Argon2id + ChaCha20-Poly1305</span>
-                  <span className="sm:hidden">Argon2id + ChaCha20-Poly1305</span>
-                  <HelpCircle className="h-3 w-3 ml-1" />
-                </Badge>
+                <div className="flex items-center gap-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-full px-3 sm:px-4 py-2 transition-colors cursor-pointer">
+                  <Shield className="h-4 w-4" />
+                  <span className="text-xs sm:text-sm font-medium">
+                    <span className="hidden sm:inline">Argon2id + ChaCha20-Poly1305</span>
+                    <span className="sm:hidden">Argon2id + ChaCha20</span>
+                  </span>
+                  <HelpCircle className="h-3 w-3 opacity-70" />
+                </div>
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80" side="bottom" align="center">
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-purple-600" />
+                  <Shield className="h-4 w-4 text-emerald-600" />
                   <h4 className="font-semibold text-sm">Future-Proof Encryption (V3)</h4>
                   <Badge variant="secondary" className="text-xs">Current Standard</Badge>
                 </div>
@@ -419,18 +421,24 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
             </PopoverContent>
           </Popover>
           
-          {/* Offline Badge - Simplified */}
-          <Badge variant="outline" className="text-xs flex items-center gap-1 bg-gray-200 text-gray-800 border-gray-300">
-            <WifiOff className="h-3 w-3" />
-            <span className="hidden sm:inline">Offline recommended</span>
-            <span className="sm:hidden">Offline recommended</span>
-          </Badge>
+          {/* Offline Badge - Modern Pill Design */}
+          <div className="flex items-center gap-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-full px-3 sm:px-4 py-2">
+            <WifiOff className="h-4 w-4" />
+            <span className="text-xs sm:text-sm font-medium">
+              <span className="hidden sm:inline">Offline recommended</span>
+              <span className="sm:hidden">Offline</span>
+            </span>
+          </div>
           
-          {/* Help Button - Mobile Optimized */}
+          {/* Help Button - Modern Design */}
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-gray-300/50 p-0">
-                <HelpCircle className="h-4 w-4 text-gray-700" />
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-9 w-9 rounded-full hover:bg-gray-100 border border-gray-200 bg-white"
+              >
+                <HelpCircle className="h-4 w-4 text-gray-600" />
                 <span className="sr-only">Help</span>
               </Button>
             </PopoverTrigger>
