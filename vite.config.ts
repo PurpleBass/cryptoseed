@@ -35,6 +35,7 @@ export default defineConfig(({ mode }) => ({
       },
     },
     
+    // Enable SRI for security
     rollupOptions: {
       plugins: [
         // Bundle analyzer for development analysis
