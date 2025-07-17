@@ -79,7 +79,7 @@ export const SeedPhraseEncryption: React.FC<SeedPhraseEncryptionProps> = ({
                   value={seedPhrase}
                   onChange={(e) => onSeedPhraseChange(e.target.value)}
                   placeholder="Paste the encrypted seed phrase here"
-                  className="w-full h-32 p-3 border border-gray-200 rounded-md resize-none focus:ring-2 focus:ring-green-500 focus:border-green-500 font-mono text-sm placeholder:text-sm placeholder:text-gray-400"
+                  className="w-full h-32 p-3 border border-gray-200 rounded-md resize-none focus:ring-2 focus:ring-green-500 focus:border-green-500 font-mono text-sm placeholder:text-xs placeholder:text-gray-400"
                 />
               </div>
             )}
