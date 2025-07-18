@@ -11,7 +11,7 @@
 ---
 
 ## ⭐️ Latest Security Status (July 2025)
-- **Mozilla Observatory Score:** A+ (130/100)
+- **Mozilla Observatory Score:** A+ (135/100)
 - **ChaCha20-Poly1305 Encryption:** Modern authenticated encryption with Argon2id key derivation (OWASP recommended)
 - **Strict Content Security Policy (CSP):**
   - `default-src 'none'` (deny by default)
