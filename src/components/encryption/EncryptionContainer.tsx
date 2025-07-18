@@ -217,15 +217,16 @@ const EncryptionContainer = ({ initialEncrypting = true, initialCipher }: Encryp
           <div className="flex items-center gap-4 bg-white border border-gray-200 rounded-full px-4 sm:px-6 py-3 shadow-sm">
             <div className="flex items-center gap-2 sm:gap-3">
               {isEncrypting ? <Lock className="h-5 w-5 text-green-600" /> : <LockOpen className="h-5 w-5 text-blue-600" />}
-              <span className="text-base sm:text-lg font-semibold text-gray-900">
+              <label htmlFor="encrypt-mode" className="text-base sm:text-lg font-semibold text-gray-900 cursor-pointer">
                 {isEncrypting ? "Encrypt" : "Decrypt"}
-              </span>
+              </label>
             </div>
             <Switch 
               id="encrypt-mode" 
               checked={isEncrypting} 
               onCheckedChange={setIsEncrypting} 
-              className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-blue-500" 
+              className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-blue-500"
+              aria-label={`Switch to ${isEncrypting ? 'decrypt' : 'encrypt'} mode`}
             />
           </div>
         </div>

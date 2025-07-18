@@ -65,6 +65,19 @@ function processHtmlFile(htmlFile) {
   let stylesProcessed = 0;
   let errors = 0;
 
+  // Add performance optimizations to head
+  const head = $('head');
+  
+  // Add resource hints for better performance (local resources only for offline-first app)
+  const resourceHints = `
+    <!-- Performance Optimizations -->
+    <meta name="format-detection" content="telephone=no">
+    <link rel="preload" href="/cryptoseed-logo-64.webp" as="image" type="image/webp">
+  `;
+  
+  // Insert after meta tags but before scripts
+  $('meta[name="author"]').after(resourceHints);
+
   // Process script tags with src attributes
   $('script[src]').each((_, el) => {
     const src = $(el).attr('src');
@@ -84,7 +97,13 @@ function processHtmlFile(htmlFile) {
             $(el).attr('crossorigin', 'anonymous');
           }
           
-          console.log(`  ✅ Script: ${assetPath}`);
+          // Make service worker registration non-blocking
+          if (assetPath === 'registerSW.js') {
+            $(el).attr('defer', '');
+            console.log(`  🚀 Script: ${assetPath} (made non-blocking)`);
+          } else {
+            console.log(`  ✅ Script: ${assetPath}`);
+          }
           scriptsProcessed++;
         } else {
           errors++;
