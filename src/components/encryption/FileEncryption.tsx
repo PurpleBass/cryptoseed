@@ -86,8 +86,8 @@ export const FileEncryption: React.FC<FileEncryptionProps> = ({
                 {isEncrypting ? "Select File" : "Select Encrypted File"}
               </Label>
               {selectedFile && (
-                <Button onClick={onClearFile} variant="outline" size="sm" className="text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-gray-700">
-                  <Eraser className="h-3.5 w-3.5 mr-1.5" />
+                <Button onClick={onClearFile} variant="outline" size="sm" className="h-8 px-3 text-xs">
+                  <Eraser className="h-3 w-3 mr-1.5" />
                   <span>Clear</span>
                 </Button>
               )}

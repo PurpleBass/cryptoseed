@@ -68,9 +68,9 @@ export const SeedPhraseEncryption: React.FC<SeedPhraseEncryptionProps> = ({
                     onClick={onClearSeedPhrase} 
                     variant="outline" 
                     size="sm" 
-                    className="text-gray-500 hover:text-gray-600 hover:bg-gray-50 border-gray-200"
+                    className="h-8 px-3 text-xs"
                   >
-                    <Eraser className="h-4 w-4 mr-2" />
+                    <Eraser className="h-3 w-3 mr-1.5" />
                     <span>Clear</span>
                   </Button>
                 </div>
