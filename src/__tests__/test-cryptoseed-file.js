@@ -3,7 +3,7 @@
  * This tests the file encryption → JSON format → decryption workflow
  */
 
-import { encryptFile, decryptFile } from './src/lib/encryptionV3.ts';
+import { encryptFile, decryptFile } from '../lib/encryptionV3.ts';
 
 // Mock File object for testing
 class MockFile {
