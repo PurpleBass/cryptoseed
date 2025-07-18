@@ -1,12 +1,8 @@
 # CryptoSeed
 
-**CryptoSeed** is a modern, open-source web application for encrypting and decryptin## Why is it Unique?
-- **No trust required:** You don't have to trust a company or server—just the open-source code.
-- **Maximum security:** With a strict CSP and no inline scripts/styles, it's extremely resistant to XSS and other web attacks.
-- **Rich text encryption:** First-class support for formatted text encryption with a privacy-focused editor.
-- **Professional workflow:** Export/import `.cryptoseed` files with compression and metadata for seamless collaboration.
-- **User-friendly:** Clean, modern UI with helpful features like password strength feedback, session auto-wipe, and real-time offline detection.
-- **Mobile-optimized:** Responsive design that works perfectly on all devices.ghly sensitive information—especially cryptocurrency seed phrases and wallet recovery codes. Built with React and Vite, it is designed for maximum privacy, security, and ease of use.
+**CryptoSeed** is a modern, open-source web application for encrypting and decrypting hi---
+
+## Getting Startedtive information—especially cryptocurrency seed phrases and wallet recovery codes. Built with React and Vite, it features a security-first design with ChaCha20-Poly1305 encryption and Argon2id key derivation for maximum privacy, security, and ease of use.
 
 ---
 
@@ -27,9 +23,9 @@
 ## What Does CryptoSeed Do?
 - **Encrypts and Decrypts Seed Phrases:**
   - Securely encrypt and store your wallet recovery phrases or any sensitive text using ChaCha20-Poly1305 encryption.
-- **Rich Text Encryption:**
-  - Advanced rich text editor with formatting support (bold, italic, underline, lists, checklists, text alignment).
-  - Privacy-focused Tiptap editor that works completely offline.
+- **Simple Text Encryption:**
+  - Clean, straightforward text encryption with textarea input for maximum compatibility and security.
+  - Focus on security over formatting - plain text approach eliminates potential attack vectors.
 - **Zero-Knowledge:**
   - All encryption and decryption happen locally in your browser. No data ever leaves your device.
 - **Military-Grade Security:**
@@ -50,20 +46,19 @@
 
 ---
 
-## 🎉 Latest User Experience Improvements (December 2024 - June 2025)
+## 🎉 Latest User Experience Improvements (December 2024 - July 2025)
 
-### Rich Text Editor
-- **Secure Rich Text Editing:** Privacy-first Tiptap editor with comprehensive formatting toolbar
-- **Formatting Options:** Bold, italic, underline, strikethrough, bullet lists, numbered lists, checklists, text alignment, horizontal rules
-- **Keyboard Shortcuts:** Full keyboard shortcut support with collapsible help panel
-- **Bubble Menu:** Context-aware formatting menu appears when text is selected
-- **Auto-focus Control:** Page loads from top (no auto-scroll to editor) while preserving click-to-focus functionality
+### Streamlined Text Interface
+- **Security-First Design:** Replaced rich text editor with secure textarea input for maximum security and compatibility
+- **Universal Compatibility:** Plain text approach works across all devices and browsers without complex dependencies
+- **Attack Surface Reduction:** Eliminates potential vulnerabilities associated with rich text editors
+- **Focus on Content:** Clean, distraction-free interface puts encryption functionality first
 
 ### Enhanced Encryption Workflow
 - **File Export:** Download encrypted content as structured `.cryptoseed` files with metadata
 - **File Import:** Drag & drop or browse to load `.cryptoseed` files for decryption
 - **Compression:** Gzip compression before encryption reduces output size by ~60-80%
-- **Copy Formatting:** Copy decrypted content preserves rich text formatting (HTML + plain text)
+- **Copy Functionality:** Simple copy/paste workflow for encrypted content
 
 ### Improved User Interface
 - **Professional Design:** Clean, modern interface with consistent Montserrat typography
@@ -72,11 +67,17 @@
 - **Brand Positioning:** Slogan "Plant privacy. Sprout Freedom." prominently placed in header
 - **Technical Accuracy:** Updated encryption to show complete "ChaCha20-Poly1305 + Argon2id" specification
 
+### V3-Only Security Implementation
+- **Simplified Codebase:** Removed legacy V1 (PBKDF2) and V2 (scrypt) support for reduced attack surface
+- **Argon2id Key Derivation:** Memory-hard, ASIC/GPU resistant key derivation (OWASP recommended)
+- **ChaCha20-Poly1305:** Constant-time authenticated encryption resistant to timing attacks
+- **Future-Proof Design:** Single encryption standard designed for next 10+ years
+
 ### Bug Fixes & Polish
-- **Word Wrapping:** Fixed text expansion issues in editors and textareas
-- **Seed Phrase Accuracy:** Resolved extra word display bug in seed phrase decryption
-- **Visual Consistency:** Standardized placeholders, button styling, and color schemes
-- **Performance:** Optimized editor rendering and focus management
+- **Stack Overflow Fix:** Resolved file encryption issues with large files using chunked processing
+- **Test Suite Cleanup:** Organized automated tests and removed outdated dependencies
+- **Visual Consistency:** Unified clear button styling across all components
+- **Performance:** Optimized encryption processing and memory management
 
 ---
 
