@@ -32,10 +32,15 @@ export default defineConfig(({ mode }) => ({
       compress: {
         drop_console: true, // Remove console.logs in production
         drop_debugger: true,
+        pure_funcs: ['console.log', 'console.warn'], // Additional pure functions to remove
+        passes: 2, // Multiple passes for better compression
+      },
+      mangle: {
+        safari10: true, // Safari 10 compatibility
       },
     },
     
-    // Enable SRI for security
+    // Enable tree shaking
     rollupOptions: {
       plugins: [
         // Bundle analyzer for development analysis
@@ -68,18 +73,38 @@ export default defineConfig(({ mode }) => ({
             return 'react-router';
           }
           
-          // Noble crypto libraries
+          // TanStack Query - separate chunk for caching/state management
+          if (id.includes('@tanstack/')) {
+            return 'tanstack-vendor';
+          }
+          
+          // Noble crypto libraries - keep separate for security
           if (id.includes('@noble/')) {
             return 'crypto-vendor';
           }
           
-          // Radix UI components (depends on React, so after React)
+          // Radix UI components - split into smaller chunks
+          if (id.includes('@radix-ui/react-tabs') || id.includes('@radix-ui/react-switch') || 
+              id.includes('@radix-ui/react-accordion')) {
+            return 'radix-core';
+          }
+          
+          if (id.includes('@radix-ui/react-dialog') || id.includes('@radix-ui/react-popover') || 
+              id.includes('@radix-ui/react-toast')) {
+            return 'radix-overlays';
+          }
+          
           if (id.includes('@radix-ui/')) {
-            return 'ui-vendor';
+            return 'radix-utils';
+          }
+          
+          // Lucide icons - separate chunk since it's large
+          if (id.includes('lucide-react')) {
+            return 'icons-vendor';
           }
           
           // Utility libraries
-          if (id.includes('lucide-react') || id.includes('clsx') || id.includes('tailwind-merge') || 
+          if (id.includes('clsx') || id.includes('tailwind-merge') || 
               id.includes('date-fns') || id.includes('zod') || id.includes('class-variance-authority')) {
             return 'utils-vendor';
           }

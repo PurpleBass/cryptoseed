@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Key, Lock, FileText } from "lucide-react";
 import Header, { ViewType } from "@/components/Header";
 import EncryptionComponent from "@/components/EncryptionComponent";
-import CodeVerification from "@/components/CodeVerification";
+import { LazyCodeVerification } from "@/components/LazyCodeVerification";
 import { LazyFAQComponent } from "@/components/LazyFAQComponent";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -151,7 +151,7 @@ const Index = () => {
       
       <main className="flex-1">
         {currentView === "encrypt" && <EncryptionComponent initialEncrypting={initialEncrypting} initialCipher={initialCipher} />}
-        {currentView === "verify" && <CodeVerification />}
+        {currentView === "verify" && <LazyCodeVerification />}
         {currentView === "faq" && <LazyFAQComponent />}
       </main>
       
