@@ -55,16 +55,22 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
             className="w-full max-w-2xl mt-2 md:mt-6"
             aria-label="Main navigation tabs"
           >
-            <TabsList className={cn(
-              "grid w-full rounded-full p-1 bg-gray-100",
-              "grid-cols-3"
-            )}>
+            <TabsList 
+              className={cn(
+                "grid w-full rounded-full p-1 bg-gray-100",
+                "grid-cols-3"
+              )}
+              aria-label="Main navigation"
+              role="tablist"
+            >
               {isMobile ? (
                 // Mobile Layout: Show all tabs with smaller text and icons
                 <>
                   <TabsTrigger 
                     value="encrypt" 
                     id="tab-encrypt"
+                    aria-controls="content-encrypt"
+                    aria-label="Switch to encrypt and decrypt view"
                     className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm text-xs py-1.5"
                   >
                     <Shield className="h-3 w-3" />
@@ -74,6 +80,8 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                   <TabsTrigger 
                     value="verify" 
                     id="tab-verify"
+                    aria-controls="content-verify"
+                    aria-label="Switch to code verification view"
                     className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm text-xs py-1.5"
                   >
                     <FileText className="h-3 w-3" />
@@ -83,6 +91,8 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                   <TabsTrigger 
                     value="faq" 
                     id="tab-faq"
+                    aria-controls="content-faq"
+                    aria-label="Switch to FAQ and best practices view"
                     className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm text-xs py-1.5"
                   >
                     <HelpCircle className="h-3 w-3" />
@@ -95,6 +105,8 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                   <TabsTrigger 
                     value="encrypt" 
                     id="tab-encrypt-desktop"
+                    aria-controls="content-encrypt"
+                    aria-label="Switch to encrypt and decrypt view"
                     className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm"
                   >
                     <Shield className="h-4 w-4" />
@@ -103,6 +115,8 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                   <TabsTrigger 
                     value="verify" 
                     id="tab-verify-desktop"
+                    aria-controls="content-verify"
+                    aria-label="Switch to code verification view"
                     className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm"
                   >
                     <FileText className="h-4 w-4" />
@@ -111,6 +125,8 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                   <TabsTrigger 
                     value="faq" 
                     id="tab-faq-desktop"
+                    aria-controls="content-faq"
+                    aria-label="Switch to FAQ and best practices view"
                     className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm"
                   >
                     <HelpCircle className="h-4 w-4" />

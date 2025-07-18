@@ -150,9 +150,9 @@ const Index = () => {
         </div>}
       
       <main className="flex-1">
-        {currentView === "encrypt" && <EncryptionComponent initialEncrypting={initialEncrypting} initialCipher={initialCipher} />}
-        {currentView === "verify" && <LazyCodeVerification />}
-        {currentView === "faq" && <LazyFAQComponent />}
+        {currentView === "encrypt" && <div id="content-encrypt"><EncryptionComponent initialEncrypting={initialEncrypting} initialCipher={initialCipher} /></div>}
+        {currentView === "verify" && <div id="content-verify"><LazyCodeVerification /></div>}
+        {currentView === "faq" && <div id="content-faq"><LazyFAQComponent /></div>}
       </main>
       
       <footer className="py-6 md:py-10 bg-gray-50 border-t border-gray-100">
