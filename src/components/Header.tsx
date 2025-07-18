@@ -43,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
               Crypto Seed
             </h1>
           </div>
-          <span className="block text-secure-700 text-base md:text-lg font-semibold tracking-tight">Plant privacy. Sprout Freedom.</span>
+          <span className="block text-secure-600 text-base md:text-lg font-semibold tracking-tight">Plant privacy. Sprout Freedom.</span>
           <p className="text-center text-sm md:text-base text-gray-600 max-w-2xl mx-auto px-2">
             A zero-knowledge, open-source ChaCha20-Poly1305 encryption tool that works offline. No data leaves your device, no backdoors, completely verifiable.
           </p>
@@ -53,6 +53,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
             value={currentView} 
             onValueChange={(v) => setCurrentView(v as ViewType)}
             className="w-full max-w-2xl mt-2 md:mt-6"
+            aria-label="Main navigation tabs"
           >
             <TabsList className={cn(
               "grid w-full rounded-full p-1 bg-gray-100",
@@ -63,7 +64,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                 <>
                   <TabsTrigger 
                     value="encrypt" 
-                    className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm text-xs py-1.5"
+                    className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm text-xs py-1.5"
                   >
                     <Shield className="h-3 w-3" />
                     <span>Encrypt</span>
@@ -71,7 +72,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                   
                   <TabsTrigger 
                     value="verify" 
-                    className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm text-xs py-1.5"
+                    className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm text-xs py-1.5"
                   >
                     <FileText className="h-3 w-3" />
                     <span>Verify</span>
@@ -79,7 +80,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                   
                   <TabsTrigger 
                     value="faq" 
-                    className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm text-xs py-1.5"
+                    className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm text-xs py-1.5"
                   >
                     <HelpCircle className="h-3 w-3" />
                     <span>FAQ</span>
@@ -90,21 +91,21 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                 <>
                   <TabsTrigger 
                     value="encrypt" 
-                    className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
+                    className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm"
                   >
                     <Shield className="h-4 w-4" />
                     <span>Encrypt & Decrypt</span>
                   </TabsTrigger>
                   <TabsTrigger 
                     value="verify" 
-                    className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
+                    className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm"
                   >
                     <FileText className="h-4 w-4" />
                     <span>Verify Code</span>
                   </TabsTrigger>
                   <TabsTrigger 
                     value="faq" 
-                    className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-700 data-[state=active]:shadow-sm"
+                    className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm"
                   >
                     <HelpCircle className="h-4 w-4" />
                     <span>FAQ & Best Practices</span>

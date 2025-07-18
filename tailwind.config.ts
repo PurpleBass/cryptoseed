@@ -68,17 +68,17 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Security-inspired green colors
+        // Security-inspired green colors - Updated for accessibility
         secure: {
           50: "#F2FCF5",
           100: "#E3F9EB",
           200: "#C7F3D7",
           300: "#A0E8BE",
           400: "#6AD599",
-          500: "#4BC282", // Primary security green
-          600: "#3AA96D",
-          700: "#2D8755",
-          800: "#236844",
+          500: "#3AA96D", // Darker primary for better contrast
+          600: "#2D8755", // Previous 700 moved to 600
+          700: "#236844", // Previous 800 moved to 700
+          800: "#1B5236", // New darker shade
           900: "#153C28",
           950: "#0B2617",
         },
