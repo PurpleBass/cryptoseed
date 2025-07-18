@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npm run add-sri",
     "postbuild": "cp public/_headers dist/_headers",
     "build:dev": "vite build --mode development",
+    "add-sri": "node scripts/add-sri.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest"
@@ -81,9 +82,11 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react-swc": "^3.10.2",
     "autoprefixer": "^10.4.20",
+    "cheerio": "^1.1.0",
     "eslint": "^9.9.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
+    "glob": "^11.0.3",
     "globals": "^15.9.0",
     "jest": "^30.0.0",
     "jest-environment-jsdom": "^30.0.0",
