@@ -44,7 +44,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
           value={password}
           onChange={(e) => onPasswordChange(e.target.value)}
           placeholder="Enter a strong password"
-          className="pr-12 font-mono text-sm placeholder:text-xs placeholder:text-gray-400"
+          className="pr-12 md:pr-10 font-mono"
         />
         <Button
           type="button"
