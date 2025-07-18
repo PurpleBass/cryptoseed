@@ -5,6 +5,24 @@ module.exports = {
 
   roots: ['<rootDir>/src'],
 
+  // Only run actual test files, not manual test scripts
+  testMatch: [
+    '**/__tests__/**/*.test.{ts,tsx,js,jsx}',
+    '**/*.test.{ts,tsx,js,jsx}',
+    '**/*.spec.{ts,tsx,js,jsx}'
+  ],
+
+  // Ignore manual test files, HTML files, and browser scripts
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '\\.html$',
+    'browser-.*\\.js$',
+    'test-.*\\.js$',
+    'verify-.*\\.js$',
+    'debug-.*\\.js$',
+    'final-.*\\.js$'
+  ],
+
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },

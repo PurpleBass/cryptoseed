@@ -46,8 +46,8 @@ function checkReactState() {
         });
     });
     
-    // Look for rich text editor (Tiptap)
-    const editors = document.querySelectorAll('[role="textbox"], .ProseMirror');
+    // Look for text areas and input fields
+    const editors = document.querySelectorAll('[role="textbox"], textarea, input[type="text"]');
     console.log(`Found ${editors.length} rich text editors:`);
     editors.forEach((ed, i) => {
         console.log(`Editor ${i}:`, {

@@ -30,7 +30,7 @@ console.log('✅ Should decrypt to: "Test message for URL hash prefill verificat
 console.log('\nSTEP 3: Test mode switching behavior');
 console.log('-----------------------------------');
 console.log('10. While on the page with prefilled content, click the Encrypt toggle');
-console.log('✅ Text input should become EMPTY (Tiptap editor)');
+console.log('✅ Text input should become EMPTY (text area)');
 console.log('11. Click the Decrypt toggle to switch back');
 console.log('✅ Text input should STAY EMPTY (not re-prefilled)');
 
