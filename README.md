@@ -1,8 +1,12 @@
 # CryptoSeed
 
-**CryptoSeed** is a modern, open-source web application for encrypting and decrypting hi---
-
-## Getting Startedtive information—especially cryptocurrency seed phrases and wallet recovery codes. Built with React and Vite, it features a security-first design with ChaCha20-Poly1305 encryption and Argon2id key derivation for maximum privacy, security, and ease of use.
+**CryptoSeed** is a modern, open-source web application for encrypting and decrypting high## Why is it Unique?
+- **No trust required:** You don't have to trust a company or server—just the open-source code.
+- **Maximum security:** With a strict CSP and no inline scripts/styles, it's extremely resistant to XSS and other web attacks.
+- **Simple and secure:** Clean textarea-based interface eliminates attack vectors while maintaining excellent usability.
+- **Professional workflow:** Export/import `.cryptoseed` files with compression and metadata for seamless collaboration.
+- **User-friendly:** Clean, modern UI with helpful features like password strength feedback, session auto-wipe, and real-time offline detection.
+- **Mobile-optimized:** Responsive design that works perfectly on all devices.ensitive information—especially cryptocurrency seed phrases and wallet recovery codes. Built with React and Vite, it features a security-first design with ChaCha20-Poly1305 encryption and Argon2id key derivation for maximum privacy, security, and ease of use.
 
 ---
 
@@ -28,7 +32,7 @@
   - Focus on security over formatting - plain text approach eliminates potential attack vectors.
 - **Zero-Knowledge:**
   - All encryption and decryption happen locally in your browser. No data ever leaves your device.
-- **Military-Grade Security:**
+- **Secure Encryption:**
   - Uses ChaCha20-Poly1305 authenticated encryption with Argon2id key derivation (OWASP recommended) and secure memory handling.
 - **File Export/Import:**
   - Download encrypted content as `.cryptoseed` files with metadata and compression.
@@ -143,7 +147,6 @@ MIT
 ---
 
 ## Credits
-- Built by [Lovable](https://lovable.dev)
 - Security and code improvements by the open-source community
 
 ---
@@ -154,5 +157,5 @@ Live: https://cryptoseed.org
 
 ---
 
-**You can trust CryptoSeed for your most sensitive secrets.**
+**Plant privacy. Sprout freedom.**
 
