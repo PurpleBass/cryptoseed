@@ -15,14 +15,14 @@
     --popover: 0 0% 100%;
     --popover-foreground: 147 47% 11%;
 
-    --primary: 142 54% 32%; /* Darker security green for accessibility */
+    --primary: 142 64% 26%; /* Much darker security green for WCAG AA */
     --primary-foreground: 140 40% 98%;
 
     --secondary: 140 14% 96%;
     --secondary-foreground: 147 47% 11%;
 
     --muted: 140 14% 96%;
-    --muted-foreground: 140 8% 38%; /* Darker for better contrast */
+    --muted-foreground: 140 8% 32%; /* Much darker for better contrast */
 
     --accent: 140 14% 96%;
     --accent-foreground: 147 47% 11%;

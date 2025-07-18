@@ -68,7 +68,7 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Security-inspired green colors - Updated for accessibility
+        // Security-inspired green colors - Updated for WCAG 2.1 AA compliance
         secure: {
           50: "#F2FCF5",
           100: "#E3F9EB",
@@ -76,10 +76,10 @@ export default {
           300: "#A0E8BE",
           400: "#6AD599",
           500: "#3AA96D", // Darker primary for better contrast
-          600: "#2D8755", // Previous 700 moved to 600
-          700: "#236844", // Previous 800 moved to 700
-          800: "#1B5236", // New darker shade
-          900: "#153C28",
+          600: "#236844", // Much darker for accessibility (previous 800)
+          700: "#1B5236", // Previous 800 moved to 700
+          800: "#153C28", // Previous 900
+          900: "#0F2A1E", // New very dark shade
           950: "#0B2617",
         },
       },

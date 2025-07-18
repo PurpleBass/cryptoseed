@@ -64,6 +64,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                 <>
                   <TabsTrigger 
                     value="encrypt" 
+                    id="tab-encrypt"
                     className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm text-xs py-1.5"
                   >
                     <Shield className="h-3 w-3" />
@@ -72,6 +73,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                   
                   <TabsTrigger 
                     value="verify" 
+                    id="tab-verify"
                     className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm text-xs py-1.5"
                   >
                     <FileText className="h-3 w-3" />
@@ -80,6 +82,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                   
                   <TabsTrigger 
                     value="faq" 
+                    id="tab-faq"
                     className="flex items-center justify-center gap-1 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm text-xs py-1.5"
                   >
                     <HelpCircle className="h-3 w-3" />
@@ -91,6 +94,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                 <>
                   <TabsTrigger 
                     value="encrypt" 
+                    id="tab-encrypt-desktop"
                     className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm"
                   >
                     <Shield className="h-4 w-4" />
@@ -98,6 +102,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                   </TabsTrigger>
                   <TabsTrigger 
                     value="verify" 
+                    id="tab-verify-desktop"
                     className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm"
                   >
                     <FileText className="h-4 w-4" />
@@ -105,6 +110,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                   </TabsTrigger>
                   <TabsTrigger 
                     value="faq" 
+                    id="tab-faq-desktop"
                     className="flex items-center gap-2 rounded-full data-[state=active]:bg-white data-[state=active]:text-secure-600 data-[state=active]:shadow-sm"
                   >
                     <HelpCircle className="h-4 w-4" />
