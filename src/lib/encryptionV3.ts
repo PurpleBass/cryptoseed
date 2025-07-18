@@ -254,7 +254,7 @@ export async function encryptFile(
   if (onProgress) onProgress(70);
   
   // Create .cryptoseed file format
-  const base64Content = btoa(String.fromCharCode(...result.encryptedData));
+  const base64Content = uint8ToBase64(result.encryptedData);
   const cryptoSeedData = {
     version: "3.0",
     algorithm: "ChaCha20-Poly1305",
@@ -389,7 +389,15 @@ export function getEncryptionInfo() {
 
 // Browser-safe base64 encoding/decoding helpers
 function uint8ToBase64(bytes: Uint8Array): string {
-  const binaryString = String.fromCharCode(...Array.from(bytes));
+  // Process in chunks to avoid stack overflow with large files
+  const chunkSize = 8192; // 8KB chunks to prevent stack overflow
+  let binaryString = '';
+  
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    const chunk = bytes.slice(i, i + chunkSize);
+    binaryString += String.fromCharCode(...Array.from(chunk));
+  }
+  
   return btoa(binaryString);
 }
 

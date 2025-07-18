@@ -117,7 +117,15 @@ async function decompressToString(compressedData: Uint8Array): Promise<string> {
 
 // Convert Uint8Array to base64 for encryption
 function uint8ArrayToBase64(array: Uint8Array): string {
-  const binaryString = String.fromCharCode(...Array.from(array));
+  // Process in chunks to avoid stack overflow with large data
+  const chunkSize = 8192; // 8KB chunks
+  let binaryString = '';
+  
+  for (let i = 0; i < array.length; i += chunkSize) {
+    const chunk = array.slice(i, i + chunkSize);
+    binaryString += String.fromCharCode(...Array.from(chunk));
+  }
+  
   return btoa(binaryString);
 }
 
