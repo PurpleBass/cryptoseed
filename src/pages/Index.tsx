@@ -315,6 +315,26 @@ const Index = () => {
               </Dialog>
             </div>
             
+            {/* Subtle Download Section */}
+            <div className="mt-8 md:mt-12 mb-6 md:mb-8 border-t border-gray-100 pt-6 md:pt-8">
+              <div className="text-center">
+                <p className="text-xs md:text-sm text-gray-500 mb-2">
+                  For maximum security and offline usage
+                </p>
+                <a 
+                  href="https://github.com/PurpleBass/cryptoseed/releases/latest" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-xs md:text-sm text-gray-600 hover:text-secure-600 transition-colors duration-200 border border-gray-200 hover:border-secure-300 rounded-lg px-3 py-2"
+                >
+                  <svg className="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Download Offline Version
+                </a>
+              </div>
+            </div>
+            
             <p className="text-xs text-gray-500 text-center max-w-2xl mx-auto px-4 md:px-0">
               <strong>Disclaimer:</strong> We are not responsible for the use of this application or the data it manages. 
               This tool is provided for educational and security purposes only. Users are solely responsible for their 

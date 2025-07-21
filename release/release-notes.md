@@ -22,4 +22,4 @@ sha256sum -c cryptoseed-v3.1.0-standalone.html.sha256
 - No backend dependencies
 - Cryptographically verifiable
 
-**SHA256**: `42168a08681c1b13dddf167bf662f588035f0639f6ba3f0bb5f00ef1504198f1`
+**SHA256**: `1be85ffc51f4e051819841a4c8aeb476e4b4c7f9fecf8ce870e8a5986d2a5d45`

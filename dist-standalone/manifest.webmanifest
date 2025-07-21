@@ -1,0 +1,22 @@
+{
+  "name": "CryptoSeed",
+  "short_name": "CryptoSeed",
+  "description": "Secure Seed Phrase Encryption",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4BC282",
+  "icons": [
+    {
+      "src": "/CryptoSeed Logo Lock.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/CryptoSeed Logo Lock.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
