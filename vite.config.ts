@@ -109,6 +109,11 @@ export default defineConfig(({ mode }) => ({
             return 'utils-vendor';
           }
           
+          // Password strength library - separate chunk since it's large and lazy-loaded
+          if (id.includes('zxcvbn')) {
+            return 'password-strength-vendor';
+          }
+          
           // Large third-party libraries (after React core)
           if (id.includes('node_modules/')) {
             return 'vendor';
