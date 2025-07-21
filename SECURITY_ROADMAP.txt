@@ -130,7 +130,7 @@ Priority: HIGH
 - Build explicit defenses for each level
 - Document what we protect against vs. what we don't
 
-#### 4.3 Zero-Knowledge Architecture
+#### 4.3 Client-Side Only Architecture
 - No server components (already achieved)
 - No telemetry/analytics (already achieved)
 - No error reporting to external services

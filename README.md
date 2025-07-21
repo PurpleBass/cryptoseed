@@ -54,8 +54,11 @@
   - Focus on security over formatting - plain text approach eliminates potential attack vectors.
 - **File Encryption:**
   - Encrypt any file type with `.cryptoseed` format that preserves original filename and metadata.
-- **Zero-Knowledge:**
+- **Client-Side Only:**
   - All encryption and decryption happen locally in your browser. No data ever leaves your device.
+  - Static site with no backend, no servers, no databases.
+  - No user accounts, no registration, no authentication required.
+  - No logs, no analytics, no tracking - we literally cannot see what you do.
 - **Modern Cryptography:**
   - Uses ChaCha20-Poly1305 authenticated encryption with Argon2id key derivation (OWASP recommended) and secure memory handling.
 - **File Export/Import:**
@@ -112,7 +115,7 @@ For file encryption, CryptoSeed creates structured JSON files:
 }
 ```
 
-### What's NOT Stored (Zero-Knowledge Design)
+### What's NOT Stored (Client-Side Only Design)
 - ❌ User information (names, IDs, etc.)
 - ❌ System information (OS, browser, etc.) 
 - ❌ File paths (only filename)

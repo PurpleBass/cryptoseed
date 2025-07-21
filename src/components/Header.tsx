@@ -45,8 +45,30 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
           </div>
           <span className="block text-secure-600 text-base md:text-lg font-semibold tracking-tight">Plant privacy. Sprout Freedom.</span>
           <p className="text-center text-sm md:text-base text-gray-600 max-w-2xl mx-auto px-2">
-            A zero-knowledge, open-source ChaCha20-Poly1305 encryption tool that works offline. No data leaves your device, no backdoors, completely verifiable.
+            A client-side only, open-source ChaCha20-Poly1305 encryption tool that works offline. No data leaves your device, no backdoors, completely verifiable.
           </p>
+          
+          {/* Technical Facts Section */}
+          <div className="bg-gray-50 rounded-lg p-3 md:p-4 max-w-3xl mx-auto mt-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 text-xs md:text-sm text-gray-700">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span><strong>Serverless:</strong> No backend, no databases</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span><strong>No transmission:</strong> Data never sent anywhere</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span><strong>No users:</strong> No accounts, no registration</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span><strong>No logs:</strong> No tracking, no analytics</span>
+              </div>
+            </div>
+          </div>
           
           <Tabs 
             defaultValue="encrypt" 

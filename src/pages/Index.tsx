@@ -109,7 +109,7 @@ const Index = () => {
             
             <div className="max-w-3xl mx-auto px-2 md:px-0">
               <p className="text-sm md:text-base text-gray-700 mb-4 md:mb-6">
-                Protect your critical seed phrases with advanced zero-knowledge encryption. 
+                Protect your critical seed phrases with advanced client-side encryption. 
                 Safeguard the keys to your crypto wallets with military-grade security.
               </p>
               
@@ -174,7 +174,7 @@ const Index = () => {
             <p className="text-base md:text-lg text-gray-800 mt-1 md:mt-2 font-bold">Crypto Seed</p>
           </div>
           <p className="text-xs md:text-sm text-gray-600 max-w-xl mx-auto text-center px-4 md:px-0">
-            Open Source, Zero-Knowledge Encryption. Your data never leaves your device.
+            Open Source, Client-Side Only Encryption. Static site with no backend, no users, no data transmission.
             All encryption happens locally in your browser.
           </p>
           <div className="mt-4 md:mt-6 flex flex-wrap justify-center gap-3 md:gap-6 px-2 md:px-0">

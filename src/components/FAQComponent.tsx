@@ -143,7 +143,7 @@ const FAQComponent = () => {
                   <AccordionContent className="text-xs sm:text-sm text-muted-foreground text-left">
                     <p>
                       <strong>We won't – and more importantly, we can't</strong>. Our entire application 
-                      is designed with a zero-knowledge architecture that makes it <strong>impossible 
+                      is designed with a client-side only architecture that makes it <strong>impossible 
                       for us to store or remember anything about your encrypted data</strong>.
                     </p>
                     <ul className="list-disc pl-4 sm:pl-6 mt-1 sm:mt-2 space-y-1">
@@ -184,10 +184,13 @@ const FAQComponent = () => {
                         </ul>
                       </li>
                       <li>
-                        <strong>Zero-Knowledge Architecture</strong>: We cannot access your data
+                        <strong>Client-Side Only Architecture</strong>: We cannot access your data
                         <ul className="list-disc pl-4 sm:pl-6 mt-1">
                           <li>All encryption happens directly in your browser</li>
                           <li>No data is ever transmitted to our servers</li>
+                          <li>Static site with no backend infrastructure</li>
+                          <li>No user accounts, no registration, no authentication</li>
+                          <li>No logs, no analytics, no tracking of any kind</li>
                           <li>We have no way to recover or see your encrypted information</li>
                         </ul>
                       </li>
@@ -528,7 +531,7 @@ const FAQComponent = () => {
                       </li>
                     </ul>
                     <p className="mt-1 sm:mt-2">
-                      The PWA functionality works seamlessly with our zero-knowledge architecture, ensuring that all cryptographic operations remain 
+                      The PWA functionality works seamlessly with our client-side only architecture, ensuring that all cryptographic operations remain 
                       entirely client-side even when the application is running offline.
                     </p>
                   </AccordionContent>
@@ -868,7 +871,7 @@ const FAQComponent = () => {
                       <li>We <strong>don't integrate</strong> with any third-party services that would collect data</li>
                     </ul>
                     <p className="mt-1 sm:mt-2">
-                      This is a <strong>zero-knowledge application</strong>, meaning we have no ability to access any information you encrypt using this service.
+                      This is a <strong>client-side only application</strong>, meaning we have no ability to access any information you encrypt using this service.
                       For the complete privacy policy, please refer to the Privacy Policy link at the bottom of the page.
                     </p>
                   </AccordionContent>
