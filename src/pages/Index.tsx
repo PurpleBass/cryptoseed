@@ -6,6 +6,7 @@ import { LazyCodeVerification } from "@/components/LazyCodeVerification";
 import { LazyFAQComponent } from "@/components/LazyFAQComponent";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
 // import { useIsMobile } from "@/hooks/use-mobile";
 import { useLocation } from "react-router-dom";
 
@@ -83,25 +84,10 @@ const Index = () => {
       {currentView === "encrypt" && <div className="bg-gradient-to-b from-secure-50 to-white pt-4 md:pt-8 pb-4 md:pb-6 border-b border-gray-100">
           <div className="satoshi-container text-center">
             <div className="flex flex-col items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
-              <picture>
-                <source 
-                  srcSet="/cryptoseed-logo-128.webp" 
-                  type="image/webp" 
-                  media="(max-width: 768px)"
-                />
-                <source 
-                  srcSet="/cryptoseed-logo-256.webp" 
-                  type="image/webp" 
-                  media="(min-width: 769px)"
-                />
-                <img 
-                  src="/cryptoseed-logo-128.png" 
-                  alt="Crypto Seed Logo" 
-                  className="h-12 w-12 md:h-16 md:w-16 mb-2" 
-                  width="128"
-                  height="128"
-                />
-              </picture>
+              <Logo 
+                size="128"
+                className="h-12 w-12 md:h-16 md:w-16 mb-2"
+              />
               <h1 className="text-2xl md:text-4xl font-bold text-gray-900">
                 Secure Your Crypto Seed Phrases
               </h1>
@@ -158,19 +144,10 @@ const Index = () => {
       <footer className="py-6 md:py-10 bg-gray-50 border-t border-gray-100">
         <div className="satoshi-container">
           <div className="mb-3 md:mb-4 text-center">
-            <picture>
-              <source 
-                srcSet="/cryptoseed-logo-64.webp" 
-                type="image/webp"
-              />
-              <img 
-                src="/cryptoseed-logo-64.png" 
-                alt="Crypto Seed Logo" 
-                className="h-6 w-6 md:h-8 md:w-8 inline-block" 
-                width="64"
-                height="64"
-              />
-            </picture>
+            <Logo 
+              size="64"
+              className="h-6 w-6 md:h-8 md:w-8 inline-block"
+            />
             <p className="text-base md:text-lg text-gray-800 mt-1 md:mt-2 font-bold">Crypto Seed</p>
           </div>
           <p className="text-xs md:text-sm text-gray-600 max-w-xl mx-auto text-center px-4 md:px-0">
