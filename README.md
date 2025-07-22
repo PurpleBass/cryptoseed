@@ -1,5 +1,20 @@
 # CryptoSeed
 
+> **⚠️ IMPORTANT DISCLAIMER - EDUCATIONAL USE ONLY**
+> 
+> **This application is currently under development and is provided for educational and demonstration purposes only.**
+> 
+> **🚨 DO NOT USE WITH REAL CRYPTOCURRENCY SEED PHRASES OR SENSITIVE DATA 🚨**
+> 
+> - This is experimental software not intended for production use
+> - No warranties are provided regarding security, reliability, or fitness for any purpose  
+> - Use only test data and example seed phrases for learning purposes
+> - The developers assume no responsibility for any loss of funds or data
+> 
+> By using this application, you acknowledge these limitations and agree to use it responsibly.
+
+---
+
 **CryptoSeed** is a modern, open-source web application for encrypting and decrypting high-sensitive information—especially cryptocurrency seed phrases and wallet recovery codes. Built with React and Vite, it features a security-first design with ChaCha20-Poly1305 encryption and Argon2id key derivation for maximum privacy, security, and ease of use.
 
 ---

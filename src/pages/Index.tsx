@@ -7,6 +7,7 @@ import { LazyFAQComponent } from "@/components/LazyFAQComponent";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
+import { DisclaimerModal } from "@/components/DisclaimerModal";
 // import { useIsMobile } from "@/hooks/use-mobile";
 import { useLocation } from "react-router-dom";
 
@@ -79,7 +80,38 @@ const Index = () => {
   }, []);
 
   return <div className="min-h-screen flex flex-col bg-background">
+      <DisclaimerModal />
       <Header currentView={currentView} setCurrentView={setCurrentView} />
+      
+      {/* EDUCATIONAL DISCLAIMER - PROMINENT WARNING */}
+      <div className="bg-red-50 border-l-4 border-red-500 p-4 shadow-sm">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-red-400 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-bold text-red-800 mb-1">
+                ⚠️ EDUCATIONAL PURPOSE ONLY - DO NOT USE FOR REAL CRYPTO ASSETS
+              </h3>
+              <div className="text-sm text-red-700 space-y-1">
+                <p className="font-medium">
+                  This website is currently under active development and testing. It is provided for educational and demonstration purposes only.
+                </p>
+                <p>
+                  <strong>DO NOT encrypt real seed phrases, private keys, or sensitive financial data.</strong> 
+                  Use test data only. The developers make no warranties about security, reliability, or fitness for any particular purpose.
+                </p>
+                <p className="text-xs mt-2 opacity-90">
+                  By using this application, you acknowledge that you understand this is experimental software not intended for production use with real cryptocurrency assets.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       
       {currentView === "encrypt" && <div className="bg-gradient-to-b from-secure-50 to-white pt-4 md:pt-8 pb-4 md:pb-6 border-b border-gray-100">
           <div className="satoshi-container text-center">
