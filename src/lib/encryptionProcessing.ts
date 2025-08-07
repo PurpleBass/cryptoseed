@@ -1,4 +1,4 @@
-import { encryptMessage, decryptMessage, encryptFile, decryptFile, getEncryptionInfo } from "@/lib/encryptionV3";
+import { encryptMessage, decryptMessage, encryptFile, decryptFile, getEncryptionInfo } from "@/lib/encryptionHybrid";
 
 // Encryption version type - V3 only for maximum security
 export type EncryptionVersion = 'v3';

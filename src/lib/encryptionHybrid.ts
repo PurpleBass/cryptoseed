@@ -104,15 +104,17 @@ async function initializeNoble(): Promise<void> {
  * Initialize the appropriate encryption backend
  */
 export async function initializeEncryption(): Promise<{ backend: 'wasm' | 'noble'; secureMemory: boolean }> {
-  // Try WASM first in browser
+  // In browser: REQUIRE WASM for security
   if (isBrowser) {
     const wasmSuccess = await initializeWASM();
-    if (wasmSuccess) {
-      return { backend: 'wasm', secureMemory: true };
+    if (!wasmSuccess) {
+      throw new Error('WASM encryption is required in browsers for secure memory handling. Please use a modern browser with WASM support.');
     }
+    return { backend: 'wasm', secureMemory: true };
   }
   
-  // Fallback to Noble libraries
+  // In Node.js (testing/development): Allow Noble.js fallback with warning
+  console.warn('⚠️ Running in Node.js environment - using Noble.js fallback (limited memory security)');
   await initializeNoble();
   return { backend: 'noble', secureMemory: false };
 }
@@ -127,11 +129,23 @@ export function hasSecureMemory(): boolean {
 /**
  * Get current encryption backend info
  */
-export function getEncryptionInfo(): { backend: 'wasm' | 'noble'; environment: string; secureMemory: boolean } {
+export function getEncryptionInfo(): { 
+  backend: 'wasm' | 'noble'; 
+  environment: string; 
+  secureMemory: boolean;
+  algorithm: string;
+  kdf: string;
+  version: string;
+  securityLevel: string;
+} {
   return {
     backend: wasmInitialized ? 'wasm' : 'noble',
     environment: isBrowser ? 'browser' : 'node',
-    secureMemory: hasSecureMemory()
+    secureMemory: hasSecureMemory(),
+    algorithm: 'ChaCha20-Poly1305',
+    kdf: 'Argon2id',
+    version: 'V3',
+    securityLevel: 'future-proof'
   };
 }
 
@@ -348,11 +362,21 @@ export async function decryptData(encryptedData: Uint8Array, password: string): 
 /**
  * High-level encrypt message function
  */
-export async function encryptMessage(message: string, password: string): Promise<string> {
+export async function encryptMessage(
+  message: string, 
+  password: string,
+  onProgress?: (progress: number) => void
+): Promise<string> {
+  if (onProgress) onProgress(0);
+  
   const encoder = new TextEncoder();
   const messageBytes = encoder.encode(message);
   
+  if (onProgress) onProgress(50);
+  
   const result = await encryptData(messageBytes, password);
+  
+  if (onProgress) onProgress(100);
   
   // Convert to base64 for storage/transmission
   return btoa(String.fromCharCode(...result.encryptedData));
@@ -371,6 +395,97 @@ export async function decryptMessage(encryptedMessage: string, password: string)
   
   const decoder = new TextDecoder();
   return decoder.decode(result.decryptedData);
+}
+
+/**
+ * High-level encrypt file function
+ */
+export async function encryptFile(
+  file: File, 
+  password: string,
+  onProgress?: (progress: number) => void
+): Promise<{ encryptedData: Blob; fileName: string }> {
+  if (onProgress) onProgress(0);
+  
+  const arrayBuffer = await file.arrayBuffer();
+  const data = new Uint8Array(arrayBuffer);
+  
+  if (onProgress) onProgress(30);
+  
+  const result = await encryptData(data, password);
+  
+  if (onProgress) onProgress(70);
+  
+  // Create .cryptoseed file format (compatible with V3)
+  const base64Content = btoa(String.fromCharCode(...result.encryptedData));
+  const cryptoSeedData = {
+    version: "3.0",
+    algorithm: "ChaCha20-Poly1305",
+    kdf: "Argon2id",
+    encrypted: true,
+    timestamp: new Date().toISOString(),
+    originalFileName: file.name,
+    content: base64Content,
+    app: "CryptoSeed"
+  };
+  
+  if (onProgress) onProgress(90);
+  
+  const jsonString = JSON.stringify(cryptoSeedData, null, 2);
+  const blob = new Blob([jsonString], { type: 'application/json' });
+  
+  if (onProgress) onProgress(100);
+  
+  return {
+    encryptedData: blob,
+    fileName: `${file.name}.cryptoseed`
+  };
+}
+
+/**
+ * High-level decrypt file function
+ */
+export async function decryptFile(
+  file: File, 
+  password: string,
+  onProgress?: (progress: number) => void
+): Promise<{ decryptedData: Blob; fileName: string }> {
+  if (onProgress) onProgress(0);
+  
+  try {
+    const text = await file.text();
+    const cryptoSeedData = JSON.parse(text);
+    
+    if (onProgress) onProgress(20);
+    
+    if (!cryptoSeedData.content || !cryptoSeedData.originalFileName) {
+      throw new Error('Invalid CryptoSeed file format');
+    }
+    
+    if (onProgress) onProgress(40);
+    
+    // Convert from base64
+    const encryptedBytes = new Uint8Array(
+      atob(cryptoSeedData.content).split('').map(char => char.charCodeAt(0))
+    );
+    
+    if (onProgress) onProgress(60);
+    
+    const result = await decryptData(encryptedBytes, password);
+    
+    if (onProgress) onProgress(90);
+    
+    const blob = new Blob([result.decryptedData]);
+    
+    if (onProgress) onProgress(100);
+    
+    return {
+      decryptedData: blob,
+      fileName: cryptoSeedData.originalFileName
+    };
+  } catch (error) {
+    throw new Error(`File decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 }
 
 // Browser/Node.js compatibility for base64 operations
